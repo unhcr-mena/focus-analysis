@@ -35,7 +35,7 @@ if (n>0) {
         #scale_fill_manual("",values="blue")+
         ggtitle(indicplot) +
         xlab("") + ylab("") +
-        theme_wsj()+
+        theme_economist_white()+
         theme(legend.key=element_blank(),
               plot.title=element_text(face="bold", size=12),
               axis.text = element_text(size = 7, face="plain"),

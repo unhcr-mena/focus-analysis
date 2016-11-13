@@ -24,9 +24,9 @@ for(i in 1:nindic)
 {
   ctrname <- as.character(listcountry[ i , 1]) 
   yearreport <- "2017"
-  #render("code/8-Report-impact.Rmd", pdf_document(latex_engine='xelatex'), output_options=self_contained)
-  render("code/8-Report-impact.Rmd", pdf_document(latex_engine='xelatex'), 
+  #render("code/Report-impact-Country.Rmd", pdf_document(latex_engine='xelatex'), output_options=self_contained)
+  render("code/Report-Impact-Country.Rmd", pdf_document(latex_engine='xelatex'), 
          output_options=list(pdf_document = list(fig_caption=yes,number_sections=yes,toc=yes,toc_depth=3)))
          
-  file.rename("code/8-Report-impact.pdf", paste0("out/",ctrname,"_FOCUS_Plan_Indicator_Analysis_Report.pdf"))
+  file.rename("code/Report-Impact-Country.pdf", paste0("out/",ctrname,"_FOCUS_Plan_Impact_Indicator_Analysis_Report.pdf"))
 }
