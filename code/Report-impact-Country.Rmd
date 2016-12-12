@@ -8,7 +8,7 @@ output:
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 ## Sys.setenv(PATH = paste(Sys.getenv("PATH"), "C:\\R\\miketex\\miktex\\bin\\x64 ", sep=.Platform$path.sep))
 
-ctrname <- "Algeria"
+#ctrname <- "Algeria"
 yearreport <- "2017"
 
 
@@ -65,7 +65,7 @@ This report allow to provide more analytical insight from the profile of the ope
 
 ## Identification of information source and line of responsibility for the indicator monitoring plan
 
-Since 2016, Preparation of monitoring plan of impact and performance indicators has become compulsory (cf. [UNHCR Programme Manual- page 187](https://intranet.unhcr.org/content/dam/UNHCR/dpsm/pass/pm/PM%20-%20PART%20II%20-%20MONITORING.pdf)).
+Since 2016, Preparation of monitoring plan of impact and performance indicators has become compulsory (cf. [UNHCR Programme Manual- page 187](https://intranet.unhcr.org/content/dam/UNHCR/dpsm/pass/pm/PM%20-%20PART%20II%20-%20MONITORING.pdf)). All guidance on impact indicators are accessible on the [intranet]()
 
 ### Establish line of responsibility
 The UNHCR RBM (Result Based Management) logical framework has been here remapped to the standard job profile present within operations  (i.e. Registration, SGBV, CP, RST, RSD, etc.) .

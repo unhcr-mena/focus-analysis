@@ -27,7 +27,7 @@ data.personnel <- read.csv("data/personnel.csv")
 ########################################################################################################
 
 ### RBM with additional analytical column
-rbmreference <- read.csv("data/All-RBM-withCat.csv", na.strings="")
+rbmreference <- read_excel("data/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
 names(rbmreference)
 
 
@@ -105,20 +105,4 @@ rbmreference$SGBV.Strategy[rbmreference$SGBV.Strategy==3] <-  "Selected"
 rbmreference$SGBV.Strategy[rbmreference$SGBV.Strategy==4] <-  "Selected" 
 
 
-
-########### linking data with RBM reference
-#names(data.performance)
-data.performance1 <- data.performance[ , !(colnames(data.performance) %in% c("Indicator"))]
-data.performance.rbm <- merge (x=data.performance1, y=rbmreference, by=c("indicatorrfid"), all.x=TRUE)
-data.impact1 <- data.impact[ , !(colnames(data.impact) %in% c("Indicator"))]
-data.impact.rbm <- merge (x=data.impact1, y=rbmreference, by=c("indicatorrfid"), all.x=TRUE)
-
-
-write.csv(data.impact.rbm,"data/dataimpactrbm.csv", na = "", row.names = FALSE)
-write.csv(data.performance.rbm,"data/dataperformancerbm.csv", na = "", row.names = FALSE)
-
-### Writing in Excel
-#library(xlsx)
-#write.xlsx(data.impact.rbm, "data/out/focus-plan-analysis.xlsx", sheetName="Impact-Indicator-n", append=TRUE) 
-#write.xlsx(data.performance.rbm, "data/out/focus-plan-analysis.xlsx", sheetName="Performance-Indicator-n", append=TRUE) 
 

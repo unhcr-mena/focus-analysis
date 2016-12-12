@@ -22,6 +22,7 @@ listcountry <- as.data.frame(unique(opreferencemenaimp$operationName))
 nindic <- nrow(listcountry)
 for(i in 1:nindic)
 {
+  #i <- 4
   ctrname <- as.character(listcountry[ i , 1]) 
   yearreport <- "2017"
   #render("code/Report-impact-Country.Rmd", pdf_document(latex_engine='xelatex'), output_options=self_contained)

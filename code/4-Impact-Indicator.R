@@ -83,6 +83,7 @@ for(i in 1:nindic)
       indicatorid      =  xpathSApply(z2, "//Indicator", xmlGetAttr, 'ID'),
       indicatorrfid    =  xpathSApply(z2, "//Indicator", xmlGetAttr, 'RFID'),
       Indicator        =  xp(z2, "//name"),
+      Standard         =  as.numeric(xp(z2, "//standard")),
       baseline1        =  as.numeric(xp(z2, "//Baseline")),
       Baseline         =  as.numeric(xp(z2, "//storedBaseline")),
       thresholdRed     =  as.numeric(xp(z2, "//thresholdRed")),
