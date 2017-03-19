@@ -11,11 +11,12 @@ opreferencemnea <- read.csv("data/opreferencemena.csv")
 opreferencemnea$plandel <- paste(opreferencemnea$operationName, opreferencemnea$planningPeriod, sep = " ")
 opreferencemnea.perf <- opreferencemnea[ !(opreferencemnea$plandel %in% c('Algeria 2015',
                                                                       'Egypt 2013', 'Egypt 2014',
-                                                                      'Israel 2013', 'Israel 2014', 'Israel 2015',  'Israel 2016', 
+                                                                      'Israel 2013', 'Israel 2014', 'Israel 2015',  'Israel 2016',  'Israel 2017', 
                                                                       'Morocco 2015','Morocco 2016', 'Morocco 2017',
                                                                       'Syrian Arab Republic 2014',
                                                                       'Lebanon 2015', 
                                                                       'Iraq 2015',
+                                                                      'Saudi Arabia 2017',
                                                                       'Regional Activities in Middle East & North Africa (MENA) 2017',
                                                                       'Regional Activities in Middle East & North Africa (MENA) 2016',
                                                                       'Regional Activities in Middle East & North Africa (MENA) 2015',

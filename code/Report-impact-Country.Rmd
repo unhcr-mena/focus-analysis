@@ -1,15 +1,15 @@
 ---
 output: 
-  pdf_document: 
+  word_document: 
     fig_caption: yes
-    number_sections: yes
+    fig_width: 9
     toc: yes
 ---
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 ## Sys.setenv(PATH = paste(Sys.getenv("PATH"), "C:\\R\\miketex\\miktex\\bin\\x64 ", sep=.Platform$path.sep))
 
 #ctrname <- "Algeria"
-yearreport <- "2017"
+#yearreport <- "2017"
 
 
 #Sys.which("pdflatex")

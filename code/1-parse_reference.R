@@ -98,7 +98,7 @@ write.csv(opreference,"data/opreference.csv")
 ## Define the reference to be used
 
 opreference.mena <- opreference[ (opreference$regionanme %in% c('Middle East', 'North Africa')) & 
-                                (opreference$planningPeriod %in% c('2013', '2014', '2015','2016','2017')) &
+                                (opreference$planningPeriod %in% c('2013', '2014', '2015','2016','2017','2018')) &
                                  (opreference$planname=='Operations Plan') ,  ]
 
 opreference.ope <- opreference[ (opreference$regionanme %in% c('Central Africa and the Great Lakes', 'Central Asia',
