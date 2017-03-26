@@ -101,6 +101,11 @@ opreference.mena <- opreference[ (opreference$regionanme %in% c('Middle East', '
                                 (opreference$planningPeriod %in% c('2013', '2014', '2015','2016','2017','2018')) &
                                  (opreference$planname=='Operations Plan') ,  ]
 
+opreference.mena <- opreference.mena[ ! (opreference.mena$operationName %in% c('Regional Activities in Middle East & North Africa (MENA)','Syria Regional Refugee Coordination Office in Amman')) ,  ]
+
+write.csv(opreference.mena,"data/opreferencemena.csv", row.names=FALSE)
+
+
 opreference.ope <- opreference[ (opreference$regionanme %in% c('Central Africa and the Great Lakes', 'Central Asia',
                                                                'East and Horn of Africa', 'East Asia and the Pacific',
                                                                'Eastern Europe', 'Latin America',
@@ -135,13 +140,13 @@ opreference.ope <- opreference.ope[ !(opreference.ope$operationName %in% c('Syri
                                                                'RO Stockholm',
                                                                'RO Tbilisi')) ,  ]
 
-write.csv(opreference.mena,"data/opreferencemena.csv")
 
-write.csv(opreference.ope,"data/opreferenceope.csv")
+
+write.csv(opreference.ope,"data/opreferenceope.csv", row.names=FALSE)
 
 rm(regionop,regionop1,regionop2,planoperation,planoperation1,operation,plan,region, L, L2, Operation, OperationList)
 
-write.csv(unique(opreference$operationName),"data/listop.csv")
+write.csv(unique(opreference$operationName),"data/listop.csv", row.names=FALSE)
 
 rm(api,apihead,bin,con,passw,upw,urlend,urlendsp2,user)
 #rm(opreference.ope1)

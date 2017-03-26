@@ -3,8 +3,28 @@
 
 
 #source("code/1-parse_reference.R")
-opreferencemena <- read.csv("data/out/opreferencemena.csv")
-opreference.mena <- opreferencemena.hr[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+
+
+
+opreferencemena <- read.csv("data/opreferencemena.csv")
+#names(opreferencemena)
+
+opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
+
+#### 
+## Pb with parsing some plans -- Need to be fixed
+
+opreferencemena.budg <- opreferencemena[ !(opreferencemena$plandel %in% c('Algeria 2015','Algeria 2014',
+                                                                          'Egypt 2013', 'Egypt 2014',
+                                                                          'Israel 2013', 'Israel 2014', 'Israel 2015',  'Israel 2016',  'Israel 2017', 'Israel 2018', 
+                                                                          'Morocco 2015','Morocco 2016', 'Morocco 2017',
+                                                                          'Syrian Arab Republic 2014',
+                                                                          'Lebanon 2015', 
+                                                                          'Iraq 2015',
+                                                                          'Saudi Arabia 2017')), ]
+
+
+opreference.mena <- opreferencemena.budg[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                          "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 ## Loop through urls and download all plan 
 

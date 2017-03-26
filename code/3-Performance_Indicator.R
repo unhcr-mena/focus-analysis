@@ -3,38 +3,28 @@
 #source("code/1-parse_reference.R")
 source("code/0-package.R")
 
-opreferencemnea <- read.csv("data/opreferencemena.csv")
-#names(opreferencemnea)
+opreferencemena <- read.csv("data/opreferencemena.csv")
+#names(opreferencemena)
 
 ##################################################3 
 ## Pb with parsing some plans -- Need to be fixed
-opreferencemnea$plandel <- paste(opreferencemnea$operationName, opreferencemnea$planningPeriod, sep = " ")
-opreferencemnea.perf <- opreferencemnea[ !(opreferencemnea$plandel %in% c('Algeria 2015',
+opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
+opreferencemena.perf <- opreferencemena[ !(opreferencemena$plandel %in% c('Algeria 2015',
                                                                       'Egypt 2013', 'Egypt 2014',
-                                                                      'Israel 2013', 'Israel 2014', 'Israel 2015',  'Israel 2016',  'Israel 2017', 
+                                                                      'Israel 2013', 'Israel 2014', 'Israel 2015',  'Israel 2016',  'Israel 2017', 'Israel 2018', 
                                                                       'Morocco 2015','Morocco 2016', 'Morocco 2017',
                                                                       'Syrian Arab Republic 2014',
                                                                       'Lebanon 2015', 
                                                                       'Iraq 2015',
-                                                                      'Saudi Arabia 2017',
-                                                                      'Regional Activities in Middle East & North Africa (MENA) 2017',
-                                                                      'Regional Activities in Middle East & North Africa (MENA) 2016',
-                                                                      'Regional Activities in Middle East & North Africa (MENA) 2015',
-                                                                      'Regional Activities in Middle East & North Africa (MENA) 2014',
-                                                                      'Regional Activities in Middle East & North Africa (MENA) 2013',
-                                                                      'Syria Regional Refugee Coordination Office in Amman 2017',
-                                                                      'Syria Regional Refugee Coordination Office in Amman 2016',
-                                                                      'Syria Regional Refugee Coordination Office in Amman 2015',
-                                                                      'Syria Regional Refugee Coordination Office in Amman 2014',
-                                                                      'Syria Regional Refugee Coordination Office in Amman 2013',
+                                                                      'Saudi Arabia 2017')), ]
                                                                       
-                                                                      'Djibouti 2015',
-                                                                      'Colombia 2015', 
-                                                                      'RO bangkok 2013', 'RO bangkok 2014', 
-                                                                      'Turkmenistan 2013', 'Turkmenistan 2014', 'Turkmenistan 2015',
-                                                                      'Mali 2014')), ]
+                                                                     # 'Djibouti 2015',
+                                                                     # 'Colombia 2015', 
+                                                                     # 'RO bangkok 2013', 'RO bangkok 2014', 
+                                                                      #'Turkmenistan 2013', 'Turkmenistan 2014', 'Turkmenistan 2015',
+                                                                      #'Mali 2014'
 
-opreference <- opreferencemnea.perf[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemena.perf[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                            "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 
 ## Loop through urls and download all plan 
