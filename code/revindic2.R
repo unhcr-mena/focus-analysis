@@ -1,7 +1,6 @@
 ### This code allow to print the indicator sourcing table
 
-temp <- unique(focus1.impact[ focus1.impact$subtype==this.subtype &  focus1.impact$planningPeriod == yearreport , c("Objective",  "Indicator","Source")])
-
+temp <- unique(focus1.performance[ focus1.performance$subtype==this.subtype &  focus1.performance$planningPeriod == yearreport , c("Objective",  "Indicator","Source")])
 
 
 temp <- temp[ !(is.na(temp$Indicator)), ]
@@ -9,6 +8,7 @@ temp <- temp[ !(is.na(temp$Indicator)), ]
 temp <- temp[with(temp, order(Objective)), ]
 
 row.names(temp) <- NULL
+
 
 if (nrow(temp) > 0) {
   #emphasize.strong.cells(1)

@@ -87,6 +87,9 @@ regionop2 <- merge(regionop1,operation, by="operationName")
 
 
 opreference <- merge(planoperation1,regionop2, by="operationID")
+
+opreference <- opreference[with(opreference, order(regionanme, operationName, planningPeriod)), ]
+
 write.csv(opreference,"data/opreference.csv")
 
 #names(opreference)

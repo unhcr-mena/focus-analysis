@@ -1,7 +1,14 @@
 ### This code allow to print the indicator review graph
 
 
-indic.country.this <- as.data.frame(unique(focus.impact.indic[focus.impact.indic$operationName==ctrname & focus.impact.indic$subtype==this.subtype  , c("Indicator", "indicatorrfid","subtype")]))
+indic.country.this <- as.data.frame(unique(focus.impact.indic[focus.impact.indic$operationName==ctrname & focus.impact.indic$subtype==this.subtype , 
+                                                              c("Indicator", "indicatorrfid","subtype","Objective")]))
+indic.country.this <- indic.country.this[ !(is.na(indic.country.this$Indicator)), ]
+
+
+
+indic.country.this <- indic.country.this[with(indic.country.this, order(Objective)), ]
+
 n <- nrow(indic.country.this)
 
 if (n>0) {
@@ -11,6 +18,7 @@ if (n>0) {
     rm(indicplot,plotindic,dataplot)
     indicplot <- as.character(indic.country.this[i, 1])
     dataplot <- indic.country.date2[ indic.country.date2$Indicator==indicplot, ]
+    objectivelab <- as.character(indic.country.this[i, 4])
     # str(dataplot)
     # dataplot
     dataplot$record <- as.numeric(dataplot$record)
@@ -23,6 +31,7 @@ if (n>0) {
       sprintf("No Record")
     } else {
       
+    cat(paste0("Objective: ", objectivelab , "\n"))
     plotindic <-  ggplot(dataplot, aes(label)) + 
         geom_bar(aes(y = record), stat="identity", fill= "slateblue4") +
         facet_wrap(~ ppg.country , ncol=1) +
@@ -45,4 +54,4 @@ if (n>0) {
     }
   } 
 
-} else {}
+} else {cat(paste0("No indicators for this category\n"))}

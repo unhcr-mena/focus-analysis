@@ -9,7 +9,7 @@ output:
 ## Sys.setenv(PATH = paste(Sys.getenv("PATH"), "C:\\R\\miketex\\miktex\\bin\\x64 ", sep=.Platform$path.sep))
 
 ctrname <- "Jordan"
-yearreport <- "2018"
+yearreport <- "2017"
 
 
 #Sys.which("pdflatex")
@@ -17,7 +17,7 @@ yearreport <- "2018"
 ```
 
 ---
-title: "Analysis of `r ctrname` Country Operation Plan  - Impact indicators for `r yearreport`"
+title: "Analysis of `r ctrname` Country Operation Plan  - Performance indicators for `r yearreport`"
 author: "MENA office of the Director - Information Management"
 date: "`r Sys.Date()`"
 ---
@@ -37,8 +37,8 @@ library(pander)  ## library to format regression output in Rmd
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 setwd("D:/R-project/focus-analysis") 
-focus.impact <- read.csv("D:/R-project/focus-analysis/data/impact.csv")
-#names(focus.impact)
+focus.performance <- read.csv("data/performance.csv")
+#names(focus.performance)
 ## load all packages
 source("D:/R-project/focus-analysis/code/0-package.R")
 
@@ -49,8 +49,8 @@ source("D:/R-project/focus-analysis/code/0-package.R")
 
 library(reshape2)
 ## Subset for the country
-focus1.impact <-focus.impact[focus.impact$operationName == ctrname, ]
-source("D:/R-project/focus-analysis/code/timeindic.R")
+focus1.performance <-focus.performance[focus.performance$operationName == ctrname, ]
+source("D:/R-project/focus-analysis/code/timeindic2.R")
 
 ```
 
@@ -65,7 +65,7 @@ This report allow to provide more analytical insight from the profile of the ope
 
 ## Identification of information source and line of responsibility for the indicator monitoring plan
 
-Since 2016, Preparation of monitoring plan of impact and performance indicators has become compulsory (cf. [UNHCR Programme Manual- page 187](https://intranet.unhcr.org/content/dam/UNHCR/dpsm/pass/pm/PM%20-%20PART%20II%20-%20MONITORING.pdf)). All guidance on impact indicators are accessible on the [intranet](https://intranet.unhcr.org/intranet/unhcr/en/home/support_services/operations_management0/indicators_guidance/results_framework.html)
+Since 2016, Preparation of monitoring plan of impact and performance indicators has become compulsory (cf. [UNHCR Programme Manual- page 187](https://intranet.unhcr.org/content/dam/UNHCR/dpsm/pass/pm/PM%20-%20PART%20II%20-%20MONITORING.pdf)). 
 
 ### Establish line of responsibility
 The UNHCR RBM (Result Based Management) logical framework has been here remapped to the standard job profile present within operations  (i.e. Registration, SGBV, CP, RST, RSD, etc.) .
@@ -86,7 +86,7 @@ To do so, all the indicators from the UNHCR Result based Framework were mapped t
  9. Key Informant 
  10. Registry of official document (SOPs, Agreement, Laws..) 
  
-When impact indicators can be selected from more than one available source wihtin the country, the following considerations should be take in account the decide on the one to retain:  
+When performance indicators can be selected from more than one available source wihtin the country, the following considerations should be take in account the decide on the one to retain:  
 
  * __Authority__ (for instance, National Stats always to come first)
  * __Accuracy__ (household survey better than Key informant)
@@ -104,7 +104,6 @@ An important element while developing the monitoring plan is to consider what is
  
 The most common data quality issues for indicators are the following: 
 
- * "No Baseline"
  * "No Target"
  * "No Mid Year"
 
@@ -139,32 +138,12 @@ An element of decision for indicator selection is to assess how the selection of
 
 ### Number of indicators per output 
 
-When defining impact indicators, (the “excess luggage”)has been matched to more than one indicator  
+When defining performance indicators, (the “excess luggage”)has been matched to more than one indicator  
 
 ### Comparison of baseline value over years
 
 The objective is to review the consistency of baseline value between previous year. 
 if current baseline is missing and the same indicator was used in the previous year
-
-
-
-##  Indicator in relation with Strategies & Global priorities
-The second important element is to consider  the consistency within the selection of indicators  in terms of compliance with global recommandations.
-
-### Global Strategic Priorities (GSP)
-
-### SGBV Updated Global Strategy 
-
-### Global Child Protection Framework 
-
-### Global Education Strategy
-
-### Community mobilization Strategy
-
-### Global Strategy for Livelihoods
-
-### Global Strategy for Safe Access to Fuel and Energy (SAFE)
-
 
 
 *** 
@@ -173,13 +152,13 @@ The second important element is to consider  the consistency within the selectio
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -189,13 +168,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -206,13 +185,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -222,13 +201,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -239,13 +218,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -256,13 +235,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -273,13 +252,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -290,13 +269,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -306,13 +285,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -322,13 +301,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -338,13 +317,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -354,13 +333,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -371,13 +350,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -387,13 +366,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -404,13 +383,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -420,13 +399,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -436,13 +415,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -452,13 +431,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -469,13 +448,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 ## Indicator selection for this year and potential sourcing
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -486,13 +465,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -503,13 +482,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -521,13 +500,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -539,13 +518,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -557,13 +536,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -575,13 +554,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 
@@ -592,13 +571,13 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("D:/R-project/focus-analysis/code/revindic2.R")
 ```
 
-## Indicator selection for this year and potential sourcing
+## Indicators review from previous years
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("D:/R-project/focus-analysis/code/plotindic2.R")
 ```
 
 

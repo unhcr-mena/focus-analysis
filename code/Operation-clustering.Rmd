@@ -1,0 +1,504 @@
+---
+title: "A data driven analysis of UNHCR Operations Profiles"
+author: "Internal Document - not for diffusion"
+date: "11 May 2016"
+classoption: landscape
+output: 
+  word_document: 
+    fig_height: 8
+    fig_width: 12
+    toc: yes
+---
+
+# Introduction
+
+UNHCR has more than one hundred operations worldwide. Those operations are very diverse in terms of field presence and implementation strategy. Developping recommandations in terms of presence implementation therefore requires to classify them.
+
+An important challenge is to design the Information Management (IM) capacity according to the operation needs. Depending on the size and on the profile of the operations, those needs might vary from a local capacity with a national staff to a large section headed by a senior officer. The objective of this research is to support of potential revision of the [IOM/FOM 09108: GUIDELINES FOR THE DESIGN OF UNHCR’S PRESENCE](https://intranet.unhcr.org/content/intranet/unhcr/en/home/policy-and-guidance/iom-foms/2008_iom-foms/iom_091-fom_093_2008/_jcr_content/mainpar/66303/multidownloadItems/81635/file/file.res/iom09108DesignGuidelines.pdf) recommandations on Data & Information Management.
+
+The analysis below is an **data-driven** attempt to analyse operations profile according to a few potential variables. More in depth analysis could be developped using for instance the [Mintzberg organisation analysis framework](http://www.accaglobal.com/ie/en/student/exam-support-resources/fundamentals-exams-study-resources/f1/technical-articles/mintzberg-theory.html).
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+## load a few functions & packages
+
+format_si <- function(...) {
+  # Format a vector of numeric values according
+  # to the International System of Units.
+  # http://en.wikipedia.org/wiki/SI_prefix
+  #
+  # Based on code by Ben Tupper
+  # https://stat.ethz.ch/pipermail/r-help/2012-January/299804.html
+  # Args:
+  #   ...: Args passed to format()
+  #
+  # Returns:
+  #   A function to format a vector of strings using
+  #   SI prefix notation
+  #
+  
+  function(x) {
+    limits <- c(1e-24, 1e-21, 1e-18, 1e-15, 1e-12,
+                1e-9,  1e-6,  1e-3,  1e0,   1e3,
+                1e6,   1e9,   1e12,  1e15,  1e18,
+                1e21,  1e24)
+    prefix <- c("y",   "z",   "a",   "f",   "p",
+                "n",   "µ",   "m",   " ",   "k",
+                "M",   "G",   "T",   "P",   "E",
+                "Z",   "Y")
+    
+    # Vector with array indices according to position in intervals
+    i <- findInterval(abs(x), limits)
+    
+    # Set prefix to " " for very small values < 1e-24
+    i <- ifelse(i==0, which(limits == 1e0), i)
+    
+    paste(format(round(x/limits[i], 1),
+                 trim=TRUE, scientific=FALSE, ...),
+          prefix[i])
+  }
+}
+
+
+library(ggplot2)
+library(ggrepel)
+library(classInt)
+library(cluster)
+library(factoextra)
+library(rmarkdown)
+library(xtable)
+library(knitr)
+library(pander)  ## library to format regression output in Rmd
+
+library(car)
+library(lme4)
+library(lmtest)
+library(plyr)
+
+### load data now
+operation.profile <- read.csv("D:/R-project/focus-analysis/data/operation-profile.csv")
+
+operation.profile$Budget.ops.ratio <- operation.profile$MSRP.Operating.Level.Budget.OPS.Total / operation.profile$MSRP.Operating.Level.Budget.Total
+#names(operation.profile)
+
+mydata <- operation.profile[ operation.profile$Planning.Year==2015, ]
+#names(mydata)
+#str(mydata)
+# listwise deletion of missing
+mydata <- na.omit(mydata) 
+
+
+```
+
+## Variables description
+
+Data were extracted from [Global Focus Insight](https://gfi.unhcr.org).
+
+Population type: 
+
+ * Number.PoC.Current: Number of person of Concerns 
+ * Number.of.PPGs: Numbers of Population Planning Group 
+
+Office & Staff configuration: 
+
+ * Number.of.Offices: Number of offices
+ * OL.Position.Cost: Cost of positions planned under the Operating Level (OL) budget 
+ * OL.Position.Manyears: Effective work time measure in Man/Year planned under the Operating Level (OL) budget
+
+Budget:
+
+ * MSRP.Operating.Level.Budget.Total : Actual total budget for the whole operations
+ * MSRP.Operating.Level.Budget.OPS.Total: Sub part of the total budget allocated for partners and projects (Ops)
+ * Budget.ops.ratio: Ratio measuring the part of the total budget allocated to outsourced activites
+
+## Analytical approach description
+
+Only operations with information for each of the elements above were retained for the analysis.This bring down the number of operations considered for analysis from 123 to around operations depending on the year.
+
+In order to keep the analysis focused, a total of 4 clusters (or class of operations) is considered. In order to have a consistent classification method between the univariate and multivariate analysis, we will use the [k-means](https://en.wikipedia.org/wiki/K-means_clustering) algorythm. Other methods such as [Jenk natural break](https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization) could also be used but would minimise the possibility of comparisons because they can be used only for univariate analysis.
+
+The present analysis is looking at: 
+
+ * Can we classify operation according to one unique measurement?
+ * How potential classification variables interfere betwen each other?
+ * Would the result of multivariate classification provide meaningfull results?
+ * How the selection of variables influence
+ 
+
+
+# Univariate data classification
+
+Operation are first sorted using the data classification. 
+
+It appears depending on the variables used for the classification, results are different. 
+
+The results are presented in the table below.
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
+## Save resulting data
+mydata$PoC.class <- as.factor(findCols(classIntervals(mydata$Number.PoC.Current, n = 4, style = "kmeans")))
+mydata$Budget.class <- as.factor(findCols(classIntervals(mydata$MSRP.Operating.Level.Budget.Total, n = 4, style = "kmeans")))
+mydata$Manyears.class <- as.factor(findCols(classIntervals(mydata$OL.Position.Manyears, n = 4, style = "kmeans")))
+mydata$Budget.ratio.class <- as.factor(findCols(classIntervals(mydata$Budget.ops.ratio, n = 4, style = "kmeans")))
+
+
+temp <- mydata[ , c("Operation",  "Region", "PoC.class", "Budget.class", "Manyears.class", "Budget.ratio.class" )]
+temp <- temp[order(temp$PoC.class, temp$Region, temp$Operation ),]
+kable(temp, row.names=FALSE, caption = "Class of country according to number of PoC" )
+#pandoc.table(temp, split.cells = c("30%","30%", "10%", "10%", "10%", "10%"), use.hyphening = TRUE, justify = 'left', caption = "Class of country according ot PoC #")
+
+
+```
+
+
+
+# Visualisation
+
+
+
+For legibility purpose, operations with a budget smaller than 10 Millions USD are excluded from the following graphs.
+
+## Relation between # of persons of concern & workforce
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+
+
+ggplot(mydata[ mydata$MSRP.Operating.Level.Budget.Total > 10000000 , ], aes(Number.PoC.Current, OL.Position.Manyears)) + 
+       geom_point(aes(size = MSRP.Operating.Level.Budget.Total, shape= Region)) +
+       ggtitle("") +
+       geom_label_repel(aes(label=Operation), size = 2, fontface = 'bold', color = 'black',
+          box.padding = unit(0.25, "lines"), point.padding = unit(0.5, "lines")) +
+       scale_size(labels=format_si()) +
+       geom_smooth(method=lm) +  # Add a loess smoothed fit curve with confidence region
+       # geom_smooth(method=lm)   # Add linear regression line 
+       scale_x_continuous(labels=format_si())
+
+```
+
+
+## Relation between Number.PoC.Current & MSRP.Operating.Level.Budget.Total
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+ggplot(mydata[ mydata$MSRP.Operating.Level.Budget.Total > 10000000 , ], aes( MSRP.Operating.Level.Budget.Total, Number.PoC.Current)) + 
+       geom_point(aes(size = 2, shape= Region)) +
+       ggtitle("") +
+       geom_label_repel(aes(label=Operation), size = 2, fontface = 'bold', color = 'black',
+          box.padding = unit(0.25, "lines"), point.padding = unit(0.5, "lines")) +
+      # scale_size(labels=format_si()) +
+       geom_smooth(method=lm) +  # Add a loess smoothed fit curve with confidence region
+       # geom_smooth(method=lm)   # Add linear regression line 
+       scale_x_continuous(labels=format_si())+
+       scale_y_continuous(labels=format_si())
+```
+
+
+## Relation between OL.Position.Manyears & MSRP.Operating.Level.Budget.Total
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+ggplot(mydata[ mydata$MSRP.Operating.Level.Budget.Total > 10000000 , ], aes( MSRP.Operating.Level.Budget.Total, OL.Position.Manyears)) + 
+       geom_point(aes(size = 2, shape= Region)) +
+       ggtitle("") +
+       geom_label_repel(aes(label=Operation), size = 2, fontface = 'bold', color = 'black',
+          box.padding = unit(0.25, "lines"), point.padding = unit(0.5, "lines")) +
+      # scale_size(labels=format_si()) +
+       geom_smooth(method=lm) +  # Add a loess smoothed fit curve with confidence region
+       # geom_smooth(method=lm)   # Add linear regression line 
+       scale_x_continuous(labels=format_si())
+```
+
+## Relation between OL.Position.Manyears & MSRP.Operating.Level.Budget.Total
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(mydata[ mydata$MSRP.Operating.Level.Budget.Total > 10000000 , ], aes( MSRP.Operating.Level.Budget.OPS.Total, OL.Position.Manyears)) + 
+       geom_point(aes(size = 2, shape= Region)) +
+       ggtitle("") +
+       geom_label_repel(aes(label=Operation), size = 2, fontface = 'bold', color = 'black',
+          box.padding = unit(0.25, "lines"), point.padding = unit(0.5, "lines")) +
+      # scale_size(labels=format_si()) +
+       geom_smooth(method=lm) +  # Add a loess smoothed fit curve with confidence region
+       # geom_smooth(method=lm)   # Add linear regression line 
+       scale_x_continuous(labels=format_si())
+```
+
+## Relation between OL.Position.Manyears & Budget.ops.ratio
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+ggplot(mydata[ mydata$MSRP.Operating.Level.Budget.Total > 10000000 , ], aes( Budget.ops.ratio, OL.Position.Manyears)) + 
+       geom_point(aes(size = 2, shape= Region)) +
+       ggtitle("") +
+       geom_label_repel(aes(label=Operation), size = 2, fontface = 'bold', color = 'black',
+          box.padding = unit(0.25, "lines"), point.padding = unit(0.5, "lines")) +
+      # scale_size(labels=format_si()) +
+       geom_smooth(method=lm)   # Add a loess smoothed fit curve with confidence region
+       # geom_smooth(method=lm)   # Add linear regression line 
+      # scale_x_continuous(labels=format_si())
+```
+
+## Relation between Budget.ops.ratio & MSRP.Operating.Level.Budget.Total
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(mydata[ mydata$MSRP.Operating.Level.Budget.Total > 10000000 , ], aes( Budget.ops.ratio, MSRP.Operating.Level.Budget.Total)) + 
+       geom_point(aes(size = 2, shape= Region)) +
+       ggtitle("") +
+       geom_label_repel(aes(label=Operation), size = 2, fontface = 'bold', color = 'black',
+          box.padding = unit(0.25, "lines"), point.padding = unit(0.5, "lines")) +
+      # scale_size(labels=format_si()) +
+       geom_smooth(method=lm)  + # Add a loess smoothed fit curve with confidence region
+       # geom_smooth(method=lm)   # Add linear regression line 
+       scale_y_continuous(labels=format_si())
+```
+
+## Relation between Budget.ops.ratio & Number.PoC.Current
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(mydata[ mydata$MSRP.Operating.Level.Budget.Total > 10000000 , ], aes( Budget.ops.ratio, Number.PoC.Current)) + 
+       geom_point(aes(size = 2, shape= Region)) +
+       ggtitle("") +
+       geom_label_repel(aes(label=Operation), size = 2, fontface = 'bold', color = 'black',
+          box.padding = unit(0.25, "lines"), point.padding = unit(0.5, "lines")) +
+      # scale_size(labels=format_si()) +
+       geom_smooth(method=lm)  + # Add a loess smoothed fit curve with confidence region
+       # geom_smooth(method=lm)   # Add linear regression line 
+      scale_y_continuous(labels=format_si())
+
+```
+
+
+# Using multiple variables for the classification
+
+From the first part of the analysis we saw that the univariate classification provide differents results. The next step is to classify using all the 4 variables together:
+
+ *  OL.Position.Manyears
+ *  Number.PoC.Current
+ *  MSRP.Operating.Level.Budget.Total
+ *  Budget.ops.ratio"
+
+
+## Partititioning clustering
+
+K-means clustering is a method to group ( or "clusters") together multiple records through a series of measurement.
+
+The results of the clustering will be different depending on the variables that are kep for the clustering.
+
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
+
+## We create subset 
+mydata1 <- mydata[,c("Operation", "OL.Position.Manyears", "Number.PoC.Current", "MSRP.Operating.Level.Budget.Total","Budget.ops.ratio")]
+
+## put label from operation in row names so that the data frame can be sued for clustering
+mydata1 <- data.frame(mydata1[,-1], row.names=mydata1[,1])
+
+## Scale the dataset: Scaling and Centering of Matrix-like Objects
+mydata2 <- scale(mydata1)
+
+
+
+# Enhanced k-means clustering
+cluster.km <- eclust(mydata2, "kmeans", k=4)
+mydata <- cbind( mydata, cluster.km[["cluster"]])
+
+kable(cluster.km$centers, caption = "Description of cluster means" )
+
+```
+
+
+
+## Hierarchical clustering
+Hierarchical clustering (also called hierarchical cluster analysis or HCA) is a method of cluster analysis which seeks to build a hierarchy of clusters. The visual depiction of the classification is called a dendrogramme and allow to see proximities between operation profiles in a different way that the kmeans clustering approach.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+cluster.hc <- eclust(mydata2, "hclust", k=4)
+
+#cluster.hc2 <- eclust(mydata2, "hclust", k=5)
+
+mydata <- cbind( mydata, cluster.hc[["cluster"]])
+
+
+
+```
+
+
+
+
+# Comparison of classification
+
+## Comparison between univariate and multivariate
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
+
+## Save resulting data
+names(mydata)[17] <- "cluster.hc"
+names(mydata)[18] <- "cluster.km"
+
+#names(mydata)
+
+temp <- mydata[ , c("Operation",  "Region", "cluster.hc","cluster.km", "PoC.class", "Budget.class", "Manyears.class", "Budget.ratio.class" )]
+temp <- temp[order(temp$cluster.hc, temp$Region, temp$Operation ),]
+kable(temp, row.names=FALSE, caption = "Class of country according to clustering" )
+
+#write.csv(mydata, "D:/R-project/analysis-focus/data/country-comparison/operation-profile2.csv")
+
+```
+
+## Comparison of multivariate classification with a different set of variables
+
+In order to see the influence of other variables, we can add 2 addtional variables to the clustering calculation and see how this will influence the results: 
+
+ * Number.of.PPGs: Numbers of Population Planning Group 
+ * Number.of.Offices: Number of offices 
+ 
+Adding those 2 variables allow to better distinguish between:
+
+  * Large scale operations
+  * Regional office with operational capacity
+  * Small and middle scale operations
+  * Office with more focus on representation
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+## We create subset 
+
+#names(mydata)
+mydata4 <- mydata[,c("Operation", "OL.Position.Manyears", "Number.PoC.Current", "MSRP.Operating.Level.Budget.Total","Budget.ops.ratio","Number.of.Offices","Number.of.PPGs")]
+
+## put label from operation in row names so that the data frame can be sued for clustering
+mydata4 <- data.frame(mydata4[,-1], row.names=mydata4[,1])
+
+## Scale the dataset: Scaling and Centering of Matrix-like Objects
+mydata4 <- scale(mydata4)
+
+
+cluster.hc2 <- eclust(mydata4, "hclust", k=4)
+
+
+
+```
+
+
+
+## Comparison of multivariate classifications with different chronological records
+
+We are now taking records for the 4 selected variables for multiple years to see how this affect the classification.
+
+This allow to see how operations profile evolve over time.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
+
+## We first merge operation name  
+operation.profile$Operation.year <- paste( as.character(operation.profile$Operation) , as.character(operation.profile$Planning.Year), sep=" ")
+  
+## We create subset 
+mydata5 <- operation.profile[,c("Operation.year", "OL.Position.Manyears", "Number.PoC.Current", "MSRP.Operating.Level.Budget.Total","Budget.ops.ratio")]
+
+# listwise deletion of missing
+mydata5 <- na.omit(mydata5) 
+
+## put label from operation in row names so that the data frame can be sued for clustering
+mydata5 <- data.frame(mydata5[,-1], row.names=mydata5[,1])
+
+## Scale the dataset: Scaling and Centering of Matrix-like Objects
+mydata5 <- scale(mydata5)
+
+
+# Enhanced k-means clustering
+cluster.km5 <- eclust(mydata5, "kmeans", k=4)
+#mydata <- cbind( mydata, cluster.km[["cluster"]])
+
+#kable(cluster.km$centers, caption = "Description of cluster means" )
+
+```
+
+
+# Regression prediction on staffing
+
+A potential assumption could be that it shoudl be possible to predict the workfoce used in an operations based on other variables. The [linear reggression technique](https://en.wikipedia.org/wiki/Linear_regression) allows to produce such calculation. 
+
+In summary the goal is to predict the value for **OL.Position.Manyear** based on the value of:
+
+ * Number.PoC.Current: Number of person of Concerns 
+ * Number.of.PPGs: Numbers of Population Planning Group 
+ * Number.of.Offices: Number of offices
+ * MSRP.Operating.Level.Budget.Total : Actual total budget for the whole operations
+ * Budget.ops.ratio: Ratio measuring the part of the total budget allocated to outsourced activites
+
+## Evaluate the model
+ 
+We can develop a predictive model.
+
+The model has an R2 predictive power of 0.77, which is pretty high.
+ 
+```{r, echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
+
+#, result='hide'
+
+
+rm(mydata6)
+mydata6 <- operation.profile[,c("Operation.year", "Operation",  "Region","OL.Position.Manyears", "Number.PoC.Current", "MSRP.Operating.Level.Budget.Total","Budget.ops.ratio","Number.of.Offices","Number.of.PPGs")]
+
+#str(mydata6)
+
+
+# listwise deletion of missing
+mydata6 <- na.omit(mydata6) 
+
+## Now we can buidl a linear model
+
+lm.workforce <- lm(OL.Position.Manyears ~
+                    Number.PoC.Current+  
+                     MSRP.Operating.Level.Budget.Total +
+                     Budget.ops.ratio + 
+                     Number.of.Offices + 
+                     Number.of.PPGs,
+                   data=mydata6
+)
+
+
+#names(summary(lm.workforce))
+#summary(lm.workforce)$r.squared
+#summary(lm.workforce)$sigma
+#summary(lm.workforce)$df
+#summary(lm.workforce)$r.squared
+
+
+#pander(summary(lm.workforce)$r.squared, missing="")
+
+pander(summary(lm.workforce),  summary = TRUE, add.significance.stars = TRUE)
+
+
+```
+
+## Compute predicted staffing values.
+
+The table below present the result of the prediction
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
+
+mydata6$predictedstaff  <- predict(lm.workforce, newdata=mydata6)
+
+mydata6$staffgap <- mydata6$OL.Position.Manyears - mydata6$predictedstaff
+
+mydata6 <- cbind( mydata6, cluster.km5[["cluster"]])
+
+names(mydata6)[12] <- "cluster.km"
+
+
+mydata7 <- mydata6[order(mydata6$Region, mydata6$cluster.km,   mydata6$Operation.year), c( "cluster.km","Region","Operation.year", "OL.Position.Manyears","predictedstaff", "staffgap" ) ]
+kable(mydata7, row.names=FALSE, caption = "Staff Gap per clusters" )
+
+
+```
+
+
+ 
