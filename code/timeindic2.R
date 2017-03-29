@@ -34,36 +34,36 @@ names(ppg.country)[2] <- "operationName"
 
 
 indic.country.date = data.frame(
-  date = c("2014-01-02", "2014-07-01", "2014-12-15",
-           "2015-01-02", "2015-07-01", "2015-12-15",
-           "2016-01-02", "2016-07-01", "2016-12-15",
-           "2017-01-02", "2017-07-01", "2017-12-15",
-           "2018-01-02", "2018-07-01", "2018-12-15"),
-  label = c("2014\n baseline", "2014\n midyear", "2014\n endyear",
-            "2015\n baseline", "2015\n midyear", "2015\n endyear",
-            "2016\n baseline", "2016\n midyear", "2016\n endyear",
-            "2017\n baseline", "2017\n midyear", "2017\n endyear",
-            "2018\n baseline", "2018\n midyear", "2018\n endyear"),
-  phase = c("Baseline", "Mid.Year", "Year.End",
-            "Baseline", "Mid.Year", "Year.End",
-            "Baseline", "Mid.Year", "Year.End",
-            "Baseline", "Mid.Year", "Year.End",
-            "Baseline", "Mid.Year", "Year.End"),
-  year = c("2014", "2014", "2014",
-           "2015", "2015", "2015",
-           "2016", "2016", "2016",
-           "2017", "2017", "2017",
-           "2018", "2018", "2018"))
+  date = c( "2014-07-01", "2014-12-15",
+            "2015-07-01", "2015-12-15",
+            "2016-07-01", "2016-12-15",
+            "2017-07-01", "2017-12-15",
+            "2018-07-01", "2018-12-15"),
+  label = c( "2014\n midyear", "2014\n endyear",
+             "2015\n midyear", "2015\n endyear",
+             "2016\n midyear", "2016\n endyear",
+             "2017\n midyear", "2017\n endyear",
+             "2018\n midyear", "2018\n endyear"),
+  phase = c( "Mid.Year", "Year.End",
+             "Mid.Year", "Year.End",
+             "Mid.Year", "Year.End",
+             "Mid.Year", "Year.End",
+             "Mid.Year", "Year.End"),
+  year = c( "2014", "2014",
+            "2015", "2015",
+            "2016", "2016",
+            "2017", "2017",
+            "2018", "2018"))
 
 indic.country.date3 <- merge(indic.country.date, indic.country)
 indic.country.date3 <- merge(indic.country.date3, ppg.country)
 
 ## Create order in levels for label
-indic.country.date3$label <- factor(indic.country.date3$label, c("2014\n baseline", "2014\n midyear", "2014\n endyear",
-                                                                 "2015\n baseline", "2015\n midyear", "2015\n endyear",
-                                                                 "2016\n baseline", "2016\n midyear", "2016\n endyear",
-                                                                 "2017\n baseline", "2017\n midyear", "2017\n endyear",
-                                                                 "2018\n baseline", "2018\n midyear", "2018\n endyear"))
+indic.country.date3$label <- factor(indic.country.date3$label, c("2014\n midyear", "2014\n endyear",
+                                                                  "2015\n midyear", "2015\n endyear",
+                                                                  "2016\n midyear", "2016\n endyear",
+                                                                  "2017\n midyear", "2017\n endyear",
+                                                                  "2018\n midyear", "2018\n endyear"))
 
 ##Create fields for values
 indic.country.date3$year <- as.character(indic.country.date3$year)

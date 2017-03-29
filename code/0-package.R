@@ -5,6 +5,7 @@ packages <- c( "doBy","downloader",
                "AER",  # interesting datasets
                "lattice", 
                "MASS", 
+               "purrr", # manipulate list
                "gvlma",
                "VGAM",
                "aod",
@@ -47,7 +48,7 @@ library(lattice)
 library(car)
 library(lme4)
 library(lmtest)
-
+library(purrr)
 library(plyr)
 
 library(RCurl)

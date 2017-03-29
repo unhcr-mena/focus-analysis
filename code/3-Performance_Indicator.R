@@ -15,9 +15,8 @@ opreferencemena.perf <- opreferencemena[ !(opreferencemena$plandel %in% c('Alger
                                                                       'Morocco 2015','Morocco 2016', 'Morocco 2017',
                                                                       'Syrian Arab Republic 2014',
                                                                       'Lebanon 2015', 
-                                                                      'Iraq 2015',
-                                                                      'Saudi Arabia 2017')), ]
-                                                                      
+                                                                      'Iraq 2015')), ]
+                                                                      ## ,'Saudi Arabia 2017'
                                                                      # 'Djibouti 2015',
                                                                      # 'Colombia 2015', 
                                                                      # 'RO bangkok 2013', 'RO bangkok 2014', 
@@ -31,10 +30,19 @@ opreference <- opreferencemena.perf[ , c( "operationID",    "attr" ,"planid" ,"p
 perfindicatorall <- NULL
 #names(opreference)
 
-nindic <-nrow(opreference)
-for(i in 1:nindic)
+## Parsing functions for XML
+xp <- function (doc, tag){
+    n <- xpathSApply(doc, tag, xmlValue)
+    if (length(n) > 0) 
+      # paste multiple values?  BILCOD and probably others..
+      paste0(n, collapse="; ") 
+    else NA
+  }
+  
+
+for(i in 1:nrow(opreference))
 {
-  #i <- 20
+  #i <- 72
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
@@ -51,16 +59,7 @@ for(i in 1:nindic)
   
   plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
   
-  xp <- function (doc, tag){
-    n <- xpathSApply(doc, tag, xmlValue)
-    if (length(n) > 0) 
-      # paste multiple values?  BILCOD and probably others..
-      paste0(n, collapse="; ") 
-    else NA
-  }
-  
-  
-  
+
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator")
   n <-length(z)
   notices <-vector("list",n)
@@ -76,24 +75,41 @@ for(i in 1:nindic)
       Standard         = as.numeric(xp(z2, "//standard")),
       OP.Target        = as.numeric(xp(z2, "//impTarget")),
       OL.Target        = as.numeric(xp(z2, "//compTarget")),
-      Mid.Year         = as.numeric(xp(z2, "//midYearValue")),
-      Year.End         = as.numeric(xp(z2, "//yearEndValue")),
+      Mid.Year1        = xp(z2, "//midYearValue"),
+      Mid.Year2        = as.numeric(xp(z2, "//midYearValue")),
+      Year.End1        = xp(z2, "//yearEndValue"),
+      Year.End2        = as.numeric(xp(z2, "//yearEndValue")),
       Disag.           = xp(z2, "//disAggrStr"),
       Reporting.Level  = xp(z2, "//reportingLevel"),
       reversal         = xp(z2, "//reversal"),
       stringsAsFactors=FALSE)
     free(z2)  
   }
-  perfindicatortemp <- as.data.frame(do.call("rbind", notices))
+
   
-  
+    
+    perfindicatortemp <- as.data.frame(do.call("rbind", notices))
+    perfindicatortemp$Year.End <- NULL
+    perfindicatortemp$Mid.Year <- NULL
+    for(i in 1:nrow(perfindicatortemp))
+    {
+      if(is.na(perfindicatortemp[i, c("Year.End2")])){
+        perfindicatortemp[i, c("Year.End")] <- as.numeric(substr(perfindicatortemp[i, c("Year.End1")] , 1,(regexpr(";", perfindicatortemp[i, c("Year.End1")] , ignore.case=FALSE, fixed=TRUE))-1))
+      } else { perfindicatortemp[i, c("Year.End")] <- perfindicatortemp[i, c("Year.End2")] }
+      
+      if(is.na(perfindicatortemp[i, c("Mid.Year2")])){
+        perfindicatortemp[i, c("Mid.Year")] <- as.numeric(substr(perfindicatortemp[i, c("Mid.Year1")] , 1,(regexpr(";", perfindicatortemp[i, c("Mid.Year1")] , ignore.case=FALSE, fixed=TRUE))-1))
+      } else { perfindicatortemp[i, c("Mid.Year")] <- perfindicatortemp[i, c("Mid.Year2")] }
+    }
+      
   
   ## If we have only one population group, it will be difficult to join: need to test
   ppgnum <- getNodeSet(plancountryparse, "//ppgs/PPG/name")
+  goalnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/name")
   indicnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator")
   
   if (as.numeric(length(ppgnum))> 1) {
-    print(paste ("There is ",length(ppgnum) , "population groups and ",length(indicnum), "performance indicators", sep = " ", collapse = NULL) )
+    print(paste ("There is ",length(ppgnum) , "population groups",length(goalnum) , "goals and ",length(indicnum),  "performance indicators", sep = " ", collapse = NULL) )
     
     temp <-  xpathSApply(plancountryparse, "//ppgs/PPG", function(x) 
       cbind(

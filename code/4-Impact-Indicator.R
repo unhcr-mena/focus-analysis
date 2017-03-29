@@ -12,19 +12,8 @@ opreferencemnea$plandel <- paste(opreferencemnea$operationName, opreferencemnea$
 #### 
 ## Pb with parsing some plans -- Need to be fixed
 
-opreferencemnea.imp <- opreferencemnea[ !(opreferencemnea$plandel %in% c('Morocco 2016',
-                                                                         'Morocco 2017',
-                                                                         'Tunisia 2017', 'Tunisia 2018',
-                                                                         'Algeria 2015',
-                                                                         'Egypt 2013', 'Egypt 2014',
-                                                                         'Israel 2013', 'Israel 2014','Israel 2016',
-                                                                         'Lebanon 2015',
-                                                                         'Syrian Arab Republic 2014',
-                                                                         'Iraq 2015')), ]
-                                                                         
-                                                                         
-                                                                        # 'Djibouti 2015','Colombia 2015', 'Mali 2014',
-                                                                        # 'RO bangkok 2013', 'RO bangkok 2014'
+opreferencemnea.imp <- opreferencemnea
+
 
 opreference <- opreferencemnea.imp[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                          "plantype",  "operationName","regionanme", "idregion","idoperation")] 
@@ -36,10 +25,19 @@ write.csv(opreferencemnea.imp, "data/opereferencemenaimp.csv")
 impindicatorall <- NULL
 #names(opreference)
 
-nindic <-nrow(opreference)
-for(i in 1:nindic)
+  xp <- function (doc, tag){
+    n <- xpathSApply(doc, tag, xmlValue)
+    if (length(n) > 0) 
+      # paste multiple values?  BILCOD and probably others..
+      paste0(n, collapse="; ") 
+    else NA
+  }
+  
+  
+
+for(i in 1:nrow(opreference))
 {
-  #i <- 20
+  #i <- 67
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
@@ -57,84 +55,88 @@ for(i in 1:nindic)
   
   plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
   
-  xp <- function (doc, tag){
-    n <- xpathSApply(doc, tag, xmlValue)
-    if (length(n) > 0) 
-      # paste multiple values?  BILCOD and probably others..
-      paste0(n, collapse="; ") 
-    else NA
-  }
   
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/indicators/Indicator")
   n <-length(z)
   notices <-vector("list",n)
   for(i in 1:n)
   {
+    # i <- 1
     z2<-xmlDoc(z[[i]])
     notices[[i]] <- data.frame(
       indicatorid      =  xpathSApply(z2, "//Indicator", xmlGetAttr, 'ID'),
       indicatorrfid    =  xpathSApply(z2, "//Indicator", xmlGetAttr, 'RFID'),
+      Type             =  xp(z2, "//isPerformance"),
       Indicator        =  xp(z2, "//name"),
+      GSP              =  xp(z2, "//isGSP"),
       Standard         =  as.numeric(xp(z2, "//standard")),
-      baseline1        =  as.numeric(xp(z2, "//Baseline")),
-      Baseline         =  as.numeric(xp(z2, "//storedBaseline")),
+      reversal        =  xp(z2, "//reversal"),
       thresholdRed     =  as.numeric(xp(z2, "//thresholdRed")),
       thresholdGreen   =  as.numeric(xp(z2, "//thresholdGreen")),
       OP.Target        =  as.numeric(xp(z2, "//impTarget")),
       OL.Target        =  as.numeric(xp(z2, "//compTarget")),
-      Mid.Year         =  as.numeric(xp(z2, "//midYearValue")),
-      Year.End         =  as.numeric(xp(z2, "//yearEndValue")),
-      Type             =  xp(z2, "//isPerformance"),
-      GSP              =  xp(z2, "//isGSP"),
+      reportingLevel   =  xp(z2, "//reportingLevel"),
+      disAggrStr       =  xp(z2, "//disAggrStr"),
+      Mid.Year1        = xp(z2, "//midYearValue"),
+      Mid.Year2        = as.numeric(xp(z2, "//midYearValue")),
+      Year.End1        =  xp(z2, "//yearEndValue"),
+      Year.End2        =  as.numeric(xp(z2, "//yearEndValue")),
+      baseline1        =  as.numeric(xp(z2, "//Baseline")),
+      Baseline         =  as.numeric(xp(z2, "//storedBaseline")),
       isgspcommitted   =  xp(z2, "//isgspcommitted"),
-      Disag.           =  xp(z2, "//disAggrStr"),
-      Reporting.Level  =  xp(z2, "//reportingLevel"),
       stringsAsFactors=FALSE)
     free(z2)  
   }
+  
   impindicatortemp <- as.data.frame(do.call("rbind", notices))
-  rm(temp)
+  impindicatortemp$Year.End <- NULL
+  impindicatortemp$Mid.Year <- NULL
+  for(i in 1:nrow(impindicatortemp))
+    {
+    if(is.na(impindicatortemp[i, c("Mid.Year2")])){
+    impindicatortemp[i, c("Mid.Year")] <- as.numeric(substr(impindicatortemp[i, c("Mid.Year1")] , 1,(regexpr(";", impindicatortemp[i, c("Mid.Year1")] , ignore.case=FALSE, fixed=TRUE))-1))
+    } else { impindicatortemp[i, c("Mid.Year")] <- impindicatortemp[i, c("Mid.Year2")] }
+    if(is.na(impindicatortemp[i, c("Year.End2")])){
+      impindicatortemp[i, c("Year.End")] <- as.numeric(substr(impindicatortemp[i, c("Year.End1")] , 1,(regexpr(";", impindicatortemp[i, c("Year.End1")] , ignore.case=FALSE, fixed=TRUE))-1))
+    } else { impindicatortemp[i, c("Year.End")] <- impindicatortemp[i, c("Year.End2")] }
+  }
   
   ## If we have only one population group, it will be difficult to join: need to test
   ppgnum <- getNodeSet(plancountryparse, "//ppgs/PPG/name")
+  goalnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/name")
   indicnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/indicators/Indicator")
   
-  if (as.numeric(length(ppgnum))> 1) {
-    print(paste ("There is ",length(ppgnum) , "population groups and ",length(indicnum), "impact indicators", sep = " ", collapse = NULL) )
+  
+    print(paste ("There is ",length(ppgnum) , "population groups",length(goalnum) , "goals and ",length(indicnum), "impact indicators", sep = " ", collapse = NULL) )
     
-    temp <-  xpathSApply(plancountryparse, "//ppgs/PPG", function(x) 
-      cbind(
-        Population.Group = xpathSApply(x, "name", xmlValue),
-        Goal             = xpathSApply(x, "goals/Goal/name", xmlValue),
-        Goalid           = xpathSApply(x, "goals/Goal", xmlGetAttr, 'ID'),
-        #  Goalrfid        = xpathSApply(x, "goals/Goal", xmlGetAttr, 'RFID'),
-        #  RightsGroup     = xpathSApply(x, "goals/Goal/rightsGroups/RightsGroup/name", xmlValue),
-        #  RightsGroupid    = xpathSApply(x, "goals/Goal/rightsGroups/RightsGroup", xmlGetAttr, 'ID'),
-        #  RightsGrouprfid  = xpathSApply(x, "goals/Goal/rightsGroups/RightsGroup", xmlGetAttr, 'RFID'),
-        #  Problem          = xpathSApply(x, "goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/problemName", xmlValue),
-        #  Objective        = xpathSApply(x, "goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveName", xmlValue),
-        indicatorid      = xpathSApply(x, "goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/indicators/Indicator", xmlGetAttr, 'ID')
-      )
-    )
+    rm(temp)
+    getPPGContent =
+      function(x)
+      {
+        goal = xpathSApply(x, "./goals/Goal/name", xmlValue)
+        indicator = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/indicators/Indicator", xmlGetAttr, 'ID')
+        cbind(
+          Population.Group = xpathSApply(x, "./name", xmlValue),
+          Goal             = if(length(goal)) goal else NA,
+          indicatorid      = if(length(indicator)) indicator else NA
+        )
+      }
+    
+    
+    #So now
+    
+    temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
+    
+    #results in a list of matrices each with 3 columns.
+    #So now they are compatible for rbind
+    
+    impindicatorobj <- as.data.frame(do.call(rbind, temp))
     #str(temp)
+    # as.data.frame(temp)
     impindicatorobj1 <- as.data.frame(do.call("rbind", temp))
-    impindicatorobj <- as.data.frame(lapply(impindicatorobj1, function(X) unname(unlist(X))))
+   
     impindicatortemp1 <- merge (impindicatorobj, impindicatortemp , by="indicatorid")
     
-  } else {
-    print(paste ("Only one population group in this Operation Plan  and ",length(indicnum), "impact indicators", sep = " ", collapse = NULL) )
-    
-    temp <-  cbind(
-      Population.Group = xpathSApply(plancountryparse, "//ppgs/PPG/name", xmlValue),
-      Goal             = xpathSApply(plancountryparse, "//ppgs/PPG/goals/Goal/name", xmlValue),
-      Goalid           = xpathSApply(plancountryparse, "//ppgs/PPG/goals/Goal", xmlGetAttr, 'ID')
-      #,
-      #  indicatorid      = xpathSApply(plancountryparse, "PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/indicators/Indicator", xmlGetAttr, 'ID')
-    )
-    impindicatorobj <- as.data.frame(temp)
-    impindicatortemp1 <- cbind (impindicatorobj, impindicatortemp)
-    
-  }
   
   impindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, impindicatortemp1)
   
