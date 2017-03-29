@@ -12,8 +12,8 @@ row.names(temp) <- NULL
 
 if (nrow(temp) > 0) {
   #emphasize.strong.cells(1)
-  print(pandoc.table(temp, split.cells = c("35%", "50%","15%"), use.hyphening = TRUE, justify = 'left', caption = "List of related impact indicators selected in the next plan"))
-#  print(pander(temp, split.cells = c("35%", "50%","15%"), use.hyphening = TRUE, justify = 'left',  caption = "List of related impact indicators selected in the next plan"))
+  print(pandoc.table(temp, split.cells = c("35%", "50%","15%"), use.hyphening = TRUE, justify = 'left', caption = "List of related Performance indicators selected in the next plan"))
+#  print(pander(temp, split.cells = c("35%", "50%","15%"), use.hyphening = TRUE, justify = 'left',  caption = "List of related Performance indicators selected in the next plan"))
   
   
   } else {

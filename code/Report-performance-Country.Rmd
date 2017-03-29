@@ -2,7 +2,7 @@
 output: 
   word_document: 
     fig_caption: yes
-    fig_width: 11
+    fig_width: 14
     toc: yes
 ---
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
@@ -40,7 +40,7 @@ setwd("D:/R-project/focus-analysis")
 focus.performance <- read.csv("data/performance.csv")
 #names(focus.performance)
 ## load all packages
-source("D:/R-project/focus-analysis/code/0-package.R")
+source("code/0-package.R")
 
 ```
 

@@ -174,4 +174,4 @@ for (i in 1:n ) {
     indic.country.date2[i, 16 ] <- OL.Target
   }
 }
-
+ rm(ppg.country,record,OL.Target,OP.Target,record,thresholdGreen,thresholdRed,indic.country.date, indic.country,Standard)

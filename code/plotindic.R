@@ -1,11 +1,12 @@
 ### This code allow to print the indicator review graph
 
-
+### Remove indicator that are not selected -- i.e. no OP target for 2018
 indic.country.this <- as.data.frame(unique(focus.impact.indic[focus.impact.indic$operationName==ctrname & focus.impact.indic$subtype==this.subtype , 
-                                                              c("Indicator", "indicatorrfid","subtype","Objective")]))
+                                                              c("Indicator", "indicatorrfid","subtype","Objective","planningPeriod")]))
+
+indic.country.this <- indic.country.this[indic.country.this$planningPeriod==2018,  c("Indicator", "indicatorrfid","subtype","Objective")]
+
 indic.country.this <- indic.country.this[ !(is.na(indic.country.this$Indicator)), ]
-
-
 
 indic.country.this <- indic.country.this[with(indic.country.this, order(Objective)), ]
 

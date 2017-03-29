@@ -136,10 +136,17 @@ data.budget2 <- join(x=data.budget, y= framework.out1, by="outputrfid", type="le
 ## create a concatenated name for the record
 data.budget2$idrecord <- paste(data.budget2$operationName,data.budget2$Goal, data.budget2$Population.Group, sep="-")
 
+
+
+## Get cost center name
+costCenter <- read.csv("data/costCenter.csv")
+data.budget2 <- join(x=data.budget2, y= costCenter, by="costCenter", type="left")
+
 #names(data.budget2)
 write.csv(data.budget2, "data/budget.csv", row.names = FALSE)
 
+#prop.table(table(data.budget2$CenterName))
 
-prop.table(table(data.budget2$accountName))
+#prop.table(table(data.budget2$accountName))
 
-prop.table(table(data.budget2$implementerName, data.budget2$operationName),2)
+#prop.table(table(data.budget2$implementerName, data.budget2$operationName),2)

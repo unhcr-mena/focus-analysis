@@ -1,10 +1,12 @@
 ### This code allow to print the indicator review graph
 
 ### Remove indicator that are not selected -- i.e. no OP target for 2018
-indic.country.this.perf <- as.data.frame(unique(focus.performance.indic[focus.performance.indic$operationName==ctrname & focus.performance.indic$subtype==this.subtype , 
-                                                              c("Indicator", "indicatorrfid","subtype","Objective","planningPeriod")]))
+framework.this <- as.data.frame(unique(framework[framework$subtype==this.subtype , c("RightsGroup","Objective",  "Output")]))
+framework.this <- framework.this [ !(is.na(framework.this$Output)), ]
 
-indic.country.this.perf <- indic.country.this.perf[indic.country.this.perf$planningPeriod==2018,  c("Indicator", "indicatorrfid","subtype","Objective")]
+framework.this2 <- as.character(framework.this [ , c("Output") ])
+
+budget.this <- focus1.budget[ focus1.budget$Output %in% framework.this2 ,  ]
 
 indic.country.this.perf <- indic.country.this.perf[ !(is.na(indic.country.this.perf$Indicator)), ]
 indic.country.this.perf <- indic.country.this.perf[with(indic.country.this.perf, order(Objective)), ]
@@ -26,22 +28,11 @@ if (n>0) {
     dataplot$Standard <- as.numeric(dataplot$Standard) 
     dataplot$OP.Target <- as.numeric(dataplot$OP.Target)
     dataplot$OL.Target <- as.numeric(dataplot$OL.Target)
-    
-      #  if (is.na(dataplot$record)) {
-      #    cat(paste0("No Record for indicator: ", indicplot , "\n"))
-      #  } else {
           
         cat(paste0("Objective: ", objectivelab , "\n"))
         plotindic2 <-  ggplot(dataplot, aes(label)) + 
             geom_bar(aes(y = record), stat="identity", fill= "slateblue4") +
             facet_wrap(~ ppg.country , ncol=1) +
-            geom_line(aes(y = Standard, group = 1, color = "Standard")) +
-          #  geom_line(aes(y = thresholdGreen, group = 1, color = "thresholdGreen")) +
-            geom_line(aes(y = OP.Target, group = 1, color = "OP.Target")) +
-            geom_line(aes(y = OL.Target, group = 1, color = "OL.Target"), linetype = 2) +
-            scale_colour_manual(" ", values=c("record" = "blue", "Standard" = "red",  "OP.Target" = "black", "OL.Target" = "blue"))+
-            #scale_size_manual(" ", values=c( "thresholdRed" = 1, "thresholdGreen" = 1, "OP.Target" = 2, "OL.Target" = 2))+
-            #scale_fill_manual("",values="blue")+
             ggtitle(indicplot) +
             xlab("") + ylab("") +
             theme_economist_white()+
@@ -52,8 +43,6 @@ if (n>0) {
                   legend.box="horizontal")
         print(plotindic2)
        # ggsave(filename=paste("out/",indicid,".png",sep=""), plot=plotindic2, width=10, height=10,units="in", dpi=300)
-    
-       # }
     } 
 
-    } else { cat(paste0("No indicators for this category\n"))}
+} else { cat(paste0("No related budget for output linked to this category\n"))}
