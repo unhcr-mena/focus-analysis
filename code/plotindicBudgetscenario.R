@@ -32,15 +32,16 @@ if (n>0) {
     # str(dataplot)
     # dataplot
     dataplot$amount <- as.numeric(dataplot$amount)
+    
     ## Subset for operating level
-    dataplot <- dataplot[dataplot$scenario=="Operating Level"]
+    #dataplot <- dataplot[dataplot$scenario=="Operating Level"]
           
         cat(paste0("Objective: ", objectivelab , "\n"))
-        plotbudget1 <-  ggplot(dataplot, aes(x=Type)) + 
+        plotbudget1 <-  ggplot(dataplot, aes(x=scenario)) + 
             geom_bar(aes(y = amount), stat="identity", fill= "slateblue4") +
             facet_wrap(~ planningPeriod , ncol=1) +
            # ggtitle(paste0("Output: ", indicplot)) +
-            ggtitle(paste0("Output: ", indicplot, " (in USD for Operating level only)."),  
+            ggtitle(paste0("Output: ", indicplot),  
                   subtitle = paste0("Objective: ", objectivelab))+
           
             xlab("") + ylab("") +
@@ -52,7 +53,7 @@ if (n>0) {
                   #legend.title=element_blank(),
                   legend.box="horizontal")
         print(plotbudget1)
-       #ggsave(filename=paste("out/budget_",outputrfid1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
+       ggsave(filename=paste("out/budget_",outputrfid1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
     } 
 
 } else { cat(paste0("No related budget for output linked to this category\n"))}
