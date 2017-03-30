@@ -9,19 +9,7 @@ opreferencemena <- read.csv("data/opreferencemena.csv")
 ##################################################3 
 ## Pb with parsing some plans -- Need to be fixed
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
-opreferencemena.perf <- opreferencemena[ !(opreferencemena$plandel %in% c('Algeria 2015',
-                                                                      'Egypt 2013', 'Egypt 2014',
-                                                                      'Israel 2013', 'Israel 2014', 'Israel 2015',  'Israel 2016',  'Israel 2017', 'Israel 2018', 
-                                                                      'Morocco 2015','Morocco 2016', 'Morocco 2017',
-                                                                      'Syrian Arab Republic 2014',
-                                                                      'Lebanon 2015', 
-                                                                      'Iraq 2015')), ]
-                                                                      ## ,'Saudi Arabia 2017'
-                                                                     # 'Djibouti 2015',
-                                                                     # 'Colombia 2015', 
-                                                                     # 'RO bangkok 2013', 'RO bangkok 2014', 
-                                                                      #'Turkmenistan 2013', 'Turkmenistan 2014', 'Turkmenistan 2015',
-                                                                      #'Mali 2014'
+opreferencemena.perf <- opreferencemena
 
 opreference <- opreferencemena.perf[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                            "plantype",  "operationName","regionanme", "idregion","idoperation")] 
@@ -42,7 +30,7 @@ xp <- function (doc, tag){
 
 for(i in 1:nrow(opreference))
 {
-  #i <- 72
+  #i <- 14
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
@@ -107,35 +95,25 @@ for(i in 1:nrow(opreference))
   ppgnum <- getNodeSet(plancountryparse, "//ppgs/PPG/name")
   goalnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/name")
   indicnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator")
-  
-  if (as.numeric(length(ppgnum))> 1) {
-    print(paste ("There is ",length(ppgnum) , "population groups",length(goalnum) , "goals and ",length(indicnum),  "performance indicators", sep = " ", collapse = NULL) )
-    
-    temp <-  xpathSApply(plancountryparse, "//ppgs/PPG", function(x) 
+
+  print(paste ("There is ",length(ppgnum) , "population groups",length(goalnum) , "goals and ",length(indicnum),  "performance indicators", sep = " ", collapse = NULL) )
+
+  rm(temp)
+  getPPGContent =
+    function(x)
+    {
+      goal = xpathSApply(x, "./goals/Goal/name", xmlValue)
+      indicator = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator", xmlGetAttr, 'ID')
       cbind(
-        Population.Group = xpathSApply(x, "name", xmlValue),
-        Goal             = xpathSApply(x, "goals/Goal/name", xmlValue),
-        Goalid           = xpathSApply(x, "goals/Goal", xmlGetAttr, 'ID'),
-        indicatorid      = xpathSApply(x, "goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator", xmlGetAttr, 'ID')
+        Population.Group = xpathSApply(x, "./name", xmlValue),
+        Goal             = if(length(goal)) goal else NA,
+        indicatorid      = if(length(indicator)) indicator else NA
       )
-    )
-    #str(temp)
-    
-    perfindicatorobj1 <- as.data.frame(do.call("rbind", temp))
-    perfindicatorobj <- as.data.frame(lapply(perfindicatorobj1, function(X) unname(unlist(X))))
+    }
+  temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
+
+    perfindicatorobj <- as.data.frame(do.call("rbind", temp))
     perfindicatortemp1 <- merge (perfindicatorobj, perfindicatortemp , by="indicatorid")
-    
-  } else {
-    print(paste ("Only one population group in this Operation Plan  and ",length(indicnum), "performance indicators", sep = " ", collapse = NULL) )
-    
-    temp <-  cbind(
-      Population.Group = xpathSApply(plancountryparse, "//ppgs/PPG/name", xmlValue),
-      Goal             = xpathSApply(plancountryparse, "//ppgs/PPG/goals/Goal/name", xmlValue),
-      Goalid           = xpathSApply(plancountryparse, "//ppgs/PPG/goals/Goal", xmlGetAttr, 'ID')
-    )
-    perfindicatorobj <- as.data.frame(temp)
-    perfindicatortemp1 <- cbind (perfindicatorobj, perfindicatortemp)
-  }
 
   
   perfindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, perfindicatortemp1)

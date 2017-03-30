@@ -4,9 +4,9 @@
 framework.this <- as.data.frame(unique(framework[framework$subtype==this.subtype , c("RightsGroup","Objective",  "Output","outputrfid")]))
 framework.this <- framework.this [ !(is.na(framework.this$Output)), ]
 
-framework.this2 <- as.character(framework.this [ , c("Output") ])
+framework.this2 <- as.character(framework.this [ , c("outputrfid") ])
 
-budget.this <- focus1.budget[ focus1.budget$Output %in% framework.this2 ,  ]
+budget.this <- focus1.budget[ focus1.budget$outputrfid %in% framework.this2 ,  ]
 
 budget.this1 <- as.data.frame(unique(budget.this[ , c("Output","outputrfid","Objective","planningPeriod")]))
 
@@ -32,12 +32,19 @@ if (n>0) {
     # str(dataplot)
     # dataplot
     dataplot$amount <- as.numeric(dataplot$amount)
+    dataplot$planningPeriod <- as.numeric(dataplot$planningPeriod)
+    dataplot$planningPeriod <- as.factor(dataplot$planningPeriod)
+    dataplot$Type <- as.character(dataplot$Type)
+    #dataplot$Type <- as.factor(dataplot$Type)
+    
+    dataplot$Type <-factor(dataplot$Type, levels=dataplot[order(dataplot$amount), "Type"])
+    
     ## Subset for operating level
-    dataplot <- dataplot[dataplot$scenario=="Operating Level", ]
+    #dataplot <- dataplot[dataplot$scenario=="Operating Level", ]
           
         cat(paste0("Objective: ", objectivelab , "\n"))
-        plotbudget1 <-  ggplot(dataplot, aes(x=Type)) + 
-            geom_bar(aes(y = amount), stat="identity", fill= "slateblue4") +
+        plotbudget1 <-  ggplot(dataplot, aes(x=Type, fill=scenario )) + 
+            geom_bar(aes(y = amount), stat="identity") +
             facet_wrap(~ planningPeriod , ncol=1) +
            # ggtitle(paste0("Output: ", indicplot)) +
             ggtitle(paste0("Output: ", indicplot, " (in USD for Operating level only)."),  

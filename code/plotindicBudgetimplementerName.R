@@ -4,9 +4,9 @@
 framework.this <- as.data.frame(unique(framework[framework$subtype==this.subtype , c("RightsGroup","Objective",  "Output","outputrfid")]))
 framework.this <- framework.this [ !(is.na(framework.this$Output)), ]
 
-framework.this2 <- as.character(framework.this [ , c("Output") ])
+framework.this2 <- as.character(framework.this [ , c("outputrfid") ])
 
-budget.this <- focus1.budget[ focus1.budget$Output %in% framework.this2 ,  ]
+budget.this <- focus1.budget[ focus1.budget$outputrfid %in% framework.this2 ,  ]
 
 budget.this1 <- as.data.frame(unique(budget.this[ , c("Output","outputrfid","Objective","planningPeriod")]))
 
@@ -32,18 +32,27 @@ if (n>0) {
     # str(dataplot)
     # dataplot
     dataplot$amount <- as.numeric(dataplot$amount)
+    dataplot$planningPeriod <- as.numeric(dataplot$planningPeriod)
+    dataplot$planningPeriod <- as.factor(dataplot$planningPeriod)
+    dataplot$implementerName <- as.character(dataplot$implementerName)
+    dataplot$implementerName <- as.factor(dataplot$implementerName)
+    
+    #dataplot$implementerName <-factor(dataplot$implementerName, levels=dataplot[order( dataplot$amount), "implementerName", decreasing = TRUE])
+    
+    # levels(dataplot$implementerName)
     
     ## Subset for operating level
-    dataplot <- dataplot[dataplot$scenario=="Operating Level", ]
+    #dataplot <- dataplot[dataplot$scenario=="Operating Level", ]
           
         cat(paste0("Objective: ", objectivelab , "\n"))
-        plotbudget1 <-  ggplot(dataplot, aes(x=implementerName)) + 
-            geom_bar(aes(y = amount), stat="identity", fill= "slateblue4") +
+        plotbudget1 <-  ggplot(dataplot, aes(x=implementerName, fill=scenario )) + 
+            geom_bar(aes(y = amount ), stat="identity") +
             facet_wrap(~ planningPeriod , ncol=1) +
-           # ggtitle(paste0("Output: ", indicplot)) +
-          ggtitle(paste0("Output: ", indicplot, " (in USD for Operating level only)."), 
+            # ggtitle(paste0("Output: ", indicplot)) +
+            ggtitle(paste0("Output: ", indicplot, " (in USD for Operating level only)."), 
                   subtitle = paste0("Objective: ", objectivelab))+
           
+            coord_flip()+
             xlab("") + ylab("") +
             scale_y_continuous(labels=format_si())+
             theme_economist_white()+

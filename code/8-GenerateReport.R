@@ -24,7 +24,7 @@ for(i in 1:nindic)
 {
   #i <- 4
   ctrname <- as.character(listcountry[ i , 1]) 
-  yearreport <- "2017"
+  yearreport <- "2018"
   #render("code/Report-impact-Country.Rmd", pdf_document(latex_engine='xelatex'), output_options=self_contained)
   render("code/Report-Programme-Review-Country.Rmd"
          #, 

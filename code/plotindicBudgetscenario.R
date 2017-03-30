@@ -4,9 +4,9 @@
 framework.this <- as.data.frame(unique(framework[framework$subtype==this.subtype , c("RightsGroup","Objective",  "Output","outputrfid")]))
 framework.this <- framework.this [ !(is.na(framework.this$Output)), ]
 
-framework.this2 <- as.character(framework.this [ , c("Output") ])
+framework.this2 <- as.character(framework.this [ , c("outputrfid") ])
 
-budget.this <- focus1.budget[ focus1.budget$Output %in% framework.this2 ,  ]
+budget.this <- focus1.budget[ focus1.budget$outputrfid %in% framework.this2 ,  ]
 
 budget.this1 <- as.data.frame(unique(budget.this[ , c("Output","outputrfid","Objective","planningPeriod")]))
 
@@ -37,9 +37,9 @@ if (n>0) {
     #dataplot <- dataplot[dataplot$scenario=="Operating Level", ]
           
         cat(paste0("Objective: ", objectivelab , "\n"))
-        plotbudget1 <-  ggplot(dataplot, aes(x=scenario)) + 
-            geom_bar(aes(y = amount), stat="identity", fill= "slateblue4") +
-            facet_wrap(~ planningPeriod , ncol=1) +
+        plotbudget1 <-  ggplot(dataplot, aes(x= planningPeriod, fill=scenario)) + 
+            geom_bar(aes(y = amount), stat="identity") +
+           # facet_wrap(~  , ncol=1) +
            # ggtitle(paste0("Output: ", indicplot)) +
             ggtitle(paste0("Output: ", indicplot),  
                   subtitle = paste0("Objective: ", objectivelab))+
