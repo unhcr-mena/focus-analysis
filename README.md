@@ -1,4 +1,4 @@
-# focus-analysis project
+# Focus Analysis project
 
 Project to analyse UNHCR response framework.
 
@@ -14,7 +14,7 @@ Achievement attempts to capture the question, "Are you doing what set out to do?
  *  Baseline to MYR - Will sort the indicators based on the progress made from the Baseline value to the Mid Year value
  *  Baseline to YER - Will sort the indicators based on the progress made from the Baseline value to the Year End value
  *  MYR to YER - Will sort the indicators based on the progress made from Mid Year value to the Year End value.
- *  # of inconsistencies - Will sort the indicators based on the number of inconsistencies that are present in the indicator
+ *  Number of inconsistencies - Will sort the indicators based on the number of inconsistencies that are present in the indicator
  
  *  Impact Criticality -Computes the values of the indicators based on the criticality algorithm.  it uses impact indicators and computes values based on the standard. -  Acceptable, Not Acceptable and Critical (respectively).
 
