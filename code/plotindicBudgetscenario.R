@@ -34,7 +34,7 @@ if (n>0) {
     dataplot$amount <- as.numeric(dataplot$amount)
     
     ## Subset for operating level
-    #dataplot <- dataplot[dataplot$scenario=="Operating Level"]
+    #dataplot <- dataplot[dataplot$scenario=="Operating Level", ]
           
         cat(paste0("Objective: ", objectivelab , "\n"))
         plotbudget1 <-  ggplot(dataplot, aes(x=scenario)) + 
@@ -53,7 +53,7 @@ if (n>0) {
                   #legend.title=element_blank(),
                   legend.box="horizontal")
         print(plotbudget1)
-       ggsave(filename=paste("out/budget_",outputrfid1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
+       #ggsave(filename=paste("out/budget_",outputrfid1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
     } 
 
 } else { cat(paste0("No related budget for output linked to this category\n"))}

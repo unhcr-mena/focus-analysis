@@ -34,7 +34,7 @@ if (n>0) {
     dataplot$amount <- as.numeric(dataplot$amount)
     
     ## Subset for operating level
-    dataplot <- dataplot[dataplot$scenario=="Operating Level"]
+    dataplot <- dataplot[dataplot$scenario=="Operating Level", ]
           
         cat(paste0("Objective: ", objectivelab , "\n"))
         plotbudget1 <-  ggplot(dataplot, aes(x=CenterName)) + 
