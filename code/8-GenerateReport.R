@@ -7,7 +7,7 @@ source("code/0-package.R")
 
 ### Refresh data
 
-source("code/2-api-get_plan.R")
+source("code/2-api_get_plan.R")
 
 source("code/3-Performance_Indicator.R")
 source("code/4-Impact-Indicator.R")

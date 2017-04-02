@@ -2,3 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
+config/costCenter.csv
+config/officetype.csv
+config/SituationCode.csv
+config/UNHCR-Result-Based-Management.xlsx
+perso/api_get_perso.R
+config/Strategies_Indicators.csv
