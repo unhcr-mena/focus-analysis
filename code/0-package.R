@@ -9,6 +9,7 @@ packages <- c(
 
   
   ## Data Manipulation
+  "purrr",
   "lubridate","date","gdata","zoo", ## playing with date
   "ggseas", ## seasonal adjustemnt with GGplot2
   "dplyr",  "data.table", "doBy","tidyr", ## Data manipulation
@@ -137,6 +138,7 @@ packages <- c(
   
   "formatR", #  used to format the code
   "xtable", "knitr", "pander", ## Package for Rmd
+  "downloader",
   
   "parallel", ## Improve performance
   "Rcpp", ## used to compile some pacjckages
@@ -180,7 +182,6 @@ library(reshape2) ## Restructure data between wide and long format before plotti
 library(RColorBrewer) ## Color palette
 library(classInt) ## Classififcation
 library(plyr)
-gpclibPermit()
 library(lubridate)
 library(date)
 library(gdata)
@@ -196,6 +197,7 @@ library(downloader)
 library(plyr)
 
 
+#gpclibPermit()
 #library(lattice)
 #library(gmodels)
 #library(car)
