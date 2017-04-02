@@ -46,9 +46,8 @@ for(i in 1:nrow(opreference))
   print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, sep = " - ", collapse = NULL) )
   
   plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
-  
-  
-  lastRefreshed   <-  xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue)
+  lastRefreshed   <-  as.data.frame(xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue))
+  names(lastRefreshed)[1] <- "lastRefreshed"
 
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator")
   n <-length(z)
