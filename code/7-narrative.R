@@ -49,10 +49,13 @@ for(i in 1:nindic)
   idoperation <- as.character(opreference[ i , 10])
   plancountryid <- paste( "data/plan/Plan_", idplan ,".xml", sep = "")
   
-  print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, sep = " - ", collapse = NULL) )
-  plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
   lastRefreshed   <-  as.data.frame(xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue))
-  names(lastRefreshed)[1] <- "lastRefreshed"
+  names(lastRefreshed)[1] <- "lastRefreshed"  
+  Refresheddate <- as.character(lastRefreshed$lastRefreshed)
+  
+  print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, " last edited on ", Refresheddate,
+               sep = " - ", collapse = NULL) )
+  
 
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveNarratives/ElementSection")
   n1 <-length(z)
@@ -111,10 +114,11 @@ for(i in 1:nindic)
           narrativeobj <- as.data.frame(do.call("rbind", temp))
           narrativetemp1 <- merge (narrativeobj, narrativetemp , by="sectionid")
        
-        narrativetemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, narrativetemp1)
+        narrativetemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, narrativetemp1,lastRefreshed)
         
         ## Now merging with the rest of the loop
-        narrativeall <- rbind(narrativeall, narrativetemp2,lastRefreshed )
+        narrativeall <- rbind(narrativeall, narrativetemp2)
+        
         rm(narrativetemp2, narrativetemp1,narrativetemp, narrativeobj, narrativeobj1,lastRefreshed )
     }
 }  

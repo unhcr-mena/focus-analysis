@@ -37,7 +37,7 @@ impindicatorall <- NULL
 
 for(i in 1:nrow(opreference))
 {
-  #i <- 67
+  #i <- 2
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
@@ -49,20 +49,23 @@ for(i in 1:nrow(opreference))
   idregion <- as.character(opreference[ i , 9])
   idoperation <- as.character(opreference[ i , 10])
   plancountryid <- paste( "data/plan/Plan_", idplan ,".xml", sep = "")
+  plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
   
-  print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ,#" from ", plancountryid, 
+  lastRefreshed   <-  as.data.frame(xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue))
+  names(lastRefreshed)[1] <- "lastRefreshed"  
+  Refresheddate <- as.character(lastRefreshed$lastRefreshed)
+  
+  print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, " last edited on ", Refresheddate,
                sep = " - ", collapse = NULL) )
   
-  plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
-  lastRefreshed   <-  as.data.frame(xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue))
-  names(lastRefreshed)[1] <- "lastRefreshed"
+
   
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/indicators/Indicator")
   n <-length(z)
   notices <-vector("list",n)
   for(i in 1:n)
   {
-    # i <- 1
+    # i <- 
     z2<-xmlDoc(z[[i]])
     notices[[i]] <- data.frame(
       indicatorid      =  xpathSApply(z2, "//Indicator", xmlGetAttr, 'ID'),
@@ -127,27 +130,21 @@ for(i in 1:nrow(opreference))
         )
       }
     
-    
-    #So now
-    
+
     temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
-    
-    #results in a list of matrices each with 3 columns.
-    #So now they are compatible for rbind
-    
-    impindicatorobj <- as.data.frame(do.call(rbind, temp))
     #str(temp)
     # as.data.frame(temp)
-    impindicatorobj1 <- as.data.frame(do.call("rbind", temp))
+    impindicatorobj <- as.data.frame(do.call("rbind", temp))
    
     impindicatortemp1 <- merge (impindicatorobj, impindicatortemp , by="indicatorid")
     
   
-  impindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, impindicatortemp1)
+  impindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, impindicatortemp1,lastRefreshed)
   
   ## Now merging with the rest of the loop
-  impindicatorall <- rbind(impindicatorall, impindicatortemp2,lastRefreshed )
-  rm(impindicatortemp2, impindicatortemp1,impindicatortemp, impindicatorobj, impindicatorobj1,lastRefreshed )
+  impindicatorall <- rbind(impindicatorall, impindicatortemp2 )
+  
+  rm(impindicatortemp2, impindicatortemp1,impindicatortemp, impindicatorobj, lastRefreshed )
 }
 
 ## that's it

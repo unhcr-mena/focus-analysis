@@ -43,11 +43,13 @@ for(i in 1:nrow(opreference))
   idoperation <- as.character(opreference[ i , 10])
   plancountryid <- paste( "data/plan/Plan_", idplan ,".xml", sep = "")
   
-  print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, sep = " - ", collapse = NULL) )
-  
   plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
   lastRefreshed   <-  as.data.frame(xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue))
-  names(lastRefreshed)[1] <- "lastRefreshed"
+  names(lastRefreshed)[1] <- "lastRefreshed"  
+  Refresheddate <- as.character(lastRefreshed$lastRefreshed)
+  
+  print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, " last edited on ", Refresheddate,
+               sep = " - ", collapse = NULL) )
 
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator")
   n <-length(z)
@@ -121,8 +123,10 @@ for(i in 1:nrow(opreference))
     perfindicatortemp1 <- merge (perfindicatorobj, perfindicatortemp , by="indicatorid")
 
   
-  perfindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, perfindicatortemp1)
-  perfindicatorall <- rbind(perfindicatorall, perfindicatortemp2, lastRefreshed )
+  perfindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, perfindicatortemp1,lastRefreshed)
+  perfindicatorall <- rbind(perfindicatorall, perfindicatortemp2)
+  
+  
   rm(perfindicatortemp2, perfindicatortemp1, perfindicatortemp, perfindicatorobj, perfindicatorobj1,lastRefreshed )
   
 }

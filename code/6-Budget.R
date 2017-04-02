@@ -48,10 +48,15 @@ for(i in 1:nindic)
   idoperation <- as.character(opreference[ i , 10])
   plancountryid <- paste( "data/plan/Plan_", idplan ,".xml", sep = "")
   
-  print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, sep = " - ", collapse = NULL) )
   plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
+  
   lastRefreshed   <-  as.data.frame(xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue))
-  names(lastRefreshed)[1] <- "lastRefreshed"
+  names(lastRefreshed)[1] <- "lastRefreshed"  
+  Refresheddate <- as.character(lastRefreshed$lastRefreshed)
+  
+  print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, " last edited on ", Refresheddate,
+               sep = " - ", collapse = NULL) )
+  
 
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine")
   n1 <-length(z)
@@ -85,7 +90,8 @@ for(i in 1:nindic)
   goalnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/name")
   budgetnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine")
   outputnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/name")
-    print(paste ("This plan includes ",length(ppgnum) , "population groups, ",length(outputnum), "goalnum, ",length(outputnum), "outputs and ",length(budgetnum), "budget lines", sep = " ", collapse = NULL) )
+  
+  print(paste ("This plan includes ",length(ppgnum) , "population groups, ",length(goalnum), "goals, ",length(outputnum), "outputs and ",length(budgetnum), "budget lines", sep = " ", collapse = NULL) )
   
 
     getPPGContent =
@@ -111,10 +117,12 @@ for(i in 1:nindic)
     budgetobj <- as.data.frame(do.call("rbind", temp))
     budgettemp1 <- merge (budgetobj, budgettemp , by="BudgetLineid")
  
-  budgettemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, budgettemp1)
+  budgettemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, budgettemp1,lastRefreshed)
   
   ## Now merging with the rest of the loop
-  budgetall <- rbind(budgetall, budgettemp2,lastRefreshed )
+  budgetall <- rbind(budgetall, budgettemp2)
+  
+  
   rm(budgettemp2, budgettemp1,budgettemp, budgetobj, budgetobj1,lastRefreshed )
 }  
 
