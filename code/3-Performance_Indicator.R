@@ -47,6 +47,8 @@ for(i in 1:nrow(opreference))
   
   plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
   
+  
+  lastRefreshed   <-  xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue)
 
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator")
   n <-length(z)
@@ -103,10 +105,14 @@ for(i in 1:nrow(opreference))
     function(x)
     {
       goal = xpathSApply(x, "./goals/Goal/name", xmlValue)
+      pillar = xpathSApply(x, "./goals/Goal/pillar", xmlValue)
+      situationCode = xpathSApply(x, "./goals/Goal/situationCode", xmlValue)
       indicator = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator", xmlGetAttr, 'ID')
       cbind(
         Population.Group = xpathSApply(x, "./name", xmlValue),
         Goal             = if(length(goal)) goal else NA,
+        pillar             = if(length(pillar)) pillar else NA,
+        situationCode             = if(length(situationCode)) situationCode else NA,
         indicatorid      = if(length(indicator)) indicator else NA
       )
     }
@@ -117,8 +123,8 @@ for(i in 1:nrow(opreference))
 
   
   perfindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, perfindicatortemp1)
-  perfindicatorall <- rbind(perfindicatorall, perfindicatortemp2 )
-  rm(perfindicatortemp2, perfindicatortemp1, perfindicatortemp, perfindicatorobj, perfindicatorobj1 )
+  perfindicatorall <- rbind(perfindicatorall, perfindicatortemp2, lastRefreshed )
+  rm(perfindicatortemp2, perfindicatortemp1, perfindicatortemp, perfindicatorobj, perfindicatorobj1,lastRefreshed )
   
 }
 
@@ -131,6 +137,14 @@ for(i in 1:nrow(opreference))
 ## Difference between baseline & review
  data <- perfindicatorall
  rm(perfindicatorall)
+ 
+ # str(data)
+ data$Standard <- as.numeric(data$Standard)
+ data$OL.Target <- as.numeric(data$OL.Target)
+ data$OP.Target <- as.numeric(data$OP.Target)
+ data$Mid.Year <- as.numeric(data$Mid.Year)
+ data$Year.End <- as.numeric(data$Year.End)
+ 
 
 ## Difference between OL target & review
 data$mid2targetol <- ifelse(data$OL.Target==0, 0, (data$OL.Target- data$Mid.Year) / data$OL.Target)
@@ -171,7 +185,7 @@ data.performance <- data
 ## Load Result Based Management framework -- in order to get # of indic
 ## Join is done on RFID
 
-framework <- read_excel("data/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
+framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
@@ -180,6 +194,10 @@ framework <- framework[ ,c("rid" , "oid" , "iid" ,"numindic", "indicatorrfid",
                            "Indicator", "protection.related", "subtype", "RightsGroup", "Objective", "Source"  )]
 
 data <- join(x=data, y= framework, by="indicatorrfid", type="left" )
+
+
+SituationCode <- read.csv("config/SituationCode.csv")
+data <- join(x=data, y= SituationCode, by="situationCode", type="left")
 
 data.performance <- data
 write.csv(data.performance, "data/performance.csv", row.names = FALSE)

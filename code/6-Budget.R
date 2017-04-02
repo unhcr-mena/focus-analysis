@@ -50,6 +50,7 @@ for(i in 1:nindic)
   
   print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, sep = " - ", collapse = NULL) )
   plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
+  lastRefreshed   <-  xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue)
 
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine")
   n1 <-length(z)
@@ -90,11 +91,15 @@ for(i in 1:nindic)
       function(x)
       {
         goal = xpathSApply(x, "./goals/Goal/name", xmlValue)
+        pillar = xpathSApply(x, "./goals/Goal/pillar", xmlValue)
+        situationCode = xpathSApply(x, "./goals/Goal/situationCode", xmlValue)
         outputrfid = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output", xmlGetAttr, 'RFID')
         BudgetLineid      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine", xmlGetAttr, 'ID')
         cbind(
           Population.Group = xpathSApply(x, "./name", xmlValue),
           Goal             = if(length(goal)) goal else NA,
+          pillar             = if(length(pillar)) pillar else NA,
+          situationCode             = if(length(situationCode)) situationCode else NA,
           outputrfid      = if(length(outputrfid)) outputrfid else NA,
           BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
         )
@@ -108,8 +113,8 @@ for(i in 1:nindic)
   budgettemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, budgettemp1)
   
   ## Now merging with the rest of the loop
-  budgetall <- rbind(budgetall, budgettemp2 )
-  rm(budgettemp2, budgettemp1,budgettemp, budgetobj, budgetobj1 )
+  budgetall <- rbind(budgetall, budgettemp2,lastRefreshed )
+  rm(budgettemp2, budgettemp1,budgettemp, budgetobj, budgetobj1,lastRefreshed )
 }  
 
 ## that's it
@@ -123,7 +128,7 @@ rm(budgetall, budgettemp)
 ## Load Result Based Management framework -- in order to get # of indic
 ## Join is done on RFID
 
-framework <- read_excel("data/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
+framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
@@ -139,8 +144,12 @@ data.budget2$idrecord <- paste(data.budget2$operationName,data.budget2$Goal, dat
 
 
 ## Get cost center name
-costCenter <- read.csv("data/costCenter.csv")
+costCenter <- read.csv("config/costCenter.csv")
 data.budget2 <- join(x=data.budget2, y= costCenter, by="costCenter", type="left")
+
+SituationCode <- read.csv("config/SituationCode.csv")
+data.budget2 <- join(x=data.budget2, y= SituationCode, by="situationCode", type="left")
+
 
 #names(data.budget2)
 write.csv(data.budget2, "data/budget.csv", row.names = FALSE)

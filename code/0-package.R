@@ -43,16 +43,14 @@ rm(packages)
 
 # loads packages into memory
 library(doBy)
-library(lattice)
+#library(lattice)
 #library(gmodels)
-library(car)
-library(lme4)
-library(lmtest)
+#library(car)
+#library(lme4)
+#library(lmtest)
 library(purrr)
 library(plyr)
 
-library(RCurl)
-library(xml2)
 
 library(ggplot2) ## The grammar of graphics!
 library(grid)
@@ -61,16 +59,16 @@ library(extrafont) ## Additional fonts
 library(ggthemes) ## Additional themes for gplot2
 library(zoo) ## Manage reformatting of date
 library(reshape2) ## Restructure data between wide and long format before plotting them - melt and cast
-library(maptools) ## Create maps
-library(rgdal) ## Open geographic files
-library(rgeos)
+#library(maptools) ## Create maps
+#library(rgdal) ## Open geographic files
+#library(rgeos)
 # library(PBSmapping)
-library(ggmap) ## get background map from google map
-library(sp) ## Spatial library
-library(raster) ## Managing raster dataset
+#library(ggmap) ## get background map from google map
+#library(sp) ## Spatial library
+#library(raster) ## Managing raster dataset
 library(RColorBrewer) ## Color palette
 library(classInt) ## Classififcation
-library(hexbin) ## Hexa binning
+#library(hexbin) ## Hexa binning
 library(plyr)
 gpclibPermit()
 library(lubridate)

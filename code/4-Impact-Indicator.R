@@ -54,7 +54,7 @@ for(i in 1:nrow(opreference))
                sep = " - ", collapse = NULL) )
   
   plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
-  
+  lastRefreshed   <-  xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue)
   
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/indicators/Indicator")
   n <-length(z)
@@ -114,10 +114,14 @@ for(i in 1:nrow(opreference))
       function(x)
       {
         goal = xpathSApply(x, "./goals/Goal/name", xmlValue)
+        pillar = xpathSApply(x, "./goals/Goal/pillar", xmlValue)
+        situationCode = xpathSApply(x, "./goals/Goal/situationCode", xmlValue)
         indicator = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/indicators/Indicator", xmlGetAttr, 'ID')
         cbind(
           Population.Group = xpathSApply(x, "./name", xmlValue),
           Goal             = if(length(goal)) goal else NA,
+          pillar             = if(length(pillar)) pillar else NA,
+          situationCode             = if(length(situationCode)) situationCode else NA,
           indicatorid      = if(length(indicator)) indicator else NA
         )
       }
@@ -141,8 +145,8 @@ for(i in 1:nrow(opreference))
   impindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, impindicatortemp1)
   
   ## Now merging with the rest of the loop
-  impindicatorall <- rbind(impindicatorall, impindicatortemp2 )
-  rm(impindicatortemp2, impindicatortemp1,impindicatortemp, impindicatorobj, impindicatorobj1 )
+  impindicatorall <- rbind(impindicatorall, impindicatortemp2,lastRefreshed )
+  rm(impindicatortemp2, impindicatortemp1,impindicatortemp, impindicatorobj, impindicatorobj1,lastRefreshed )
 }
 
 ## that's it
@@ -155,6 +159,13 @@ for(i in 1:nrow(opreference))
 data <- impindicatorall
 
 rm(impindicatorall) 
+
+
+data$Baseline <- as.numeric(data$Baseline)
+data$OL.Target <- as.numeric(data$OL.Target)
+data$OP.Target <- as.numeric(data$OP.Target)
+data$Mid.Year <- as.numeric(data$Mid.Year)
+data$Year.End <- as.numeric(data$Year.End)
 
 
 ########################################
@@ -297,7 +308,7 @@ data$end2net.sit  <- factor(data$end2net.sit, levels = c("No End Year report","E
 ## Load Result Based Management framework -- in order to get # of indic
 ## Join is done on RFID
 
-framework <- read_excel("data/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
+framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
@@ -306,6 +317,10 @@ framework <- framework[ ,c("rid" , "oid" , "iid" ,"numindic", "indicatorrfid",
                            "Indicator", "protection.related", "subtype", "RightsGroup", "Objective", "Source"  )]
 
 data <- join(x=data, y= framework, by="indicatorrfid", type="left" )
+
+
+SituationCode <- read.csv("config/SituationCode.csv")
+data <- join(x=data, y= SituationCode, by="situationCode", type="left")
 
 data.impact <- data
 
