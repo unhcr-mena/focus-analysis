@@ -13,7 +13,7 @@ yearreport <- "2018"
 ```
 
 ---
-title: "Analysis of `r ctrname` Country Operation Plan- `r yearreport`"
+title: "Annual Review of `r ctrname` Country Operation Plan- `r yearreport`"
 author: "MENA office of the Director"
 date: "`r Sys.Date()`"
 ---
@@ -39,6 +39,7 @@ library(readxl)
 focus.impact <- read.csv("D:/R-project/focus-analysis/data/impact.csv")
 focus.performance <- read.csv("D:/R-project/focus-analysis/data/performance.csv")
 focus.budget <- read.csv("D:/R-project/focus-analysis/data/budget.csv")
+focus.narrative <- read.csv("D:/R-project/focus-analysis/data/narrative.csv")
 
 
 
@@ -66,6 +67,7 @@ source("D:/R-project/focus-analysis/code/timeindic2.R")
 
 
 focus1.budget <-focus.budget[focus.budget$operationName == ctrname, ]
+focus1.narrative <-focus.narrative[focus.narrative$operationName == ctrname, ]
 
 ```
 
@@ -73,86 +75,8 @@ focus1.budget <-focus.budget[focus.budget$operationName == ctrname, ]
 
 # Introduction 
 
-UNHCR [FOCUS](http://focus.unhcr.org) system allows for a consistent organisation of all information related to UNHCR programme. The data used for the analysis has been pulled out of Focus Reader. Indicator were also analysed in relation with the Budget reporting managed in MSRP and exposed through Global Focus Insight.
-
-This report allow to provide more analytical insight from the profile of the operation plan for each country. It is automatically generated from the data extracted using a standard analysis script in the R statistical language. If you identify errors or additional interesting analysis to be added, please contact [Edouard Legoupil, snr IMO, MENA Protection Services](mailto:legoupil@unhcr.org?Subject=FocusAnalysisReport).
 
 
-## Identification of information source and line of responsibility for the indicator monitoring plan
-
-Since 2016, Preparation of monitoring plan of impact and performance indicators has become compulsory (cf. [UNHCR Programme Manual- page 187](https://intranet.unhcr.org/content/dam/UNHCR/dpsm/pass/pm/PM%20-%20PART%20II%20-%20MONITORING.pdf)). All guidance on impact indicators are accessible on the [intranet](https://intranet.unhcr.org/intranet/unhcr/en/home/support_services/operations_management0/indicators_guidance/results_framework.html)
-
-### Establish line of responsibility
-The UNHCR RBM (Result Based Management) logical framework has been here remapped to the standard job profile present within operations  (i.e. Registration, SGBV, CP, RST, RSD, etc.) .
-
-
-### Sourcing indicators
-The following provided suggested sources for each indicator per technical area of responsibility.
-To do so, all the indicators from the UNHCR Result based Framework were mapped to one of the following data source: 
-
- 1. National Statistical office (or Stats from Ministry – Education – Labour – Interior…) 
- 2. Registration 
- 3. Case management & assistance tracking – Interagency 
- 4. Record Tracking Sheet – linked to one agency – potential double count – data protection risk… 
- 5. Representative Household survey 
- 6. Protection Monitoring 
- 7. Expert Panel (for instance JAM) 
- 8. Structured community discussions 
- 9. Key Informant 
- 10. Registry of official document (SOPs, Agreement, Laws..) 
- 
-When impact indicators can be selected from more than one available source wihtin the country, the following considerations should be take in account the decide on the one to retain:  
-
- * __Authority__ (for instance, National Stats always to come first)
- * __Accuracy__ (household survey better than Key informant)
- * __Convenience__ (for instance expert panel easier to organize than key Informant)
- * __Economies of scale__ (for instance one unique HH survey can help to cover multiple indicators)
- * __Cost__ (representative household survey ~ minimum 25 K$…)
-
-
-## Support the indicator review excercise
-
-An important element while developing the monitoring plan is to consider what is the importance of the indicator versus the burden 9in terms of workload) and the cost of obtaining the data? For instance, if the indicator has been part of the framework last year but only a few partners used or only a few values were collected throughout the year, is it worth keeping it?
-
-
-### Missing values 
- 
-The most common data quality issues for indicators are the following: 
-
- * "No Baseline"
- * "No Target"
- * "No Mid Year"
-
-Those indicators becomes useless in terms of planning as there won't be anyway to use them for achievement level measurement. The analysis of indicator levels can be done in different ways dpending on whether the difference is looking at: 
- * End year Value or mid year Report;
- * Target Value as defined per operating level (all needs) and target Value as defined per Operating Plan (prioritised needs);
- * Achievement in terms of progress from the base, progres toward the target or absolute progres between the base and the target value. 
-
-### Analysis Classes 
-
-The analysis of indicators difference is then classified along the following classes:
-
- * "No Mid Year review"
- * "No End Year report"
- * "No Baseline"
- * "No OP Target"
- * "No OL Target"
- * "Underplan" - difference is negative
- * "Underperf" - difference below 30% (for mid year) or 50% (for End  year)
- * "Normal" - difference beetween 30% (for mid year) or 50% (for End  year) & 70 % (for mid year) or 90% (for End  year)
- * "Overperf"- difference is over 70 % (for mid year) or 90% (for End  year)
- * "Overplan" - difference is over 100 %
-
-
-### Assess the consistency of indicators selection
-
-The second important element is to consider  the consistency within the selection of indicators in terms of longitudinal analysis.
-
-An element of decision for indicator selection is to assess Indicator consistency over time, i.e. how the selection of indicators match the most used indicators in the region over the recent years. 
-
-The number of indicators per output is also an important dimension. An “excess luggage” is defined when defining more than one impact indicators is define for the same objective.  
-
-A final objective is to review the consistency of baseline value between previous year and if current baseline is missing and the same indicator was used in the previous year
 
 
 
