@@ -49,6 +49,8 @@ for(i in 1:nindic)
   idoperation <- as.character(opreference[ i , 10])
   plancountryid <- paste( "data/plan/Plan_", idplan ,".xml", sep = "")
   
+  plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
+  
   lastRefreshed   <-  as.data.frame(xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue))
   names(lastRefreshed)[1] <- "lastRefreshed"  
   Refresheddate <- as.character(lastRefreshed$lastRefreshed)
@@ -104,7 +106,7 @@ for(i in 1:nindic)
                 Goal             = if(length(goal)) goal else NA,
                 pillar             = if(length(pillar)) pillar else NA,
                 situationCode             = if(length(situationCode)) situationCode else NA,
-                Objective             = if(length(Objective)) goal else NA,
+                Objective             = if(length(Objective)) Objective else NA,
                 sectionid      = if(length(sectionid)) sectionid else NA
               )
             }
@@ -138,8 +140,8 @@ framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1)
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
-framework.out <- framework[ !(is.na(framework$Output)),c( "protection.related", "subtype", "RightsGroup", "Objective", "Output", "outputrfid")]
-framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputrfid")])
+framework.out <- framework[ !(is.na(framework$Output)),c( "protection.related", "subtype","subtype.obj", "RightsGroup", "Objective", "Output", "outputrfid")]
+framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputrfid","subtype.obj")])
 framework.out2 <- unique(framework.out[ ,c( "protection.related", "subtype", "RightsGroup", "Objective")])
 
 data.narrative2 <- join(x=data.narrative, y= framework.out1, by="Objective", type="left" )

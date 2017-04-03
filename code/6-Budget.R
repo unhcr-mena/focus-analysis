@@ -141,8 +141,9 @@ framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1)
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
-framework.out <- framework[ !(is.na(framework$Output)),c( "protection.related", "subtype", "RightsGroup", "Objective", "Output", "outputrfid")]
-framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputrfid")])
+framework.out <- framework[ !(is.na(framework$Output)),c( "protection.related", "subtype","subtype.obj", "RightsGroup", "Objective", "Output", "outputrfid")]
+framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output","subtype.obj", "outputrfid")])
+framework.out11 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputrfid")])
 framework.out2 <- unique(framework.out[ ,c( "protection.related", "subtype", "RightsGroup", "Objective", "Output", "outputrfid")])
 
 data.budget2 <- join(x=data.budget, y= framework.out1, by="outputrfid", type="left" )
