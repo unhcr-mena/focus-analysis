@@ -35,22 +35,22 @@ indic.country.date = data.frame(
            "2015-01-02", "2015-07-01", "2015-12-15",
            "2016-01-02", "2016-07-01", "2016-12-15",
            "2017-01-02", "2017-07-01", "2017-12-15",
-           "2018-01-02", "2018-07-01", "2018-12-15"),
+           "2018-01-02"),
   label = c("2014\n baseline", "2014\n midyear", "2014\n endyear",
             "2015\n baseline", "2015\n midyear", "2015\n endyear",
             "2016\n baseline", "2016\n midyear", "2016\n endyear",
             "2017\n baseline", "2017\n midyear", "2017\n endyear",
-            "2018\n baseline", "2018\n midyear", "2018\n endyear"),
+            "2018\n baseline"),
   phase = c("Baseline", "Mid.Year", "Year.End",
             "Baseline", "Mid.Year", "Year.End",
             "Baseline", "Mid.Year", "Year.End",
             "Baseline", "Mid.Year", "Year.End",
-            "Baseline", "Mid.Year", "Year.End"),
+            "Baseline"),
   year = c("2014", "2014", "2014",
            "2015", "2015", "2015",
            "2016", "2016", "2016",
            "2017", "2017", "2017",
-           "2018", "2018", "2018"))
+           "2018"))
 
 indic.country.date2 <- merge(indic.country.date, indic.country)
 indic.country.date2 <- merge(indic.country.date2, ppg.country)
@@ -60,7 +60,7 @@ indic.country.date2$label <- factor(indic.country.date2$label, c("2014\n baselin
                                                                  "2015\n baseline", "2015\n midyear", "2015\n endyear",
                                                                  "2016\n baseline", "2016\n midyear", "2016\n endyear",
                                                                  "2017\n baseline", "2017\n midyear", "2017\n endyear",
-                                                                 "2018\n baseline", "2018\n midyear", "2018\n endyear"))
+                                                                 "2018\n baseline"))
 
 ##Create fields for values
 indic.country.date2$year <- as.character(indic.country.date2$year)

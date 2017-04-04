@@ -61,12 +61,12 @@ source("D:/R-project/focus-analysis/code/timeindic.R")
 focus1.budget <-focus.budget[focus.budget$operationName == ctrname, ]
 
 focus1.narrative <-focus.narrative[focus.narrative$operationName == ctrname, ]
+focus1.narrative$ppggoal <- paste(focus1.narrative$Population.Group, focus1.narrative$Goal, sep=" - ")
+
 
 ## Number of ppggoal
 
 focus1.impact$ppggoalsit <- paste(focus1.impact$Population.Group, focus1.impact$Goal, focus1.impact$SituationName, sep=" - ")
-focus1.narrative$ppggoal <- paste(focus1.narrative$Population.Group, focus1.narrative$Goal, sep=" - ")
-
 ppg.ctr <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("Population.Group")]))
 
 ppggoalsit1 <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("ppggoalsit")]))
@@ -148,11 +148,11 @@ ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018"), 
 
 The plan includes: 
 
- *  `r ppggoalsit` Population Planning Group(s) associated with Goal & situation,
+ *  __`r ppggoalsit`__ Population Planning Group(s) associated with Goal & situation,
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
  
-kable(ppggoalsit1)
+kable(ppggoalsit1, rownames = NULL, col.names="List of groups in the plan")
 
 ```
 
@@ -175,55 +175,306 @@ The report looks at the	per objective within each sector:
 *** 
  
 # Refugee Registration
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Registration"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
+
 *** 
  
 # Refugee Status Determination (RSD)
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "RSD"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Resettlement
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Resettlement"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Child Protection
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "ChildProtection"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Sexual and other forms of gender-based violence (SGBV)
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "SGBV"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Education
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Education"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Legal issues
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Legal"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Mixed Migration
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Mixed migration"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Statelessness
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Statelessness"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Community Services
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Community Services"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Community Based Protection
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Community Based Protection"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Communication
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Communication"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Protection Coordination
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "ProtCoordination"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Non Food Item (NFI) & Cash Based Intervention
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "NFI-cash"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Health
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Health"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Food Security & Nutrition
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Food"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Shelter
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Shelter"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # WASH
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "WASH"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Supply
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Supply"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Camp Coordination and Camp Management (CCCM)
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "CCCM"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Energy
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Energy"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Environment
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Environment"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Management
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Management"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
-# External Relation
+# External Relations
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "ExtRel"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 *** 
 # Response Coordination
+
+## Objective Analysis
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+this.subtype <- "Coordination"
+source("D:/R-project/focus-analysis/code/obj.review.R")
+```
+
+## Expert feedbacks
+
 
 
 

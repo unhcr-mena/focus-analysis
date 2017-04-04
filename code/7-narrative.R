@@ -99,6 +99,7 @@ for(i in 1:nindic)
               goal           = xpathSApply(x, "./goals/Goal/name", xmlValue)
               pillar = xpathSApply(x, "./goals/Goal/pillar", xmlValue)
               situationCode = xpathSApply(x, "./goals/Goal/situationCode", xmlValue)
+              RightsGroup      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/name", xmlValue)
               Objective      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveName", xmlValue)
               sectionid      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveNarratives/ElementSection", xmlGetAttr, 'ID')
               cbind(
@@ -106,6 +107,7 @@ for(i in 1:nindic)
                 Goal             = if(length(goal)) goal else NA,
                 pillar             = if(length(pillar)) pillar else NA,
                 situationCode             = if(length(situationCode)) situationCode else NA,
+                RightsGroup             = if(length(RightsGroup)) RightsGroup else NA,
                 Objective             = if(length(Objective)) Objective else NA,
                 sectionid      = if(length(sectionid)) sectionid else NA
               )
@@ -140,11 +142,14 @@ framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1)
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
-framework.out <- framework[ !(is.na(framework$Output)),c( "protection.related", "subtype","subtype.obj", "RightsGroup", "Objective", "Output", "outputrfid")]
-framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputrfid","subtype.obj")])
-framework.out2 <- unique(framework.out[ ,c( "protection.related", "subtype", "RightsGroup", "Objective")])
+framework.out <- framework[ is.na(framework$Output),c( "protection.related", "subtype.obj", "RightsGroup", "Objective")]
+#framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputrfid","subtype.obj")])
+framework.out2 <- unique(framework.out[ ,c( "protection.related", "subtype.obj", "RightsGroup", "Objective")])
+framework.out3 <- as.data.frame(unique(framework.out[ ,c(  "Objective")]))
+framework.out22 <- unique(framework.out[ ,c( "subtype.obj", "RightsGroup", "Objective")])
 
-data.narrative2 <- join(x=data.narrative, y= framework.out1, by="Objective", type="left" )
+#data.narrative2 <- merge(x=data.narrative, y= framework.out22, by=c("Objective", "RightsGroup"), all.x=TRUE)
+data.narrative2 <- data.narrative
 
 ## create a concatenated name for the record
 data.narrative2$idrecord <- paste(data.narrative2$operationName,data.narrative2$Goal, data.narrative2$Population.Group, sep="-")
