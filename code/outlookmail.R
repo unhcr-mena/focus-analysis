@@ -6,7 +6,7 @@ OutApp <- COMCreate("Outlook.Application")
 ## create an email 
 outMail = OutApp$CreateItem(0)
 ## configure  email parameter 
-outMail[["To"]] = "egoupil@unhcr.org"
+outMail[["To"]] = "legoupil@unhcr.org"
 outMail[["subject"]] = "some subject"
 outMail[["body"]] = "some body"
 ## send it    

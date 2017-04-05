@@ -1,12 +1,14 @@
+
+
 ## Script to schedule Report
 
-install.packages("data.table")
-install.packages("knitr")
-install.packages("miniUI")
-install.packages("shiny")
-install.packages("taskscheduleR", repos = "http://www.datatailor.be/rcube", type = "source")
+#install.packages("data.table")
+#install.packages("knitr")
+#install.packages("miniUI")
+#install.packages("shiny")
+#install.packages("taskscheduleR", repos = "http://www.datatailor.be/rcube", type = "source")
 
-
+#https://trinkerrstuff.wordpress.com/2015/02/11/scheduling-r-tasks-via-windows-task-scheduler/
 
 #SUCCESS: The scheduled task "outlookmail.R" was successfully deleted.
 #Creating task schedule: schtasks /Create /TN "outlookmail.R" /TR
@@ -15,7 +17,8 @@ install.packages("taskscheduleR", repos = "http://www.datatailor.be/rcube", type
 #>> \"C:/Users/legoupil/Documents/R/R-3.3.2/library/taskscheduleR/extdata/outlookmail.log\" 
 #2>&1" /SC ONCE /ST 22:30 
 
-library(taskscheduleR)
+#library(taskscheduleR)
+library("taskscheduleR", lib.loc="D:/R-project/library")
 #myscript <- system.file("D:/R-project/focus-analysis/code", "8-GenerateReport.R", package = "taskscheduleR")
 
 myscript <- system.file("D:/R-project/focus-analysis/perso", "outlookmail.R", package = "taskscheduleR")
