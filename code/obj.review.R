@@ -13,7 +13,8 @@ if ( length(temp.obj) == 0) {
   
   cat("There's no objective related to this functional area in the plan.\n")
   } else {
-  
+    
+    
     names(temp.obj)[1] <- "Objective"
     temp.obj <- as.character(temp.obj)
     
@@ -120,15 +121,6 @@ if ( length(temp.obj) == 0) {
     ## names(focus1.narrative)
     # &  focus1.narrative$planningPeriod %in% c("2016","2017","2018") 
     
-    temp.narr <- unique(focus1.narrative[ focus1.narrative$Objective %in% temp.obj & focus1.narrative$planningPeriod %in% c("2016","2017","2018"), ])
-    
-    ## list objective
-    temp.obj1 <- as.data.frame(temp.obj)
-    
-    ## List ppg goal
-    
-    ppggoallist <- as.data.frame(unique(focus1.narrative[focus1.narrative$planningPeriod==2018, c("ppggoal")]))
-    names(ppggoallist)[1] <- "ppggoal"
     
     # str(temp.narr)
     ## Now looping around to create the tables
@@ -145,42 +137,18 @@ if ( length(temp.obj) == 0) {
     # "Problem/Objective - Prioritized Response"                                                                               
     # "Problem/Objective - Problem Assessment and Comprehensive Response"                                                      
     # "Results and Impact - Results and Impact"                                                                                
-    # "Unmet Needs - Unmet Needs"  
+    # "Unmet Needs - Unmet Needs" 
     
+    temp.narr <- unique(focus1.narrative[ focus1.narrative$Objective %in% temp.obj & focus1.narrative$planningPeriod %in% c("2016","2017","2018"), ])
     
-    for(i in 1:nrow(temp.obj1))
-    { 
-      for(j in 1:nrow(ppggoallist))
-      { 
-        # i <- 2
-        # j <- 2
-        objectivethis <- as.character(temp.obj1[i, 1])
-        ppggoalthis <- as.character(ppggoallist[j, 1])
-        tempsummary <- as.data.frame(objectivethis)
-        temp.narrtest <- temp.narr[ temp.narr$planningPeriod == "2017" &  temp.narr$sectionName == "Prioritized Response - Prioritized Response" &
-                                      temp.narr$Objective == objectivethis &  temp.narr$ppggoal == ppggoalthis  , c("reportID","planningPeriod","sectionName", "Objective", "ppggoal", "reportName", "text") ]
-        
-        summary2016 <- as.character(temp.narr[temp.narr$planningPeriod == "2016" &  temp.narr$sectionName == "Results and Impact - Results and Impact" &
-                                                temp.narr$Objective == objectivethis &   temp.narr$ppggoal == ppggoalthis , c("text") ])
-        
-        summary2017 <- as.character(temp.narr[temp.narr$planningPeriod == "2017" &  temp.narr$sectionName == "Prioritized Response - Prioritized Response" &
-                                                temp.narr$Objective == objectivethis &  temp.narr$ppggoal == ppggoalthis , c("text") ]) 
-        
-        summary2018 <- as.character(temp.narr[temp.narr$planningPeriod == "2018" &   temp.narr$sectionName == "Prioritized Response - Prioritized Response" &
-                                                temp.narr$Objective == objectivethis &   temp.narr$ppggoal == ppggoalthis , c("text") ])
-        
-        #  summary2018  <- subset(temp.narr[temp.narr$planningPeriod == "2018" & temp.narr$sectionName == "Prioritized Response - Prioritized Response" &
-        #                       temp.narr$Objective == objectivethis &  temp.narr$ppggoal == ppggoalthis )["text"]
-        
-       # if(length(summary2016)==0){ tempsummary[2,1] <- "No narrative for2016 " } else {  tempsummary[2,1] <- summary2016  }
-        # if(length(summary2017)==0){ tempsummary[3,1] <- "No narrative for 2017 " } else {  tempsummary[3,1] <- summary2017  }
-        # if(length(summary2018)==0){ tempsummary[4,1] <- "No narrative for 2018 " } else {  tempsummary[4,1] <- summary2018  }
-        
-        
-        kable(tempsummary, rownames = NULL, col.names= "Narratives for")
-        cat(" \n")
-      }
-    }
+    ## list objective
+    temp.obj1 <- as.data.frame(temp.obj)
+    
+    ## List ppg goal
+    ppggoallist <- as.data.frame(unique(focus1.narrative[focus1.narrative$planningPeriod==2018, c("ppggoal")]))
+    names(ppggoallist)[1] <- "ppggoal"
+    
+
 
     
 }
