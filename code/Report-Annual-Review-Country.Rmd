@@ -30,14 +30,17 @@ library(readxl)
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 #setwd("D:/R-project/focus-analysis") 
 
+## load all R packages for the analysis
+source("D:/R-project/focus-analysis/code/0-package.R")
+
 ##  Loading the 3 dataset - Impact, performance, budget
 focus.impact <- read.csv("D:/R-project/focus-analysis/data/impact.csv")
+## Subset for the country
+focus1.impact <-focus.impact[focus.impact$operationName == ctrname, ]
+source("D:/R-project/focus-analysis/code/timeindic.R")
 
 focus.budget <- read.csv("D:/R-project/focus-analysis/data/budget.csv")
-
-focus.narrative <- read.csv("D:/R-project/focus-analysis/data/narrative.csv")
-
-
+focus1.budget <-focus.budget[focus.budget$operationName == ctrname, ]
 
 framework <- read_excel("D:/R-project/focus-analysis/config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
 #names(framework)
@@ -45,27 +48,11 @@ framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
  # names(framework)
 
-## load all R packages for the analysis
-source("D:/R-project/focus-analysis/code/0-package.R")
-
-```
-
-
-```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
-
-library(reshape2)
-## Subset for the country
-focus1.impact <-focus.impact[focus.impact$operationName == ctrname, ]
-source("D:/R-project/focus-analysis/code/timeindic.R")
-
-focus1.budget <-focus.budget[focus.budget$operationName == ctrname, ]
-
+focus.narrative <- read.csv("D:/R-project/focus-analysis/data/narrative.csv")
 focus1.narrative <-focus.narrative[focus.narrative$operationName == ctrname, ]
-focus1.narrative$ppggoal <- paste(focus1.narrative$Population.Group, focus1.narrative$Goal, sep=" - ")
-
+focus1.narrative$ppggoal <- paste(focus1.narrative$Population.Group, focus1.narrative$goal, sep=" - ")
 
 ## Number of ppggoal
-
 focus1.impact$ppggoalsit <- paste(focus1.impact$Population.Group, focus1.impact$Goal, focus1.impact$SituationName, sep=" - ")
 ppg.ctr <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("Population.Group")]))
 
@@ -97,7 +84,6 @@ ol.budget.2017 <- format( sum(focus1.budget[focus1.budget$scenario=="Operating L
 aol.budget.2017 <- format(sum(focus1.budget[focus1.budget$scenario=="Above Operating Level" & focus1.impact$planningPeriod==2018,c("amount")])
                          - sum(focus1.budget[focus1.budget$scenario=="Above Operating Level" & focus1.impact$planningPeriod==2017, c("amount")]),
                           digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
-
 
 ```
 
@@ -140,8 +126,6 @@ ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018"), 
                   axis.text = element_text(size = 7, face="plain"),
                   #legend.title=element_blank(),
                   legend.box="horizontal")
-
-
 
 ```
 

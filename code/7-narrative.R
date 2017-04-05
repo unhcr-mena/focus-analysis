@@ -3,26 +3,20 @@
 #source("code/1-parse_reference.R")
 source("code/0-package.R")
 
-
-
 opreferencemena <- read.csv("data/opreferencemena.csv")
 #names(opreferencemena)
-
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
 
 #### 
 ## Pb with parsing some plans -- Need to be fixed
-
 opreferencemena.narrative <- opreferencemena
-
 opreference <- opreferencemena.narrative[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
-                                         "plantype",  "operationName","regionanme", "idregion","idoperation")] 
+                                               "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 ## Loop through urls and download all plan 
 
 narrativeall <- NULL
 #names(opreference)
 
-  
 xp <- function (doc, tag){
     n <- xpathSApply(doc, tag, xmlValue)
     if (length(n) > 0) 
@@ -31,12 +25,11 @@ xp <- function (doc, tag){
     else NA
 }
 
-
 ### First getting the reference of the plan
 nindic <-nrow(opreference)
 for(i in 1:nindic)
 {
-  # i <- 12
+  # i <- 18
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
@@ -99,16 +92,17 @@ for(i in 1:nindic)
               goal           = xpathSApply(x, "./goals/Goal/name", xmlValue)
               pillar = xpathSApply(x, "./goals/Goal/pillar", xmlValue)
               situationCode = xpathSApply(x, "./goals/Goal/situationCode", xmlValue)
-              RightsGroup      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/name", xmlValue)
-              Objective      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveName", xmlValue)
+             # RightsGroup      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/name", xmlValue)
+             # Objective      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveName", xmlValue)
               sectionid      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveNarratives/ElementSection", xmlGetAttr, 'ID')
+            
               cbind(
                 Population.Group = xpathSApply(x, "./name", xmlValue),
-                Goal             = if(length(goal)) goal else NA,
+                goal             = if(length(goal)) goal else NA,
                 pillar             = if(length(pillar)) pillar else NA,
                 situationCode             = if(length(situationCode)) situationCode else NA,
-                RightsGroup             = if(length(RightsGroup)) RightsGroup else NA,
-                Objective             = if(length(Objective)) Objective else NA,
+             #   RightsGroup             = if(length(RightsGroup)) RightsGroup else NA,
+             #   Objective             = if(length(Objective)) Objective else NA,
                 sectionid      = if(length(sectionid)) sectionid else NA
               )
             }
@@ -129,24 +123,12 @@ for(i in 1:nindic)
 
 ## that's it
 
+
+
 #str(narrativeall)
 data.narrative <- narrativeall
 write.csv(data.narrative, "data/narrative1.csv")
 rm(narrativeall, narrativetemp)
-
-##########################################################################
-## Load Result Based Management framework -- in order to get # of indic
-## Join is done on RFID
-
-framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
-#names(framework)
-framework<- framework[ !(is.na(framework$Indicator)) ,  ]
-framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
-framework.out <- framework[ is.na(framework$Output),c( "protection.related", "subtype.obj", "RightsGroup", "Objective")]
-#framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputrfid","subtype.obj")])
-framework.out2 <- unique(framework.out[ ,c( "protection.related", "subtype.obj", "RightsGroup", "Objective")])
-framework.out3 <- as.data.frame(unique(framework.out[ ,c(  "Objective")]))
-framework.out22 <- unique(framework.out[ ,c( "subtype.obj", "RightsGroup", "Objective")])
 
 #data.narrative2 <- merge(x=data.narrative, y= framework.out22, by=c("Objective", "RightsGroup"), all.x=TRUE)
 data.narrative2 <- data.narrative
@@ -154,9 +136,15 @@ data.narrative2 <- data.narrative
 ## create a concatenated name for the record
 data.narrative2$idrecord <- paste(data.narrative2$operationName,data.narrative2$Goal, data.narrative2$Population.Group, sep="-")
 
-
 SituationCode <- read.csv("config/SituationCode.csv")
 data.narrative2 <- join(x=data.narrative2, y= SituationCode, by="situationCode", type="left")
+
+## check that it's parsed correctly
+data.narrative2test <- data.narrative2[ data.narrative2$Objective =="Civil registration and civil status documentation strengthened" &
+                                          data.narrative2$operationName =="Jordan" & 
+                                          data.narrative2$sectionName == "Prioritized Response - Prioritized Response",
+                                        c("sectionid","planningPeriod","sectionName",# "Objective",
+                                          "Population.Group", "reportName", "text")]
 
 #names(data.narrative2)
 write.csv(data.narrative2, "data/narrative.csv", row.names = FALSE)

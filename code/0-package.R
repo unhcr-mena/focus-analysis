@@ -137,7 +137,7 @@ packages <- c(
   "AER",  # Applied economtrics with R
   
   "formatR", #  used to format the code
-  "xtable", "knitr", "pander", ## Package for Rmd
+  "xtable", "knitr", "pander", "rmarkdown",## Package for Rmd
   "downloader",
   
   "parallel", ## Improve performance
@@ -195,7 +195,10 @@ library(readxl)
 library(RCurl)
 library(downloader)
 library(plyr)
-
+library(xtable)
+library(knitr)
+library(pander)
+library(rmarkdown)
 
 #gpclibPermit()
 #library(lattice)
