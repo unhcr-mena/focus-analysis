@@ -215,11 +215,6 @@ library(rmarkdown)
 #library(raster) ## Managing raster dataset
 #library(hexbin) ## Hexa binning
 
-##### Load the packages required to read XML files.
-#install.packages("XML")
-#install.packages("xml2")
-
-# install.packages("RCurl")
 
 
 
