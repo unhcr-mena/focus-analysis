@@ -3,22 +3,22 @@
 source("code/0-package.R")
 
 
-opreferencemnea <- read.csv("data/opreferencemena.csv")
+opreferencemena <- read.csv("data/opreferencemena.csv")
 #opreferenceope <- read.csv("data/opreferenceope.csv")
-names(opreferencemnea)
+names(opreferencemena)
 
-opreferencemnea$plandel <- paste(opreferencemnea$operationName, opreferencemnea$planningPeriod, sep = " ")
+opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
 
 #### 
 ## Pb with parsing some plans -- Need to be fixed
 
-opreferencemnea.imp <- opreferencemnea
 
+opreferencemena.imp <- opreferencemena
 
-opreference <- opreferencemnea.imp[ opreferencemena.imp$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemena.imp[ opreferencemena.imp$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                          "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 
-write.csv(opreferencemnea.imp, "data/opereferencemenaimp.csv")
+write.csv(opreferencemena.imp, "data/opereferencemenaimp.csv")
 
 #############################################################
 ## Loop through urls and download all plan 
