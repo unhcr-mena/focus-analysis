@@ -9,6 +9,9 @@ opreferencemena <- read.csv("data/opreferencemena.csv")
 ##################################################3 
 ## Pb with parsing some plans -- Need to be fixed
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
+
+opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Saudi Arabia 2016', 'United Arab Emirates 2018', 'Tunisia 2018')), ]
+
 opreferencemena.perf <- opreferencemena
 
 opreference <- opreferencemena.perf[ opreferencemena.perf$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
@@ -34,7 +37,7 @@ nperf2 <- 0
 
 for(i in 1:nrow(opreference))
 {
-  #i <- 14
+  #i <- 13
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
