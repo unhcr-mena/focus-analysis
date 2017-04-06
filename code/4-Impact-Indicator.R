@@ -15,7 +15,7 @@ opreferencemnea$plandel <- paste(opreferencemnea$operationName, opreferencemnea$
 opreferencemnea.imp <- opreferencemnea
 
 
-opreference <- opreferencemnea.imp[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemnea.imp[ opreferencemena.imp$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                          "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 
 write.csv(opreferencemnea.imp, "data/opereferencemenaimp.csv")
@@ -33,6 +33,10 @@ impindicatorall <- NULL
     else NA
   }
   
+### First getting the reference of the plan
+nimp <- 0
+nimp1 <- 0
+nimp2 <- 0
   
 
 for(i in 1:nrow(opreference))
@@ -136,7 +140,17 @@ for(i in 1:nrow(opreference))
     # as.data.frame(temp)
     impindicatorobj <- as.data.frame(do.call("rbind", temp))
    
-    impindicatortemp1 <- merge (impindicatorobj, impindicatortemp , by="indicatorid")
+    impindicatortemp1 <- merge (x=impindicatortemp , y=impindicatorobj,  by="indicatorid", all.x=TRUE)
+    
+    
+    nimp <- nimp + nrow(impindicatorobj)
+    print(paste ("Loaded ", nrow(impindicatorobj) , "impact indicator Lines, total of", nimp , "impact indicator Lines.", sep = " ", collapse = NULL) )
+    
+    nimp2 <- nimp2 + nrow(impindicatortemp)
+    print(paste ("Loaded ", nrow(impindicatortemp) , "impact indicator Lines, total of", nimp2 , "impact indicator Lines.", sep = " ", collapse = NULL) )
+    
+    nimp1 <- nimp1 + nrow(impindicatortemp1)
+    print(paste ("Merged ", nrow(impindicatortemp1) , "impact indicator Lines, total of", nimp1 , "impact indicator Lines.", sep = " ", collapse = NULL) )
     
   
   impindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, impindicatortemp1,lastRefreshed)

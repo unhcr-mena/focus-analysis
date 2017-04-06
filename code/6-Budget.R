@@ -15,7 +15,7 @@ opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$
 
 opreferencemena.budg <- opreferencemena
 
-opreference <- opreferencemena.budg[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemena.budg[ opreferencemena.budg$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                          "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 ## Loop through urls and download all plan 
 
@@ -33,9 +33,13 @@ xp <- function (doc, tag){
 
 
 ### First getting the reference of the plan
-nindic <-nrow(opreference)
-for(i in 1:nindic)
+nbudg <- 0
+nbudg1 <- 0
+nbudg2 <- 0
+
+for(i in 1:nrow(opreference))
 {
+  # i <- 1
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
@@ -64,25 +68,25 @@ for(i in 1:nindic)
   
   ## Now parsing all budget lines
   for(i in 1:n1)
-  {
-    z2<-xmlDoc(z[[i]])
-    notices[[i]] <- data.frame(
-      BudgetLineid     =  xpathSApply(z2, "//BudgetLine", xmlGetAttr, 'ID'),
-      scenario         = xp(z2, "//scenario"),
-      Type             = xp(z2, "//type"),
-      costCenter       = xp(z2, "//costCenter"),
-      implementerCode  = xp(z2, "//implementerCode"),
-      implementerName  = xp(z2, "//implementerName"),
-      accountCode      = xp(z2, "//accountCode"),
-      accountName      = xp(z2, "//accountName"),
-      quantity         = as.numeric(xp(z2, "//quantity")),
-      currency         = xp(z2, "//currency"),
-      unitCost         = as.numeric(xp(z2, "//unitCost")),
-      localCost        = as.numeric(xp(z2, "//localCost")),
-      amount           = as.numeric(xp(z2, "//amount")),
-      stringsAsFactors=FALSE)
-    free(z2)  
-  }
+    {
+      z2<-xmlDoc(z[[i]])
+      notices[[i]] <- data.frame(
+        BudgetLineid     =  xpathSApply(z2, "//BudgetLine", xmlGetAttr, 'ID'),
+        scenario         = xp(z2, "//scenario"),
+        Type             = xp(z2, "//type"),
+        costCenter       = xp(z2, "//costCenter"),
+        implementerCode  = xp(z2, "//implementerCode"),
+        implementerName  = xp(z2, "//implementerName"),
+        accountCode      = xp(z2, "//accountCode"),
+        accountName      = xp(z2, "//accountName"),
+        quantity         = as.numeric(xp(z2, "//quantity")),
+        currency         = xp(z2, "//currency"),
+        unitCost         = as.numeric(xp(z2, "//unitCost")),
+        localCost        = as.numeric(xp(z2, "//localCost")),
+        amount           = as.numeric(xp(z2, "//amount")),
+        stringsAsFactors=FALSE)
+      free(z2)  
+    }
   budgettemp <- as.data.frame(do.call("rbind", notices))
   
   ## If we have only one population group, it will be difficult to join: need to test
@@ -100,30 +104,64 @@ for(i in 1:nindic)
         goal = xpathSApply(x, "./goals/Goal/name", xmlValue)
         pillar = xpathSApply(x, "./goals/Goal/pillar", xmlValue)
         situationCode = xpathSApply(x, "./goals/Goal/situationCode", xmlValue)
-        outputrfid = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output", xmlGetAttr, 'RFID')
+       # outputrfid = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output", xmlGetAttr, 'RFID')
         BudgetLineid      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine", xmlGetAttr, 'ID')
         cbind(
           Population.Group = xpathSApply(x, "./name", xmlValue),
           Goal             = if(length(goal)) goal else NA,
           pillar             = if(length(pillar)) pillar else NA,
           situationCode             = if(length(situationCode)) situationCode else NA,
-          outputrfid      = if(length(outputrfid)) outputrfid else NA,
+        #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
           BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
         )
       }
      temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
-    
-    
     budgetobj <- as.data.frame(do.call("rbind", temp))
-    budgettemp1 <- merge (budgetobj, budgettemp , by="BudgetLineid")
+    
+    
+    ## Restore hierachy with RBM
+    getoutContent =
+      function(x)
+      {
+        BudgetLineid      = xpathSApply(x, "./Output/budgetLines/BudgetLine", xmlGetAttr, 'ID')
+        cbind(
+          outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
+        #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
+          BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
+        )
+      }
+    
+    
+    #BudgetLineidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine", xmlGetAttr, 'ID'))
+   # outputrfidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output", xmlGetAttr, 'RFID'))
+    temp2 <-  xpathApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs", getoutContent)
+   # str(temp2)
+    
+    budgetobj2 <- as.data.frame(do.call("rbind", temp2))
+    budgetobj2 <- budgetobj2[!(is.na(budgetobj2$BudgetLineid )), ]
+    budgetobj <- join(x=budgetobj, y=budgetobj2,  by="BudgetLineid", type="left")
+    
+    budgettemp1 <- merge(x=budgettemp, y=budgetobj,  by="BudgetLineid", all.x=TRUE)
+    
+    
+    nbudg <- nbudg + nrow(budgetobj)
+    print(paste ("Loaded ", nrow(budgetobj) , "Budget Lines, total of", nbudg , "Budget Lines.", sep = " ", collapse = NULL) )
+    
+    nbudg2 <- nbudg2 + nrow(budgettemp)
+    print(paste ("Loaded ", nrow(budgettemp) , "Budget Lines, total of", nbudg2 , "Budget Lines.", sep = " ", collapse = NULL) )
+    
+    nbudg1 <- nbudg1 + nrow(budgettemp1)
+    print(paste ("Merged ", nrow(budgettemp1) , "Budget Lines, total of", nbudg1 , "Budget Lines.", sep = " ", collapse = NULL) )
  
   budgettemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, budgettemp1,lastRefreshed)
   
   ## Now merging with the rest of the loop
   budgetall <- rbind(budgetall, budgettemp2)
   
-  
-  rm(budgettemp2, budgettemp1,budgettemp, budgetobj, budgetobj1,lastRefreshed )
+  rm(budgettemp2, budgettemp1,budgettemp, budgetobj, budgetobj1,lastRefreshed, goalnum,i,idoperation,
+     idplan,idregion,n1,
+     notices,operationID,operationName,plancountryid,planid,plancountryparse,planningPeriod,plantype,ppgnum,planname,
+     Refresheddate,regionanme,sectnum,temp,temp2,z,z2)
 }  
 
 ## that's it

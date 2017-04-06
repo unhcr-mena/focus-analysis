@@ -11,7 +11,7 @@ opreferencemena <- read.csv("data/opreferencemena.csv")
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
 opreferencemena.perf <- opreferencemena
 
-opreference <- opreferencemena.perf[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemena.perf[ opreferencemena.perf$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                            "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 
 ## Loop through urls and download all plan 
@@ -26,7 +26,11 @@ xp <- function (doc, tag){
       paste0(n, collapse="; ") 
     else NA
   }
-  
+### First getting the reference of the plan
+nperf <- 0
+nperf1 <- 0
+nperf2 <- 0
+
 
 for(i in 1:nrow(opreference))
 {
@@ -118,16 +122,58 @@ for(i in 1:nrow(opreference))
       )
     }
   temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
+  perfindicatorobj <- as.data.frame(do.call("rbind", temp))
+  
+  ## Restore hierachy with RBM
+  getoutContent =
+    function(x)
+    {
+      BudgetLineid      = xpathSApply(x, "./Output/budgetLines/BudgetLine", xmlGetAttr, 'ID')
+      cbind(
+        outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
+        #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
+        BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
+      )
+    }
+  temp2 <-  xpathApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs", getoutContent)
+  
+  getoutContent =
+    function(x)
+    {
+      indicator = xpathSApply(x, "./Output/indicators/Indicator", xmlGetAttr, 'ID')
+      cbind(
+        outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
+        indicatorid      = if(length(indicator)) indicator else NA
+      )
+    }
+  
+  temp2 <-  xpathApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs", getoutContent)
+  perfindicatorobj2 <- as.data.frame(do.call("rbind", temp2))
+  perfindicatorobj2 <- perfindicatorobj2[!(is.na(perfindicatorobj2$sectionid )), ]
+  perfindicatorobj <- join(x=perfindicatorobj, y=perfindicatorobj2,  by="indicatorid", type="left")
+  
+  perfindicatortemp1 <- merge (x=perfindicatortemp, y=perfindicatorobj, by="indicatorid", all.x=TRUE)
 
-    perfindicatorobj <- as.data.frame(do.call("rbind", temp))
-    perfindicatortemp1 <- merge (perfindicatorobj, perfindicatortemp , by="indicatorid")
-
+  
+  nperf <- nperf + nrow(perfindicatorobj)
+  print(paste ("Loaded ", nrow(perfindicatorobj) , "prformance indicator Lines, total of", nperf , "prformance indicator Lines.", sep = " ", collapse = NULL) )
+  
+  nperf2 <- nperf2 + nrow(perfindicatortemp)
+  print(paste ("Loaded ", nrow(perfindicatortemp) , "prformance indicator Lines, total of", nperf2 , "prformance indicator Lines.", sep = " ", collapse = NULL) )
+  
+  nperf1 <- nperf1 + nrow(perfindicatortemp1)
+  print(paste ("Merged ", nrow(perfindicatortemp1) , "prformance indicator Lines, total of", nperf1 , "prformance indicator Lines.", sep = " ", collapse = NULL) )
+  
+  
   
   perfindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, perfindicatortemp1,lastRefreshed)
   perfindicatorall <- rbind(perfindicatorall, perfindicatortemp2)
   
   
-  rm(perfindicatortemp2, perfindicatortemp1, perfindicatortemp, perfindicatorobj, perfindicatorobj1,lastRefreshed )
+  rm(perfindicatortemp2, perfindicatortemp1, perfindicatortemp, perfindicatorobj, perfindicatorobj1,lastRefreshed, goalnum,i,idoperation,
+     idplan,idregion,n1,
+     notices,operationID,operationName,plancountryid,planid,plancountryparse,planningPeriod,plantype,ppgnum,planname,
+     Refresheddate,regionanme,sectnum,temp,temp2,z,z2)
   
 }
 

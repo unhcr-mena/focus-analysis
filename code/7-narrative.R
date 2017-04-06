@@ -10,7 +10,7 @@ opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$
 #### 
 ## Pb with parsing some plans -- Need to be fixed
 opreferencemena.narrative <- opreferencemena
-opreference <- opreferencemena.narrative[ , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemena.narrative[opreferencemena.narrative$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                                "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 ## Loop through urls and download all plan 
 
@@ -26,10 +26,16 @@ xp <- function (doc, tag){
 }
 
 ### First getting the reference of the plan
-nindic <-nrow(opreference)
-for(i in 1:nindic)
+nindic0 <- 0
+nindic  <- 0
+nindic1 <- 0
+nindic11 <- 0
+nindic2 <- 0
+
+
+for(i in 1:nrow(opreference))
 {
-  # i <- 18
+  # i <- 6
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
@@ -83,9 +89,9 @@ for(i in 1:nindic)
         goalnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/name")
         sectnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveNarratives/ElementSection")
       
-          print(paste ("This plan includes ",length(ppgnum) , "population groups, ",length(goalnum), "goalnum and ",length(sectnum), "narrative sections", sep = " ", collapse = NULL) )
+        print(paste ("This plan includes ",length(ppgnum) , "population groups, ",length(goalnum), "goalnum and ",length(sectnum), "narrative sections", sep = " ", collapse = NULL) )
         
-      
+          
           getPPGContent =
             function(x)
             {
@@ -93,7 +99,7 @@ for(i in 1:nindic)
               pillar = xpathSApply(x, "./goals/Goal/pillar", xmlValue)
               situationCode = xpathSApply(x, "./goals/Goal/situationCode", xmlValue)
              # RightsGroup      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/name", xmlValue)
-             # Objective      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveName", xmlValue)
+            #  Objective      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveName", xmlValue)
               sectionid      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveNarratives/ElementSection", xmlGetAttr, 'ID')
             
               cbind(
@@ -101,28 +107,65 @@ for(i in 1:nindic)
                 goal             = if(length(goal)) goal else NA,
                 pillar             = if(length(pillar)) pillar else NA,
                 situationCode             = if(length(situationCode)) situationCode else NA,
-             #   RightsGroup             = if(length(RightsGroup)) RightsGroup else NA,
-             #   Objective             = if(length(Objective)) Objective else NA,
+               # RightsGroup             = if(length(RightsGroup)) RightsGroup else NA,
+               # Objective             = if(length(Objective)) Objective else NA,
                 sectionid      = if(length(sectionid)) sectionid else NA
               )
             }
+          
            temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
+           narrativeobj <- as.data.frame(do.call("rbind", temp))
+           narrativeobj <- narrativeobj[!(is.na(narrativeobj$sectionid )), ]
+           
+           ## Restore hierachy with RBM
+            getobjContent =
+              function(x)
+              {
+                sectionid      = xpathSApply(x, "./objectiveNarratives/ElementSection", xmlGetAttr, 'ID')
+                cbind(
+                  Objective = xpathSApply(x, "./objectiveName", xmlValue),
+                  sectionid      = if(length(sectionid)) sectionid else NA
+                )
+              }
+            
+             temp2 <-  xpathApply(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective", getobjContent)
+             narrativeobj2 <- as.data.frame(do.call("rbind", temp2))
+             narrativeobj2 <- narrativeobj2[!(is.na(narrativeobj2$sectionid )), ]
+             narrativeobj <- join(x=narrativeobj, y=narrativeobj2,  by="sectionid", type="left")
+           
+           narrativetemp1 <- join(x=narrativetemp, y=narrativeobj,  by="sectionid", type="left")
+          
+           narrativetemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, narrativetemp1,lastRefreshed)
+          
+           nindic0 <- nindic0 + nrow(narrativetemp)
+           print(paste ("Loaded ", nrow(narrativetemp) , "sections, total of", nindic0 , "sections.", sep = " ", collapse = NULL) )
+          
+           nindic <- nindic + nrow(narrativeobj)
+           print(paste ("Loaded ", nrow(narrativeobj) , "sections to ppg, total of", nindic , "sections.", sep = " ", collapse = NULL) )
+           
+           nindic11 <- nindic11 + nrow(narrativeobj2)
+           print(paste ("Loaded ", nrow(narrativeobj2) , "sections to right, total of", nindic11 , "sections.", sep = " ", collapse = NULL) )
+           
+           nindic1 <- nindic1 + nrow(narrativetemp1)
+           print(paste ("Loaded ", nrow(narrativetemp1) , "sections, total of", nindic1 , "sections.", sep = " ", collapse = NULL) )
+           
+           nindic2 <- nindic2 + nrow(narrativetemp2)
+           print(paste ("Loaded ", nrow(narrativetemp2) , "sections, total of", nindic2 , "sections.", sep = " ", collapse = NULL) )
           
           
-          narrativeobj <- as.data.frame(do.call("rbind", temp))
-          narrativetemp1 <- merge (narrativeobj, narrativetemp , by="sectionid")
        
-        narrativetemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, narrativetemp1,lastRefreshed)
-        
         ## Now merging with the rest of the loop
         narrativeall <- rbind(narrativeall, narrativetemp2)
         
-        rm(narrativetemp2, narrativetemp1,narrativetemp, narrativeobj, narrativeobj1,lastRefreshed )
+        rm(narrativetemp2, narrativetemp1,narrativetemp, narrativeobj,  narrativeobj2, narrativeobj1,lastRefreshed, goalnum,i,idoperation,
+           idplan,idregion,n1,
+           notices,operationID,operationName,plancountryid,planid,plancountryparse,planningPeriod,plantype,ppgnum,planname,
+           Refresheddate,regionanme,sectnum,temp,temp2,z,z2)
     }
 }  
 
 ## that's it
-
+rm(nindic,nindic0,nindic1,nindic2,nindic11)
 
 
 #str(narrativeall)
@@ -148,4 +191,7 @@ data.narrative2test <- data.narrative2[ data.narrative2$Objective =="Civil regis
 
 #names(data.narrative2)
 write.csv(data.narrative2, "data/narrative.csv", row.names = FALSE)
+
+rm(SituationCode)
+
 
