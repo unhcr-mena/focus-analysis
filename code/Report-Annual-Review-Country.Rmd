@@ -9,7 +9,7 @@ output:
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
-#ctrname <- "Israel"
+#ctrname <- "Jordan"
 yearreport <- "2018"
 
 
@@ -31,27 +31,27 @@ library(readxl)
 
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
-#setwd("D:/R-project/focus-analysis") 
+#setwd("C:/R-project/focus-analysis1") 
 
 ## load all R packages for the analysis
-source("D:/R-project/focus-analysis/code/0-package.R")
+source("C:/R-project/focus-analysis1/code/0-package.R")
 
 ##  Loading the 3 dataset - Impact, performance, budget
-focus.impact <- read.csv("D:/R-project/focus-analysis/data/impact.csv")
+focus.impact <- read.csv("C:/R-project/focus-analysis1/data/impact.csv")
 ## Subset for the country
 focus1.impact <-focus.impact[focus.impact$operationName == ctrname, ]
-source("D:/R-project/focus-analysis/code/timeindic.R")
+source("C:/R-project/focus-analysis1/code/timeindic.R")
 
-focus.budget <- read.csv("D:/R-project/focus-analysis/data/budget.csv")
+focus.budget <- read.csv("C:/R-project/focus-analysis1/data/budget.csv")
 focus1.budget <-focus.budget[focus.budget$operationName == ctrname, ]
 
-framework <- read_excel("D:/R-project/focus-analysis/config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
+framework <- read_excel("C:/R-project/focus-analysis1/config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
  # names(framework)
 
-focus.narrative <- read.csv("D:/R-project/focus-analysis/data/narrative.csv")
+focus.narrative <- read.csv("C:/R-project/focus-analysis1/data/narrative.csv")
 focus1.narrative <-focus.narrative[focus.narrative$operationName == ctrname, ]
 focus1.narrative$ppggoal <- paste(focus1.narrative$Population.Group, focus1.narrative$goal, sep=" - ")
 
@@ -159,7 +159,7 @@ ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018"), 
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -173,7 +173,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -185,7 +185,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -197,7 +197,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -209,7 +209,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -221,7 +221,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -233,7 +233,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -245,7 +245,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -257,7 +257,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -269,7 +269,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -281,7 +281,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -293,7 +293,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -305,7 +305,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -317,7 +317,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "NFI-cash"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -329,7 +329,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -341,7 +341,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -353,7 +353,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -365,7 +365,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -377,7 +377,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -389,7 +389,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -401,7 +401,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -413,7 +413,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -425,7 +425,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -437,7 +437,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 
@@ -449,7 +449,7 @@ source("D:/R-project/focus-analysis/code/obj.review.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/obj.review.R")
+source("C:/R-project/focus-analysis1/code/obj.review.R")
 ```
 
 

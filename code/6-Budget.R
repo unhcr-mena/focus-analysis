@@ -37,6 +37,7 @@ xp <- function (doc, tag){
 nbudg <- 0
 nbudg1 <- 0
 nbudg2 <- 0
+nbudg3 <- 0
 
 for(i in 1:nrow(opreference))
 {
@@ -125,11 +126,13 @@ for(i in 1:nrow(opreference))
       function(x)
       {
         BudgetLineid      = xpathSApply(x, "./Output/budgetLines/BudgetLine", xmlGetAttr, 'ID')
-        cbind(
-          outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
-        #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
-          BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
-        )
+        if (length(BudgetLineid)!=0){
+          cbind(
+            outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
+          #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
+            BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
+          )
+        }
       }
     
     
@@ -145,14 +148,18 @@ for(i in 1:nrow(opreference))
     budgettemp1 <- merge(x=budgettemp, y=budgetobj,  by="BudgetLineid", all.x=TRUE)
     
     
-    nbudg <- nbudg + nrow(budgetobj)
-    print(paste ("Loaded ", nrow(budgetobj) , "Budget Lines, total of", nbudg , "Budget Lines.", sep = " ", collapse = NULL) )
     
     nbudg2 <- nbudg2 + nrow(budgettemp)
-    print(paste ("Loaded ", nrow(budgettemp) , "Budget Lines, total of", nbudg2 , "Budget Lines.", sep = " ", collapse = NULL) )
+    print(paste ("Loaded ", nrow(budgettemp) , "Budget Lines documented, total of", nbudg2 , "Budget Lines.", sep = " ", collapse = NULL) )
+    
+    nbudg <- nbudg + nrow(budgetobj)
+    print(paste ("Loaded ", nrow(budgetobj) , "Budget Lines mapped to ppg, total of", nbudg , "Budget Lines.", sep = " ", collapse = NULL) )
+    
+    nbudg3 <- nbudg3 + nrow(budgetobj2)
+    print(paste ("Loaded ", nrow(budgetobj2) , "Budget Lines mapped to output, total of", nbudg3 , "Budget Lines.", sep = " ", collapse = NULL) )
     
     nbudg1 <- nbudg1 + nrow(budgettemp1)
-    print(paste ("Merged ", nrow(budgettemp1) , "Budget Lines, total of", nbudg1 , "Budget Lines.", sep = " ", collapse = NULL) )
+    print(paste ("Merged ", nrow(budgettemp1) , "Budget Lines together, total of", nbudg1 , "Budget Lines.", sep = " ", collapse = NULL) )
  
   budgettemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, budgettemp1,lastRefreshed)
   
@@ -169,6 +176,12 @@ for(i in 1:nrow(opreference))
 
 #str(budgetall)
 data.budget <- budgetall
+
+
+### Check that we do not duplicate
+nbudg22 <- unique(budgetall$BudgetLineid)
+print(length(nbudg22))
+
 write.csv(data.budget, "data/budget1.csv")
 rm(budgetall, budgettemp)
 

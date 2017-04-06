@@ -22,6 +22,22 @@ source("code/7-narrative.R")
 opreferencemena <- read.csv("data/opreferencemena.csv")
 listcountry <- as.data.frame(unique(opreferencemena$operationName))
 
+listcountry <- as.data.frame(c("Iraq",
+                             #  "Israel",
+                               "Jordan",
+                               "Lebanon",
+                               "Saudi Arabia",
+                               "Syrian Arab Republic",
+                               "United Arab Emirates",
+                               "Yemen",
+                               "Algeria",
+                               "Egypt",
+                               "Libya",
+                               "Mauritania",
+                               "Morocco",
+                               "Tunisia",
+                               "Western Sahara"))
+
 ## Generate report and copy them in the folder synced with Sharepoint
 for(i in 1:nrow(listcountry))
 {

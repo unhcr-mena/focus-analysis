@@ -7,6 +7,8 @@ opreferencemena <- read.csv("data/opreferencemena.csv")
 #names(opreferencemena)
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
 
+opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Tunisia 2016', 'Morocco 2018')), ]
+
 #### 
 ## Pb with parsing some plans -- Need to be fixed
 opreferencemena.narrative <- opreferencemena
@@ -122,10 +124,12 @@ for(i in 1:nrow(opreference))
               function(x)
               {
                 sectionid      = xpathSApply(x, "./objectiveNarratives/ElementSection", xmlGetAttr, 'ID')
+                if (length(sectionid)!=0){
                 cbind(
                   Objective = xpathSApply(x, "./objectiveName", xmlValue),
                   sectionid      = if(length(sectionid)) sectionid else NA
                 )
+                } else { cat("nothing to parse \n")}
               }
             
              temp2 <-  xpathApply(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective", getobjContent)
@@ -165,8 +169,11 @@ for(i in 1:nrow(opreference))
 }  
 
 ## that's it
-rm(nindic,nindic0,nindic1,nindic2,nindic11)
+rm(nindic,nindic0,nindic1,nindic11)
 
+### Check that we do not duplicate
+nindic22 <- unique(narrativeall$sectionid)
+print(length(nindic22))
 
 #str(narrativeall)
 data.narrative <- narrativeall
