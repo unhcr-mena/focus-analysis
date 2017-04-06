@@ -58,8 +58,8 @@ names(ppggoallist)[1] <- "ppggoal"
 for(f in 1:nrow(temp.obj1) ) { 
   for(g in 1:nrow(ppggoallist) ) {
     
-    # i <- 2
-    # j <- 2
+    # f <- 1
+    # g <- 1
     objectivethis <- as.character(temp.obj1[f, 1])
     ppggoalthis <- as.character(ppggoallist[g, 1])
     tempsummary <- as.data.frame(objectivethis)
@@ -77,11 +77,11 @@ for(f in 1:nrow(temp.obj1) ) {
     #summary2018  <- subset(temp.narr[temp.narr$planningPeriod == "2018" & temp.narr$sectionName == "Prioritized Response - Prioritized Response" & temp.narr$Objective == objectivethis &  temp.narr$ppggoal == ppggoalthis ) ["text"]
     
     tempsummary[1,1] <- "__Results and Impact for 2016__"
-    if(length(summary2016)==0){ tempsummary[2,1] <- "No narrative for2016 " } else {  tempsummary[2,1] <- summary2016  }
+    if(length(summary2016)==0 | length(summary2016)>1){ tempsummary[2,1] <- "No narrative for2016 " } else {  tempsummary[2,1] <- summary2016  }
     tempsummary[3,1] <- "__Prioritized Response for 2017__"
-    if(length(summary2017)==0){ tempsummary[4,1] <- "No narrative for 2017 " } else {  tempsummary[4,1] <- summary2017  }
+    if(length(summary2017)==0 | length(summary2017)>1){ tempsummary[4,1] <- "No narrative for 2017 " } else {  tempsummary[4,1] <- summary2017  }
     tempsummary[5,1] <- "__Prioritized Response for 2018__"
-    if(length(summary2018)==0){ tempsummary[6,1] <- "No narrative for 2018 " } else {  tempsummary[6,1] <- summary2018  }
+    if(length(summary2018)==0 | length(summary2018)>1){ tempsummary[6,1] <- "No narrative for 2018 " } else {  tempsummary[6,1] <- summary2018  }
     
     print(kable(tempsummary, rownames = NULL,  longtable = TRUE, padding = 2))
     
