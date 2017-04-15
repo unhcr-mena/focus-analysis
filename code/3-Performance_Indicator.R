@@ -10,7 +10,7 @@ opreferencemena <- read.csv("data/opreferencemena.csv")
 ## Pb with parsing some plans -- Need to be fixed
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
 
-opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Saudi Arabia 2016', 'United Arab Emirates 2018', 'Tunisia 2018', 'Lebanon 2018')), ]
+#opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Saudi Arabia 2016', 'United Arab Emirates 2018', 'Tunisia 2018', 'Lebanon 2018')), ]
 
 opreferencemena.perf <- opreferencemena
 
@@ -116,38 +116,31 @@ for(i in 1:nrow(opreference))
       pillar = xpathSApply(x, "./goals/Goal/pillar", xmlValue)
       situationCode = xpathSApply(x, "./goals/Goal/situationCode", xmlValue)
       indicator = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator", xmlGetAttr, 'ID')
-      cbind(
-        Population.Group = xpathSApply(x, "./name", xmlValue),
-        Goal             = if(length(goal)) goal else NA,
-        pillar             = if(length(pillar)) pillar else NA,
-        situationCode             = if(length(situationCode)) situationCode else NA,
-        indicatorid      = if(length(indicator)) indicator else NA
-      )
+      if (length(indicator)!=0){
+          cbind(
+            Population.Group = xpathSApply(x, "./name", xmlValue),
+            Goal             = if(length(goal)) goal else NA,
+            pillar             = if(length(pillar)) pillar else NA,
+            situationCode             = if(length(situationCode)) situationCode else NA,
+            indicatorid      = if(length(indicator)) indicator else NA
+          )
+      } else { cat("nothing to parse \n")}
     }
   temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
   perfindicatorobj <- as.data.frame(do.call("rbind", temp))
   
   ## Restore hierachy with RBM
-  getoutContent =
-    function(x)
-    {
-      BudgetLineid      = xpathSApply(x, "./Output/budgetLines/BudgetLine", xmlGetAttr, 'ID')
-      cbind(
-        outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
-        #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
-        BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
-      )
-    }
-  temp2 <-  xpathApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs", getoutContent)
-  
+
   getoutContent =
     function(x)
     {
       indicator = xpathSApply(x, "./Output/indicators/Indicator", xmlGetAttr, 'ID')
-      cbind(
-        outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
-        indicatorid      = if(length(indicator)) indicator else NA
-      )
+      if (length(indicator)!=0){
+        cbind(
+          outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
+          indicatorid      = if(length(indicator)) indicator else NA
+        )
+      } else { cat("nothing to parse \n")}
     }
   
   temp2 <-  xpathApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs", getoutContent)

@@ -7,7 +7,7 @@ opreferencemena <- read.csv("data/opreferencemena.csv")
 #names(opreferencemena)
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
 
-opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Tunisia 2016', 'Morocco 2018')), ]
+#opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Tunisia 2016', 'Morocco 2018')), ]
 
 #### 
 ## Pb with parsing some plans -- Need to be fixed
@@ -103,16 +103,18 @@ for(i in 1:nrow(opreference))
              # RightsGroup      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/name", xmlValue)
             #  Objective      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveName", xmlValue)
               sectionid      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/objectiveNarratives/ElementSection", xmlGetAttr, 'ID')
-            
-              cbind(
-                Population.Group = xpathSApply(x, "./name", xmlValue),
-                goal             = if(length(goal)) goal else NA,
-                pillar             = if(length(pillar)) pillar else NA,
-                situationCode             = if(length(situationCode)) situationCode else NA,
-               # RightsGroup             = if(length(RightsGroup)) RightsGroup else NA,
-               # Objective             = if(length(Objective)) Objective else NA,
-                sectionid      = if(length(sectionid)) sectionid else NA
-              )
+              
+              if (length(sectionid)!=0){
+                  cbind(
+                    Population.Group = xpathSApply(x, "./name", xmlValue),
+                    goal             = if(length(goal)) goal else NA,
+                    pillar             = if(length(pillar)) pillar else NA,
+                    situationCode             = if(length(situationCode)) situationCode else NA,
+                   # RightsGroup             = if(length(RightsGroup)) RightsGroup else NA,
+                   # Objective             = if(length(Objective)) Objective else NA,
+                    sectionid      = if(length(sectionid)) sectionid else NA
+                  )
+              } else { cat("nothing to parse \n")}
             }
           
            temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)

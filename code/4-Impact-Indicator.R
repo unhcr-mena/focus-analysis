@@ -144,7 +144,7 @@ for(i in 1:nrow(opreference))
     
     
     nimp <- nimp + nrow(impindicatorobj)
-    print(paste ("Loaded ", nrow(impindicatorobj) , "impact indicator Lines, total of", nimp , "impact indicator Lines.", sep = " ", collapse = NULL) )
+    print(paste ("Loaded ", nrow(impindicatorobj) , "impact indicator linked to ppg, total of", nimp , "impact indicator Lines.", sep = " ", collapse = NULL) )
     
     nimp2 <- nimp2 + nrow(impindicatortemp)
     print(paste ("Loaded ", nrow(impindicatortemp) , "impact indicator Lines, total of", nimp2 , "impact indicator Lines.", sep = " ", collapse = NULL) )

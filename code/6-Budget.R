@@ -10,7 +10,7 @@ opreferencemena <- read.csv("data/opreferencemena.csv")
 
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
 
-opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Saudi Arabia 2016', 'United Arab Emirates 2018', 'Tunisia 2018')), ]
+#opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Saudi Arabia 2016', 'United Arab Emirates 2018', 'Tunisia 2018')), ]
 #### 
 ## Pb with parsing some plans -- Need to be fixed
 
@@ -41,7 +41,7 @@ nbudg3 <- 0
 
 for(i in 1:nrow(opreference))
 {
-  # i <- 1
+  # i <- 6
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
@@ -108,15 +108,17 @@ for(i in 1:nrow(opreference))
         situationCode = xpathSApply(x, "./goals/Goal/situationCode", xmlValue)
        # outputrfid = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output", xmlGetAttr, 'RFID')
         BudgetLineid      = xpathSApply(x, "./goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine", xmlGetAttr, 'ID')
-        cbind(
-          Population.Group = xpathSApply(x, "./name", xmlValue),
-          Goal             = if(length(goal)) goal else NA,
-          pillar             = if(length(pillar)) pillar else NA,
-          situationCode             = if(length(situationCode)) situationCode else NA,
-        #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
-          BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
-        )
-      }
+        if (length(BudgetLineid)!=0){
+          cbind(
+            Population.Group = xpathSApply(x, "./name", xmlValue),
+            Goal             = if(length(goal)) goal else NA,
+            pillar             = if(length(pillar)) pillar else NA,
+            situationCode             = if(length(situationCode)) situationCode else NA,
+          #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
+            BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
+          )
+        } else { cat("nothing to parse \n")}
+      }  
      temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
     budgetobj <- as.data.frame(do.call("rbind", temp))
     
@@ -126,14 +128,15 @@ for(i in 1:nrow(opreference))
       function(x)
       {
         BudgetLineid      = xpathSApply(x, "./Output/budgetLines/BudgetLine", xmlGetAttr, 'ID')
-        if (length(BudgetLineid)!=0){
+        outputrfid      = xpathSApply(x, "./Output", xmlGetAttr, 'RFID')
+        if (length(outputrfid)!=0){
           cbind(
             outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
           #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
             BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
           )
-        }
-      }
+        } else { cat("nothing to parse \n")}
+      }  
     
     
     #BudgetLineidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine", xmlGetAttr, 'ID'))
@@ -142,6 +145,10 @@ for(i in 1:nrow(opreference))
    # str(temp2)
     
     budgetobj2 <- as.data.frame(do.call("rbind", temp2))
+    
+    print(length(unique(budgetobj2$BudgetLineid)))
+    
+    
     budgetobj2 <- budgetobj2[!(is.na(budgetobj2$BudgetLineid )), ]
     budgetobj <- join(x=budgetobj, y=budgetobj2,  by="BudgetLineid", type="left")
     
@@ -179,8 +186,7 @@ data.budget <- budgetall
 
 
 ### Check that we do not duplicate
-nbudg22 <- unique(budgetall$BudgetLineid)
-print(length(nbudg22))
+print(length(unique(budgetall$BudgetLineid)))
 
 write.csv(data.budget, "data/budget1.csv")
 rm(budgetall, budgettemp)
