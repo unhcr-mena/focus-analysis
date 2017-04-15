@@ -8,15 +8,13 @@
 
 ## get list of related objective
 temp.obj <- unique(focus1.budget[ focus1.budget$subtype.obj==this.subtype &  focus1.budget$planningPeriod == yearreport , c("Objective")])
-if ( length(temp.obj) == 0) {
-  
-  cat("There's no objective related to this functional area in the plan.\n")
-} else {
+if ( length(temp.obj) == 0) { cat("There's no objective related to this functional area in the plan.\n")
+  } else {
   
   
   names(temp.obj)[1] <- "Objective"
   temp.obj <- as.character(temp.obj)
-cat(" \n")
+  cat(" \n")
 #cat("### Comparison of Narratives.\n")
 
 #cat(" The following tables present narratives from the current & previous Country Operation Plan: Results and Impact for 2016 and  Prioritized Response for 2017 & 2018. \n")
@@ -68,9 +66,23 @@ for(f in 1:nrow(temp.obj1) ) {
     names(tempsummary)[1] <- paste ( "Narrative Comparison: ", objectivethis, "for", ppggoalthis, sep= " ")
     # temp.narrtest <- temp.narr[ temp.narr$sectionName == "Prioritized Response - Prioritized Response" & temp.narr$Objective == objectivethis &  temp.narr$ppggoal == ppggoalthis  , c("reportID","planningPeriod","sectionName", "Objective", "ppggoal", "reportName", "text") ]
     #  temp.narr$planningPeriod == "2017" &  
-    summary2016 <- as.character(temp.narr[temp.narr$planningPeriod == "2016" &  temp.narr$sectionName == "Results and Impact - Results and Impact" &  temp.narr$Objective == objectivethis &   temp.narr$ppggoal == ppggoalthis , c("text") ])
-    summary2017 <- as.character(temp.narr[temp.narr$planningPeriod == "2017" &  temp.narr$sectionName == "Prioritized Response - Prioritized Response" & temp.narr$Objective == objectivethis & temp.narr$ppggoal == ppggoalthis , c("text")])
-    summary2018 <- as.character(temp.narr[temp.narr$planningPeriod == "2018" &  temp.narr$sectionName == "Prioritized Response - Prioritized Response" & temp.narr$Objective == objectivethis & temp.narr$ppggoal == ppggoalthis , c("text") ])
+    summary2016 <- as.character(temp.narr[temp.narr$planningPeriod == "2016" &
+                                            temp.narr$sectionName == "Results and Impact - Results and Impact" &
+                                            temp.narr$Objective == objectivethis &
+                                            temp.narr$ppggoal == ppggoalthis , 
+                                          c("text") ])
+    
+    summary2017 <- as.character(temp.narr[temp.narr$planningPeriod == "2017" &  
+                                            temp.narr$sectionName == "Prioritized Response - Prioritized Response" & 
+                                            temp.narr$Objective == objectivethis &
+                                            temp.narr$ppggoal == ppggoalthis , 
+                                          c("text")])
+    
+    summary2018 <- as.character(temp.narr[temp.narr$planningPeriod == "2018" &  
+                                            temp.narr$sectionName == "Prioritized Response - Prioritized Response" & 
+                                            temp.narr$Objective == objectivethis &
+                                            temp.narr$ppggoal == ppggoalthis , 
+                                          c("text") ])
     
     # summary2016  <- subset(temp.narr[temp.narr$planningPeriod == "2016" & temp.narr$sectionName == "Results and Impact - Results and Impact" & temp.narr$Objective == objectivethis &  temp.narr$ppggoal == ppggoalthis ) ["text"]
     #summary2017  <- subset(temp.narr[temp.narr$planningPeriod == "2017" & temp.narr$sectionName == "Prioritized Response - Prioritized Response" & temp.narr$Objective == objectivethis &  temp.narr$ppggoal == ppggoalthis ) ["text"]
