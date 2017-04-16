@@ -326,7 +326,7 @@ framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
 
 framework <- framework[ ,c("rid" , "oid" , "iid" ,"numindic", "indicatorrfid",
-                           "Indicator", "protection.related", "subtype","subtype.obj", "RightsGroup", "Objective", "Source"  )]
+                           "Indicator", "protection.related", "subtype","subtype.obj", "RightsGroup", "Objective","objectivemsrp", "Source"  )]
 
 data <- join(x=data, y= framework, by="indicatorrfid", type="left" )
 

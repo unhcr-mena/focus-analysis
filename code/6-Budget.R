@@ -215,8 +215,8 @@ framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1)
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
-framework.out <- framework[ !(is.na(framework$Output)),c( "protection.related", "subtype","subtype.obj", "RightsGroup", "Objective", "Output", "outputmsrp")]
-framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output","subtype.obj", "outputmsrp")])
+framework.out <- framework[ !(is.na(framework$Output)),c( "protection.related", "subtype","subtype.obj", "RightsGroup", "Objective", "Output", "outputmsrp", "objectivemsrp")]
+framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output","subtype.obj", "outputmsrp", "objectivemsrp")])
 framework.out11 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputmsrp")])
 framework.out2 <- unique(framework.out[ ,c( "protection.related", "subtype", "RightsGroup", "Objective", "Output", "outputmsrp")])
 

@@ -1,7 +1,7 @@
 ################################################################################################
 ### STEP 1: Subset data 
 #names(focus.impact)
-focus.impact.indic <- focus.impact[focus.impact$operationName==ctrname , c("operationName","indicatorid","Objective", "Indicator","planningPeriod","subtype","Population.Group","indicatorrfid",
+focus.impact.indic <- focus.impact[focus.impact$operationName==ctrname , c("operationName","indicatorid","Objective","objectivemsrp", "Indicator","planningPeriod","subtype","Population.Group","indicatorrfid",
                                                                            "Baseline","Mid.Year", "Year.End","Standard",
                                                                            "thresholdRed", "thresholdGreen" , "OP.Target",  "OL.Target"  ) ]
 
@@ -24,7 +24,7 @@ focus.impact.indic.t <- focus.impact.indic.t[focus.impact.indic.t$operationName=
 ## list indicators & ppg for the country
 #indic.country <- as.data.frame(unique(focus.impact.indic[ , c("Indicator", "indicatorrfid","subtype")]))
 
-indic.country <- as.data.frame(unique(focus.impact.indic[ , c("Objective","Indicator", "indicatorrfid","subtype")]))
+indic.country <- as.data.frame(unique(focus.impact.indic[ , c("Objective","objectivemsrp","Indicator", "indicatorrfid","subtype")]))
 ppg.country <- as.data.frame(unique(focus.impact.indic[ ,  c("Population.Group","operationName")]))
 names(ppg.country)[1] <- "ppg.country"
 names(ppg.country)[2] <- "operationName"
@@ -65,6 +65,7 @@ indic.country.date2$label <- factor(indic.country.date2$label, c("2014\n baselin
 ##Create fields for values
 indic.country.date2$year <- as.character(indic.country.date2$year)
 indic.country.date2$record <- as.numeric(NA)
+indic.country.date2$standard <- as.numeric(NA)
 indic.country.date2$thresholdRed <- as.numeric(NA)
 indic.country.date2$thresholdGreen <- as.numeric(NA)
 indic.country.date2$OP.Target <- as.numeric(NA)
@@ -81,15 +82,16 @@ indic.country.date2$OL.Target <- as.numeric(NA)
 ### STEP 4: Fill time line table
 ## now we fill the 5 values -- Actual Record  & reference - thresholdgreen, thresholdred,OP.target, OL.Target
 n <- nrow(indic.country.date2)
+# names(indic.country.date2)
 #print(n)
 for (i in 1:n ) {
   #i <- 1
   rm(date1,phase1,Indicator1,ppgcountry1,record,thresholdGreen,thresholdRed,OP.Target,OL.Target)
   date1 <- as.character(indic.country.date2[i, 4 ])
   phase1 <-  as.character(indic.country.date2[i, 3 ])
-  Indicator1 <-  as.character(indic.country.date2[i, 6 ])
-  ppgcountry1 <-  as.character(indic.country.date2[i, 9])
-  country1 <-  as.character(indic.country.date2[i, 10])
+  Indicator1 <-  as.character(indic.country.date2[i, 7 ])
+  ppgcountry1 <-  as.character(indic.country.date2[i, 10])
+  country1 <-  as.character(indic.country.date2[i, 11])
   
   record <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                  
                      operationName==country1 &                                          
@@ -136,42 +138,42 @@ for (i in 1:n ) {
     #  cat('No matched values\n')
   }else{
     #  cat(paste("Record for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), record,"\n ", sep="\n "))
-    indic.country.date2[i, 11 ] <- record
+    indic.country.date2[i, 12 ] <- record
   }
   
   if(nrow(Standard)==0){
     #  cat('No matched values\n')
   }else{
     # cat(paste("Standard for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), Standard,"\n ", sep="\n"))
-    indic.country.date2[i, 12 ] <- Standard
+    indic.country.date2[i, 13 ] <- Standard
   }
   
   if(nrow(thresholdRed)==0){
     #  cat('No matched values\n')
   }else{
     # cat(paste("thresholdRed for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), thresholdRed,"\n ", sep="\n"))
-    indic.country.date2[i, 13 ] <- thresholdRed
+    indic.country.date2[i, 14 ] <- thresholdRed
   }
   
   if(nrow(thresholdGreen)==0){
     #  cat('No matched values\n')
   }else{
     # cat(paste("thresholdGreen for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), thresholdGreen,"\n ", sep="\n"))
-    indic.country.date2[i, 14 ] <- thresholdGreen
+    indic.country.date2[i, 15 ] <- thresholdGreen
   }
   
   if(nrow(OP.Target)==0){
     # cat('No matched values\n')
   }else{
     # cat(paste("OP.Target for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), OP.Target,"\n ", sep="\n"))
-    indic.country.date2[i, 15 ] <- OP.Target
+    indic.country.date2[i, 16 ] <- OP.Target
   }
   
   if(nrow(OL.Target)==0){
     # cat('No matched values\n')
   }else{
     #  cat(paste("OL.Target for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), OL.Target,"\n ", sep="\n"))
-    indic.country.date2[i, 16 ] <- OL.Target
+    indic.country.date2[i, 17 ] <- OL.Target
   }
 }
  rm(ppg.country,record,OL.Target,OP.Target,record,thresholdGreen,thresholdRed,indic.country.date, indic.country,Standard)

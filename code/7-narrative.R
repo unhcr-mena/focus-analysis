@@ -37,7 +37,7 @@ nindic2 <- 0
 
 for(i in 1:nrow(opreference))
 {
-  # i <- 6
+  # i <- 16
   idplan <- as.character(opreference[ i , 2])
   operationID <- as.character(opreference[ i , 1])
   planid <- as.character(opreference[ i , 3])
@@ -129,6 +129,7 @@ for(i in 1:nrow(opreference))
                 if (length(sectionid)!=0){
                 cbind(
                   Objective = xpathSApply(x, "./objectiveName", xmlValue),
+                  objectivemsrp = xpathSApply(x, "./msrpcode", xmlValue),
                   sectionid      = if(length(sectionid)) sectionid else NA
                 )
                 } else { cat("nothing to parse \n")}
@@ -139,9 +140,9 @@ for(i in 1:nrow(opreference))
              narrativeobj2 <- narrativeobj2[!(is.na(narrativeobj2$sectionid )), ]
              narrativeobj <- join(x=narrativeobj, y=narrativeobj2,  by="sectionid", type="left")
            
-          # narrativetemp1 <- join(x=narrativetemp, y=narrativeobj,  by="sectionid", type="left")
+           narrativetemp1 <- join(x=narrativetemp, y=narrativeobj,  by="sectionid", type="left")
           
-          # narrativetemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, narrativetemp1,lastRefreshed)
+           narrativetemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, narrativetemp1,lastRefreshed)
           
            nindic0 <- nindic0 + nrow(narrativetemp)
            print(paste ("Loaded ", nrow(narrativetemp) , "sections, total of", nindic0 , "sections.", sep = " ", collapse = NULL) )
