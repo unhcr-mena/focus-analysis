@@ -24,8 +24,8 @@ listcountry <- as.data.frame(unique(opreferencemena$operationName))
 
 listcountry <- as.data.frame(c("Iraq", # Worked #
                                "Jordan",    # Worked # 
-                               "Israel",
                                "Lebanon",
+                               "Israel",
                                "Saudi Arabia",
                                "Syrian Arab Republic",
                                "United Arab Emirates",

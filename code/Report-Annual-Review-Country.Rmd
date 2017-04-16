@@ -9,7 +9,7 @@ output:
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
-#ctrname <- "Jordan"
+#ctrname <- "Israel"
 yearreport <- "2018"
 
 

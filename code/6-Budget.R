@@ -10,7 +10,7 @@ opreferencemena <- read.csv("data/opreferencemena.csv")
 
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
 
-#opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Saudi Arabia 2016', 'United Arab Emirates 2018', 'Tunisia 2018')), ]
+#opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Saudi Arabia 2016', 'United Arab Emirates 2018', 'Tunisia 2018', 'Western Sahara 2018')), ]
 #### 
 ## Pb with parsing some plans -- Need to be fixed
 
@@ -128,24 +128,39 @@ for(i in 1:nrow(opreference))
       function(x)
       {
         BudgetLineid      = xpathSApply(x, "./Output/budgetLines/BudgetLine", xmlGetAttr, 'ID')
-        outputrfid      = xpathSApply(x, "./Output", xmlGetAttr, 'RFID')
-        if (length(outputrfid)!=0){
+       # outputrfid      = xpathSApply(x, "./Output", xmlGetAttr, 'RFID')
+        if (length(BudgetLineid)!=0){
           cbind(
-            outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
-          #  outputrfid      = if(length(outputrfid)) outputrfid else NA,
+            #outputrfid = xpathSApply(x, "./Output", xmlGetAttr, 'RFID'),
+            output = xpathSApply(x, "./Output/name", xmlValue),
+            outputmsrp = xpathSApply(x, "./Output/msrpcode", xmlValue),
+           # outputrfid      = if(length(outputrfid)) outputrfid else NA,
             BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
           )
         } else { cat("nothing to parse \n")}
       }  
     
     
-    #BudgetLineidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine", xmlGetAttr, 'ID'))
-   # outputrfidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output", xmlGetAttr, 'RFID'))
+ # BudgetLineidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine", xmlGetAttr, 'ID'))
+ # outputrfidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output", xmlGetAttr, 'RFID'))
     temp2 <-  xpathApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs", getoutContent)
    # str(temp2)
     
     budgetobj2 <- as.data.frame(do.call("rbind", temp2))
+
+    ### Get MSRP Code 
     
+
+    # objective <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/name", xmlValue))
+    # outputrfidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/msrpcode", xmlValue))
+
+    
+    budgetobj2 <- as.data.frame(do.call("rbind", temp2))
+    
+    
+    
+    
+        
     print(length(unique(budgetobj2$BudgetLineid)))
     
     
@@ -191,6 +206,7 @@ print(length(unique(budgetall$BudgetLineid)))
 write.csv(data.budget, "data/budget1.csv")
 rm(budgetall, budgettemp)
 
+names(data.budget)
 ##########################################################################
 ## Load Result Based Management framework -- in order to get # of indic
 ## Join is done on RFID
@@ -199,12 +215,12 @@ framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1)
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
-framework.out <- framework[ !(is.na(framework$Output)),c( "protection.related", "subtype","subtype.obj", "RightsGroup", "Objective", "Output", "outputrfid")]
-framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output","subtype.obj", "outputrfid")])
-framework.out11 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputrfid")])
-framework.out2 <- unique(framework.out[ ,c( "protection.related", "subtype", "RightsGroup", "Objective", "Output", "outputrfid")])
+framework.out <- framework[ !(is.na(framework$Output)),c( "protection.related", "subtype","subtype.obj", "RightsGroup", "Objective", "Output", "outputmsrp")]
+framework.out1 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output","subtype.obj", "outputmsrp")])
+framework.out11 <- unique(framework.out[ ,c(  "RightsGroup", "Objective", "Output", "outputmsrp")])
+framework.out2 <- unique(framework.out[ ,c( "protection.related", "subtype", "RightsGroup", "Objective", "Output", "outputmsrp")])
 
-data.budget2 <- join(x=data.budget, y= framework.out1, by="outputrfid", type="left" )
+data.budget2 <- join(x=data.budget, y= framework.out1, by="outputmsrp", type="left" )
 
 ## create a concatenated name for the record
 data.budget2$idrecord <- paste(data.budget2$operationName,data.budget2$Goal, data.budget2$Population.Group, sep="-")

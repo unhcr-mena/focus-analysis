@@ -139,9 +139,9 @@ for(i in 1:nrow(opreference))
              narrativeobj2 <- narrativeobj2[!(is.na(narrativeobj2$sectionid )), ]
              narrativeobj <- join(x=narrativeobj, y=narrativeobj2,  by="sectionid", type="left")
            
-           narrativetemp1 <- join(x=narrativetemp, y=narrativeobj,  by="sectionid", type="left")
+          # narrativetemp1 <- join(x=narrativetemp, y=narrativeobj,  by="sectionid", type="left")
           
-           narrativetemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, narrativetemp1,lastRefreshed)
+          # narrativetemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, narrativetemp1,lastRefreshed)
           
            nindic0 <- nindic0 + nrow(narrativetemp)
            print(paste ("Loaded ", nrow(narrativetemp) , "sections, total of", nindic0 , "sections.", sep = " ", collapse = NULL) )
@@ -192,8 +192,8 @@ SituationCode <- read.csv("config/SituationCode.csv")
 data.narrative2 <- join(x=data.narrative2, y= SituationCode, by="situationCode", type="left")
 
 ## check that it's parsed correctly
-data.narrative2test <- data.narrative2[ data.narrative2$Objective =="Civil registration and civil status documentation strengthened" &
-                                          data.narrative2$operationName =="Jordan" & 
+data.narrative2test <- data.narrative2[ #data.narrative2$Objective =="Civil registration and civil status documentation strengthened" &
+                                          data.narrative2$operationName =="Israel" & 
                                           data.narrative2$sectionName == "Prioritized Response - Prioritized Response",
                                         c("sectionid","planningPeriod","sectionName",# "Objective",
                                           "Population.Group", "reportName", "text")]
