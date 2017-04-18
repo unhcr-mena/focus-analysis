@@ -119,6 +119,15 @@ for(i in 1:nrow(opreference))
           
            temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
            narrativeobj <- as.data.frame(do.call("rbind", temp))
+           
+           ## Some test
+           #narrativeobjtest <- narrativeobj[narrativeobj$Objective =="Operations management, coordination and support strengthened and optimized", ]
+          # narrativeobj$sectionid <- as.character(narrativeobj$sectionid)
+          #  narrativeobjtest <- narrativeobj[narrativeobj$sectionid %in%
+           #c("206c0594-15b0-4a84-a669-56d43bccccd8",
+          # "aa912a21-4aec-4ffe-864a-1114538e358b"   ) , ]
+           
+           
            narrativeobj <- narrativeobj[!(is.na(narrativeobj$sectionid )), ]
            
            ## Restore hierachy with RBM
@@ -164,10 +173,10 @@ for(i in 1:nrow(opreference))
         ## Now merging with the rest of the loop
         narrativeall <- rbind(narrativeall, narrativetemp2)
         
-        rm(narrativetemp2, narrativetemp1,narrativetemp, narrativeobj,  narrativeobj2, narrativeobj1,lastRefreshed, goalnum,i,idoperation,
-           idplan,idregion,n1,
-           notices,operationID,operationName,plancountryid,planid,plancountryparse,planningPeriod,plantype,ppgnum,planname,
-           Refresheddate,regionanme,sectnum,temp,temp2,z,z2)
+      #  rm(narrativetemp2, narrativetemp1,narrativetemp, narrativeobj,  narrativeobj2, narrativeobj1,lastRefreshed, goalnum,i,idoperation,
+      #     idplan,idregion,n1,
+      #     notices,operationID,operationName,plancountryid,planid,plancountryparse,planningPeriod,plantype,ppgnum,planname,
+      #     Refresheddate,regionanme,sectnum,temp,temp2,z,z2)
     }
 }  
 

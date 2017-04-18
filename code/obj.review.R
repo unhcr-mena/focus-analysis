@@ -5,7 +5,6 @@
 
 ### List objective
 #	Budget evolution 2016 to 2018 at objective level – stacked by scenario. 
-
 ## get list of related objective
 
 #names(focus1.budget)
@@ -15,7 +14,7 @@ names(temp.obj)[2] <- "Objective"
 
 temp.obj <-  temp.obj[!(is.na(temp.obj$objectivemsrp)),]
 
-if ( length(temp.obj) == 0) { cat("There's no objective related to this functional area in the plan.\n")
+if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional area in the plan.\n")
   } else {
   
   
@@ -32,32 +31,10 @@ if ( length(temp.obj) == 0) { cat("There's no objective related to this function
 # &  focus1.narrative$planningPeriod %in% c("2016","2017","2018") 
 
 
-# str(temp.narr)
-## Now looping around to create the tables
-
-# "Comprehensive Impact - Comprehensive Impact"                                                                            
-# "Constraints - Constraints"                                                                                              
-# "Objective - Constraints (O)"                                                                                            
-# "Objective - Results and Impact (M)"                                                                                     
-# "Objective - Unmet Needs (O)"                                                                                            
-# "Operating Impact - Operating Impact"                                                                                    
-# "Prioritized Response - Prioritized Response"                                                                            
-# "Problem Assessment and Comprehensive Response - Problem Assessment and Comprehensive Response"                          
-# "Problem Assessment, Comprehensive and Prioritised Response - Problem Assessment, Comprehensive and Prioritised Response"
-# "Problem/Objective - Prioritized Response"                                                                               
-# "Problem/Objective - Problem Assessment and Comprehensive Response"                                                      
-# "Results and Impact - Results and Impact"                                                                                
-# "Unmet Needs - Unmet Needs" 
-
 temp.narr <- unique(focus1.narrative[ focus1.narrative$objectivemsrp %in% temp.obj &
                                         focus1.narrative$planningPeriod %in% c("2016","2017","2018")&
                                         focus1.narrative$reportName %in% c("Year-End Report","Operations Plan Document"), ])
-
-## list objective
-#temp.obj1 <- as.data.frame(temp.obj)
-
-
-
+temp.narr$objectivemsrp <- as.character(temp.narr$objectivemsrp)
 ## List ppg goal
 ppggoallist <- as.data.frame(unique(focus1.narrative[focus1.narrative$planningPeriod==2018, c("ppggoal")]))
 names(ppggoallist)[1] <- "ppggoal"
@@ -68,38 +45,39 @@ for(f in 1:nrow(temp.obj2) ) {
   for(g in 1:nrow(ppggoallist) ) {
     
     # f <- 1
-    # g <- 2
-    objectivemsrpthis <- as.character(temp.obj2[f, 1])
-    ppggoalthis <- as.character(ppggoallist[g, 1])
-    
+    # g <- 3
     ## Get objective name corresponding to MSRP code
     objectivethis <- as.character(temp.obj2[f, 2])
+    objectivemsrpthis <- as.character(temp.obj2[f, 1])
+    ppggoalthis <- as.character(ppggoallist[g, 1])
     
     tempsummary <- as.data.frame(objectivethis)
     #str(tempsummary)
     tempsummary$objectivethis <- as.character(tempsummary$objectivethis)
     names(tempsummary)[1] <- paste ( "Narrative Comparison: ", objectivethis, "for", ppggoalthis, sep= " ")
+    
      temp.narrtest <- temp.narr[ #temp.narr$sectionName == "Prioritized Response - Prioritized Response" &
                                    temp.narr$objectivemsrp == objectivemsrpthis &
                                    temp.narr$ppggoal == ppggoalthis  ,
                                  c("reportID","planningPeriod","sectionName", "Objective","objectivemsrp", "ppggoal", "reportName", "text") ]
     
      #levels(temp.narrtest$sectionName)
-     
+     # str(temp.narr)
+     # write
      #  temp.narr$planningPeriod == "2017" &  
-    summary2016 <- as.character(temp.narr[temp.narr$planningPeriod == "2016" &
+    summary2016 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2016" &
                                             temp.narr$sectionName == "Results and Impact - Results and Impact" &
                                             temp.narr$objectivemsrp == objectivemsrpthis &
                                             temp.narr$ppggoal == ppggoalthis , 
                                           c("text") ])
     
-    summary2017 <- as.character(temp.narr[temp.narr$planningPeriod == "2017" &  
+    summary2017 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2017" &  
                                             temp.narr$sectionName == "Prioritized Response - Prioritized Response" & 
                                             temp.narr$objectivemsrp == objectivemsrpthis &
                                             temp.narr$ppggoal == ppggoalthis , 
                                           c("text")])
     
-    summary2018 <- as.character(temp.narr[temp.narr$planningPeriod == "2018" &  
+    summary2018 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2018" &  
                                             temp.narr$sectionName == "Problem Assessment, Comprehensive and Prioritised Response - Problem Assessment, Comprehensive and Prioritised Response" & 
                                             temp.narr$objectivemsrp == objectivemsrpthis &
                                             temp.narr$ppggoal == ppggoalthis , 
@@ -110,11 +88,11 @@ for(f in 1:nrow(temp.obj2) ) {
     #summary2018  <- subset(temp.narr[temp.narr$planningPeriod == "2018" & temp.narr$sectionName == "Prioritized Response - Prioritized Response" & temp.narr$objectivemsrp == objectivemsrpthis &  temp.narr$ppggoal == ppggoalthis ) ["text"]
     
     tempsummary[1,1] <- "__Results and Impact for 2016__"
-    if(length(summary2016)==0 ){ tempsummary[2,1] <- "No narrative for2016 " } else {  tempsummary[2,1] <- summary2016  }
+    if(nrow(summary2016)==0 ){ tempsummary[2,1] <- "No narrative for2016 " } else {  tempsummary[2,1] <- as.character(summary2016[1,1])  }
     tempsummary[3,1] <- "__Prioritized Response for 2017__"
-    if(length(summary2017)==0 ){ tempsummary[4,1] <- "No narrative for 2017 " } else {  tempsummary[4,1] <- summary2017  }
+    if(nrow(summary2017)==0 ){ tempsummary[4,1] <- "No narrative for 2017 " } else {  tempsummary[4,1] <-  as.character(summary2017[1,1])  }
     tempsummary[5,1] <- "__Problem Assessment and Comprehensive Response for 2018__"
-    if(length(summary2018)==0 ){ tempsummary[6,1] <- "No narrative for 2018 " } else {  tempsummary[6,1] <- summary2018  }
+    if(nrow(summary2018)==0 ){ tempsummary[6,1] <- "No narrative for 2018 " } else {  tempsummary[6,1] <-  as.character(summary2018[1,1])  }
    # | length(summary2018)>1
     #print(kable(tempsummary, rownames = NULL,  longtable = TRUE, padding = 2))
     
@@ -238,4 +216,24 @@ for(f in 1:nrow(temp.obj2) ) {
     cat("## Bureau feedbacks.\n")
     
     
-}
+  }
+
+
+
+
+# str(temp.narr)
+## Now looping around to create the tables
+
+# "Comprehensive Impact - Comprehensive Impact"                                                                            
+# "Constraints - Constraints"                                                                                              
+# "Objective - Constraints (O)"                                                                                            
+# "Objective - Results and Impact (M)"                                                                                     
+# "Objective - Unmet Needs (O)"                                                                                            
+# "Operating Impact - Operating Impact"                                                                                    
+# "Prioritized Response - Prioritized Response"                                                                            
+# "Problem Assessment and Comprehensive Response - Problem Assessment and Comprehensive Response"                          
+# "Problem Assessment, Comprehensive and Prioritised Response - Problem Assessment, Comprehensive and Prioritised Response"
+# "Problem/Objective - Prioritized Response"                                                                               
+# "Problem/Objective - Problem Assessment and Comprehensive Response"                                                      
+# "Results and Impact - Results and Impact"                                                                                
+# "Unmet Needs - Unmet Needs" 

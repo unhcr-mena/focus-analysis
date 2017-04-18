@@ -9,7 +9,7 @@ output:
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
-#ctrname <- "Israel"
+#ctrname <- "Syrian Arab Republic"
 yearreport <- "2018"
 
 
@@ -32,6 +32,7 @@ library(readxl)
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 #setwd("C:/R-project/focus-analysis1") 
+
 
 ## load all R packages for the analysis
 source("C:/R-project/focus-analysis1/code/0-package.R")
@@ -114,7 +115,11 @@ The plan includes:
 
 The report is extracting information from Focus in order to review selected objectives within each sector/functional areas:
 
- 1.	Comparison of Narrative 2016– “Results and Impact - Results and Impact”, 2017& 2018 “Problem/Objective - Prioritized Response” 
+ 1.	Comparison of Narrative: 
+ 
+   *  2016 “Results and Impact - Results and Impact” 
+   *  2017 “Problem/Objective - Prioritized Response” 
+   *  2018 "Problem Assessment and Comprehensive Response" 
  
  2.	Budget evolution from 2016 to 2018 at objective level – stacked by scenario.
  

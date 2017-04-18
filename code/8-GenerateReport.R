@@ -19,15 +19,15 @@ source("code/7-narrative.R")
 #
 ### Now Generating Reports
 
-opreferencemena <- read.csv("data/opreferencemena.csv")
-listcountry <- as.data.frame(unique(opreferencemena$operationName))
+#opreferencemena <- read.csv("data/opreferencemena.csv")
+#listcountry <- as.data.frame(unique(opreferencemena$operationName))
 
 listcountry <- as.data.frame(c("Iraq", # Worked #
                                "Jordan",    # Worked # 
-                               "Lebanon",
-                               "Israel",
+                               "Lebanon", # Worked #
+                               "Israel", # Worked #
                                "Saudi Arabia",
-                               "Syrian Arab Republic",
+                               "Syrian Arab Republic", # did not Worked #
                                "United Arab Emirates",
                                "Yemen",
                                "Algeria",
@@ -41,13 +41,20 @@ listcountry <- as.data.frame(c("Iraq", # Worked #
 ## Generate report and copy them in the folder synced with Sharepoint
 for(i in 1:nrow(listcountry))
 {
-  #i <- 4
   ctrname <- as.character(listcountry[ i , 1])
   cat(paste(i, " - Render report for ",ctrname ))
   yearreport <- "2018"
   render("code/Report-Annual-Review-Country.Rmd")
   file.rename("code/Report-Annual-Review-Country.docx", paste0("D:/onereport/OneDrive for Business/COP-Review/",ctrname,"_FOCUS_Plan_Annual-Review_Analysis_Report.docx"))
 }
+
+
+
+
+
+
+
+
 
 
 #render("code/Report-impact-Country.Rmd", pdf_document(latex_engine='xelatex'), output_options=self_contained)
