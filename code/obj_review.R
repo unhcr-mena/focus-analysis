@@ -23,14 +23,12 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
   temp.obj <- as.character(temp.obj$objectivemsrp)
   cat(" \n")
 
-  
-  cat(" The following tables present narratives from the current & previous Country Operation Plan: Results and Impact for 2016 and  Prioritized Response for 2017 & 2018. \n")
-  ### 
-  ##	Comparison of Narrative 2016– “Results and Impact - Results and Impact”, 2017& 2018 “Problem/Objective - Prioritized Response” 
+  ########################################################################################################################  
+  ######################################################################################################################## 
+  ##	Comparison of Narrative 
+  ########################################################################################################################
   
   ## names(focus1.narrative)
-  # &  focus1.narrative$planningPeriod %in% c("2016","2017","2018") 
-  
   
   temp.narr <- unique(focus1.narrative[ focus1.narrative$objectivemsrp %in% temp.obj &
                                           focus1.narrative$planningPeriod %in% c("2016","2017","2018")&
@@ -39,8 +37,11 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
   ## List ppg goal
   ppggoallist <- as.data.frame(unique(focus1.narrative[focus1.narrative$planningPeriod==2018, c("ppggoal")]))
   names(ppggoallist)[1] <- "ppggoal"
-  
+
   cat("## Comparison of narrative.\n")
+  cat(" The following tables present narratives from the current & previous Country Operation Plan: Results and Impact for 2016 and  Prioritized Response for both 2017 & 2018. \n")
+  
+  
   
   for(f in 1:nrow(temp.obj2) ) { 
     for(g in 1:nrow(ppggoallist) ) {
@@ -64,8 +65,6 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
       
       #levels(temp.narrtest$sectionName)
       # str(temp.narr)
-      # write
-      #  temp.narr$planningPeriod == "2017" &  
       summary2016 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2016" &
                                                temp.narr$sectionName == "Results and Impact - Results and Impact" &
                                                temp.narr$objectivemsrp == objectivemsrpthis &
@@ -84,32 +83,26 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
                                                temp.narr$ppggoal == ppggoalthis , 
                                              c("text") ])
       
-      # summary2016  <- subset(temp.narr[temp.narr$planningPeriod == "2016" & temp.narr$sectionName == "Results and Impact - Results and Impact" & temp.narr$objectivemsrp == objectivemsrpthis &  temp.narr$ppggoal == ppggoalthis ) ["text"]
-      #summary2017  <- subset(temp.narr[temp.narr$planningPeriod == "2017" & temp.narr$sectionName == "Prioritized Response - Prioritized Response" & temp.narr$objectivemsrp == objectivemsrpthis &  temp.narr$ppggoal == ppggoalthis ) ["text"]
-      #summary2018  <- subset(temp.narr[temp.narr$planningPeriod == "2018" & temp.narr$sectionName == "Prioritized Response - Prioritized Response" & temp.narr$objectivemsrp == objectivemsrpthis &  temp.narr$ppggoal == ppggoalthis ) ["text"]
-      
       tempsummary[1,1] <- "__Results and Impact for 2016__"
       if(nrow(summary2016)==0 ){ tempsummary[2,1] <- "No narrative for2016 " } else {  tempsummary[2,1] <- as.character(summary2016[1,1])  }
       tempsummary[3,1] <- "__Prioritized Response for 2017__"
       if(nrow(summary2017)==0 ){ tempsummary[4,1] <- "No narrative for 2017 " } else {  tempsummary[4,1] <-  as.character(summary2017[1,1])  }
       tempsummary[5,1] <- "__Problem Assessment and Comprehensive Response for 2018__"
       if(nrow(summary2018)==0 ){ tempsummary[6,1] <- "No narrative for 2018 " } else {  tempsummary[6,1] <-  as.character(summary2018[1,1])  }
-      # | length(summary2018)>1
-      #print(kable(tempsummary, rownames = NULL,  longtable = TRUE, padding = 2))
-      
-      #tempsummary3 <- as.data.frame(c(" "," "))
-      #names(tempsummary3)[1] <- "Nar"
-      #tempsummary3$Nar <- as.character(tempsummary3$Nar)
-      #tempsummary3[1,1] <- "Prioritized Response for 2018"
-      #if(length(summary2018)==0){ tempsummary3[2,1] <- "No narrative for 2018 " } else {  tempsummary3[2,1] <- summary2018  }
+
       #print(kable(tempsummary3, rownames = NA,  longtable = TRUE, padding = 2))
+      if(nrow(summary2018)==0 ){ 
+        cat("") } else {   
       
-      
-      # col.names= "Narratives ",
       print(pandoc.table(tempsummary, rownames = NULL, split.table = 300, split.cells = c( "100%"), use.hyphening = TRUE, justify = 'left'))
       cat(" \n") }
+      }
   }
   
+  ########################################################################################################################  
+  ######################################################################################################################## 
+  ##	Comparison of Budget 
+  ########################################################################################################################  
   
   #temp.obj <- as.data.frame(unique(focus1.budget[ focus1.budget$subtype.obj==this.subtype &  focus1.budget$planningPeriod == yearreport , c("objectivemsrp")]))
   #
@@ -119,6 +112,8 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
   focus1.budget.obj <- focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018") & focus1.budget$objectivemsrp %in% temp.obj, ]
   
   cat("## Budget per Objective.\n")
+  cat(" The following chart presents budget evolution over years between Operating and Above Operating levels. \n")
+  
   
   plotbudjobj <- ggplot(focus1.budget.obj, aes(x=  planningPeriod , fill=scenario )) + 
     geom_bar(aes(y = amount), stat="identity") +
@@ -138,6 +133,12 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
   print(plotbudjobj)
   cat(" \n")
   
+  
+  ########################################################################################################################  
+  ######################################################################################################################## 
+  ##	Comparison of Impact indicators
+  ########################################################################################################################
+  
   ### List indicators
   #	Impact indicators From 2016 year end till 2018 baseline – Notify if GSP or not in the title of the chart.
   # str(focus1.impact)
@@ -150,6 +151,13 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
   
   cat(" \n")
   cat("## Review of impact indicators.\n")
+  cat(" The following chart presents evolution of impact indicators over years. 
+      Actual reported Indicators values are represented as bars and can be compared between baseline, mid-year and end-year.
+      Different types of targets (as defined by budget: OL, as defined by needs: OP, as defined by strandards: Green and Red Threeshold) are represented as lines in the same chart.\n")
+  
+  cat("  A specific note included for the indicators falling under Global Strategic Priorities - GSP. Note that operations are not forced to report mid-year values for all their impact indicators.\n")
+  
+  cat(" This allows to visualise progress, gaps, missing values & inconsistencies (for instance when the baseline for the next year differs from the end-year value from the previous years).\n")
   
   if ( nrow(temp.ind) > 0) {
     
@@ -181,14 +189,19 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
       #} else {
       
       cat(paste0("Objective: ", objectivelab , "\n"))
+      
+      
+      ### Now plotting graphs
       plotindic <-  ggplot(dataplot, aes(label)) + 
         geom_bar(aes(y = record), stat="identity", fill= "slateblue4") +
+       # geom_text(aes(dataplot, y = record, label=record)) +
         facet_wrap(~ ppg.country , ncol=1) +
-        geom_line(aes(y = thresholdRed, group = 1, color = "thresholdRed")) +
-        geom_line(aes(y = thresholdGreen, group = 1, color = "thresholdGreen")) +
-        geom_line(aes(y = OP.Target, group = 1, color = "OP.Target")) +
-        geom_line(aes(y = OL.Target, group = 1, color = "OL.Target"), linetype = 2) +
+        geom_line(aes(y = thresholdRed, group = 1, color = "thresholdRed"), size=1.4) +
+        geom_line(aes(y = thresholdGreen, group = 1, color = "thresholdGreen"), size=1.4) +
+        geom_line(aes(y = OP.Target, group = 1, color = "OP.Target"), size=1.4) +
+        geom_line(aes(y = OL.Target, group = 1, color = "OL.Target"), linetype = 2, size=1.4) +
         scale_colour_manual(" ", values=c("record" = "blue", "thresholdRed" = "red", "thresholdGreen" = "green", "OP.Target" = "black", "OL.Target" = "blue"))+
+        geom_label_repel(aes(y = record, label = record), fill = 'black', color = 'white') +
         #scale_size_manual(" ", values=c( "thresholdRed" = 1, "thresholdGreen" = 1, "OP.Target" = 2, "OL.Target" = 2))+
         #scale_fill_manual("",values="blue")+
         ggtitle(indicplot,  
@@ -197,9 +210,11 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
         theme_economist_white()+
         theme(legend.key=element_blank(),
               plot.title=element_text(face="bold", size=12),
-              axis.text = element_text(size = 7, face="plain"),
-              #legend.title=element_blank(),
-              legend.box="horizontal")
+              axis.text = element_text(size = 9, face="plain"),
+              #legend.title=element_blank(),+
+              legend.position="top", 
+              legend.direction="horizontal")
+             # legend.box="horizontal")
       print(plotindic)
       cat(" \n")
       #}

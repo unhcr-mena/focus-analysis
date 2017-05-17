@@ -8,9 +8,9 @@ output:
     reference_docx: style-unhcr-portrait.docx
 ---
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r ctryfilter , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
-ctrname <- "Syrian Arab Republic"
+#ctrname <- "Libya"
 yearreport <- "2018"
 
 
@@ -18,7 +18,7 @@ yearreport <- "2018"
 
 
 
-```{r include=FALSE, cache=FALSE}
+```{r libraries, include=FALSE, cache=FALSE}
 
 library(ggplot2)
 library(ggthemes)
@@ -31,7 +31,7 @@ library(readxl)
 ```
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r load-data , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 setwd("D:/R-project/focus-analysis") 
 
 
@@ -106,6 +106,10 @@ date: "`r Sys.Date()`"
 
 This reports provides an high level review of  `r ctrname` country operation programme as updated in Focus on the `r lastRefreshedate`.
 
+It aims at bringing together, in a convenient format, longitudinal information both in terms of narratives, budget & impact indicators.
+
+In order to faciliate the consultation, information is grouped by area of expertise.
+
 The plan includes: 
 
  *  __`r ppggoalsit`__ Population Planning Group(s) associated with Goal & situation,
@@ -118,9 +122,10 @@ The report is extracting information from Focus in order to review selected obje
 
  1.	Comparison of Narrative: 
  
-   *  2016 “Results and Impact - Results and Impact” 
-   *  2017 “Problem/Objective - Prioritized Response” 
+   *  2016 "Results and Impact - Results and Impact"" 
+   *  2017 "Problem/Objective - Prioritized Response" 
    *  2018 "Problem Assessment and Comprehensive Response" 
+
  
  2.	Budget evolution from 2016 to 2018 at objective level – stacked by scenario.
  
@@ -133,7 +138,7 @@ This plan present an "operating level" budget of  __`r ol.budget.2018`USD__  (di
 
 Globally the budget evolution per area of expertise is:
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE, fig.width=10, fig.height=16}
+```{r budgettopic , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE, fig.width=8, fig.height=10}
  
 
 
@@ -163,7 +168,7 @@ ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018"), 
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Registration, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Registration"
 #list.files()
 source("obj_review.R")
@@ -178,7 +183,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r RSD, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "RSD"
 source("obj_review.R")
 ```
@@ -190,7 +195,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Resettlement, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Resettlement"
 source("obj_review.R")
 ```
@@ -202,7 +207,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r ChildProtection, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ChildProtection"
 source("obj_review.R")
 ```
@@ -214,7 +219,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r SGBV, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "SGBV"
 source("obj_review.R")
 ```
@@ -226,7 +231,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Education, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Education"
 source("obj_review.R")
 ```
@@ -238,7 +243,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Legal, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Legal"
 source("obj_review.R")
 ```
@@ -250,7 +255,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Mixedmigration, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Mixed migration"
 source("obj_review.R")
 ```
@@ -262,7 +267,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Statelessness, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Statelessness"
 source("obj_review.R")
 ```
@@ -274,7 +279,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r CommunityServices, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Community Services"
 source("obj_review.R")
 ```
@@ -286,7 +291,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r CBP, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Community Based Protection"
 source("obj_review.R")
 ```
@@ -298,7 +303,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Communication, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Communication"
 source("obj_review.R")
 ```
@@ -310,7 +315,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r ProtCoordination, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ProtCoordination"
 source("obj_review.R")
 ```
@@ -322,7 +327,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r NFI-cash, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "NFI-cash"
 source("obj_review.R")
 ```
@@ -334,7 +339,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Health, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Health"
 source("obj_review.R")
 ```
@@ -358,7 +363,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Shelter, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Shelter"
 source("obj_review.R")
 ```
@@ -370,7 +375,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r WASH, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "WASH"
 source("obj_review.R")
 ```
@@ -382,7 +387,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Supply, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Supply"
 source("obj_review.R")
 ```
@@ -394,7 +399,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r CCCM, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "CCCM"
 source("obj_review.R")
 ```
@@ -406,7 +411,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Energy, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Energy"
 source("obj_review.R")
 ```
@@ -418,7 +423,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Environment, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Environment"
 source("obj_review.R")
 ```
@@ -430,7 +435,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Management, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Management"
 source("obj_review.R")
 ```
@@ -442,7 +447,7 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r ExtRel, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ExtRel"
 source("obj_review.R")
 ```
@@ -454,14 +459,12 @@ source("obj_review.R")
 
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Coordination, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Coordination"
 source("obj_review.R")
 ```
 
 
 
-
-
-
-
+***
+END OF REPORT

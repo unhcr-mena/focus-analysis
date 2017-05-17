@@ -35,21 +35,20 @@ if (n>0) {
         plotindic2 <-  ggplot(dataplot, aes(label)) + 
             geom_bar(aes(y = record), stat="identity", fill= "slateblue4") +
             facet_wrap(~ ppg.country , ncol=1) +
-            geom_line(aes(y = Standard, group = 1, color = "Standard")) +
+            geom_line(aes(y = Standard, group = 1, color = "Standard"), size=1.4) +
           #  geom_line(aes(y = thresholdGreen, group = 1, color = "thresholdGreen")) +
-            geom_line(aes(y = OP.Target, group = 1, color = "OP.Target")) +
-            geom_line(aes(y = OL.Target, group = 1, color = "OL.Target"), linetype = 2) +
+            geom_line(aes(y = OP.Target, group = 1, color = "OP.Target"), size=1.4) +
+            geom_line(aes(y = OL.Target, group = 1, color = "OL.Target"), linetype = 2, size=1.4) +
             scale_colour_manual(" ", values=c("record" = "blue", "Standard" = "red",  "OP.Target" = "black", "OL.Target" = "blue"))+
-            #scale_size_manual(" ", values=c( "thresholdRed" = 1, "thresholdGreen" = 1, "OP.Target" = 2, "OL.Target" = 2))+
-            #scale_fill_manual("",values="blue")+
+            geom_label_repel(aes(y = record, label = record), fill = 'black', color = 'white') +
             ggtitle(indicplot) +
             xlab("") + ylab("") +
             theme_economist_white()+
             theme(legend.key=element_blank(),
                   plot.title=element_text(face="bold", size=12),
                   axis.text = element_text(size = 7, face="plain"),
-                  #legend.title=element_blank(),
-                  legend.box="horizontal")
+                  legend.position="top", 
+                  legend.direction="horizontal")
         print(plotindic2)
        # ggsave(filename=paste("out/",indicid,".png",sep=""), plot=plotindic2, width=10, height=10,units="in", dpi=300)
     

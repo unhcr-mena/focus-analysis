@@ -174,6 +174,7 @@ library(doBy)
 library(purrr)
 library(plyr)
 library(ggplot2) ## The grammar of graphics!
+library(ggrepel)
 library(grid)
 library(extrafont) ## Additional fonts
 library(ggthemes) ## Additional themes for gplot2
