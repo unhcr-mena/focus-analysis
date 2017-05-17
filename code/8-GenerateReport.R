@@ -1,7 +1,7 @@
 ####################################################################################################
 ### This scripts generate country report one by one based on the report template: 8-Report.Rmd
 #####################################################################################################
-setwd("C:/R-project/focus-analysis1") 
+setwd("D:/R-project/focus-analysis") 
 ## load all packages
 source("code/0-package.R")
 
@@ -45,7 +45,7 @@ for(i in 1:nrow(listcountry))
   cat(paste(i, " - Render report for ",ctrname ))
   yearreport <- "2018"
   render("code/Report-Annual-Review-Country.Rmd")
-  file.rename("code/Report-Annual-Review-Country.docx", paste0("D:/onereport/OneDrive for Business/COP-Review/",ctrname,"_FOCUS_Plan_Annual-Review_Analysis_Report.docx"))
+  file.rename("code/Report-Annual-Review-Country.docx", paste0("out/COP-Review/",ctrname,Sys.Date(),"_FOCUS_Plan_Annual-Review_Analysis_Report.docx"))
 }
 
 
