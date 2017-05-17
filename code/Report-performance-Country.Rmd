@@ -258,7 +258,7 @@ source("revindic2.R")
 ```
 
 ## Indicators review from previous years
-```{r "Legal, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+```{r Legal, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Legal"
 source("plotindic2.R")
 ```

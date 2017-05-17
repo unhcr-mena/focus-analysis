@@ -38,7 +38,7 @@ listcountry <- as.data.frame(c("Iraq", # Worked #
                                "Tunisia",
                                "Western Sahara"))
 
-## Generate report and copy them in the folder synced with Sharepoint
+## Generate reports for Annual Review
 for(i in 1:nrow(listcountry))
 {
   ctrname <- as.character(listcountry[ i , 1])
@@ -46,6 +46,24 @@ for(i in 1:nrow(listcountry))
   yearreport <- "2018"
   render("code/Report-Annual-Review-Country.Rmd")
   file.rename("code/Report-Annual-Review-Country.docx", paste0("out/COP-Review/",ctrname,Sys.Date(),"_FOCUS_Plan_Annual-Review_Analysis_Report.docx"))
+}
+
+for(i in 1:nrow(listcountry))
+{
+  ctrname <- as.character(listcountry[ i , 1])
+  cat(paste(i, " - Render report for ",ctrname ))
+  yearreport <- "2018"
+  render("code/Report-Annual-Review-Country.Rmd")
+  file.rename("code/Report-performance-Country.docx", paste0("out/Performance-Review/",ctrname,Sys.Date(),"_FOCUS_performance_Analysis_Report.docx"))
+}
+
+for(i in 1:nrow(listcountry))
+{
+  ctrname <- as.character(listcountry[ i , 1])
+  cat(paste(i, " - Render report for ",ctrname ))
+  yearreport <- "2018"
+  render("code/Report-Annual-Review-Country.Rmd")
+  file.rename("code/Report-Programme-Country.docx", paste0("out/Programme-Review/",ctrname,Sys.Date(),"_FOCUS_Programme-Review_Analysis_Report.docx"))
 }
 
 

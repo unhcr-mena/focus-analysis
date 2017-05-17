@@ -4,8 +4,10 @@ output:
     fig_caption: yes
     fig_width: 11
     toc: yes
+    toc_depth: 2
+    reference_docx: style-unhcr-portrait.docx
 ---
-```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r datafilter, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
 #ctrname <- "Jordan"
 #yearreport <- "2018"
@@ -19,7 +21,7 @@ date: "`r Sys.Date()`"
 ---
 
 
-```{r include=FALSE, cache=FALSE}
+```{r libs include=FALSE, cache=FALSE}
 
 library(ggplot2)
 library(ggthemes)
@@ -32,37 +34,37 @@ library(readxl)
 ```
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
-#setwd("D:/R-project/focus-analysis") 
+```{r loaddata, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+setwd("D:/R-project/focus-analysis") 
 
 ##  Loading the 3 dataset - Impact, performance, budget
-focus.impact <- read.csv("D:/R-project/focus-analysis/data/impact.csv")
-focus.performance <- read.csv("D:/R-project/focus-analysis/data/performance.csv")
-focus.budget <- read.csv("D:/R-project/focus-analysis/data/budget.csv")
+focus.impact <- read.csv("data/impact.csv")
+focus.performance <- read.csv("data/performance.csv")
+focus.budget <- read.csv("data/budget.csv")
 
 
 
-framework <- read_excel("D:/R-project/focus-analysis/config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
+framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
  # names(framework)
 
 ## load all R packages for the analysis
-source("D:/R-project/focus-analysis/code/0-package.R")
+source("code/0-package.R")
 
 ```
 
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r filterit, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
 library(reshape2)
 ## Subset for the country
 focus1.impact <-focus.impact[focus.impact$operationName == ctrname, ]
-source("D:/R-project/focus-analysis/code/timeindic.R")
+source("timeindic.R")
 
 focus1.performance <-focus.performance[focus.performance$operationName == ctrname, ]
-source("D:/R-project/focus-analysis/code/timeindic2.R")
+source("timeindic2.R")
 
 
 focus1.budget <-focus.budget[focus.budget$operationName == ctrname, ]
@@ -162,63 +164,63 @@ A final objective is to review the consistency of baseline value between previou
 ## Indicator selection for this year and potential sourcing
 ### Impact
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+```{r RegistrationImp, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+```{r Registrationperf, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 
 ## Budget for linked output & objectives
 ### By Scenario
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
+```{r Registrationbudg, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
+```{r Registrationimpl, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
+```{r Registrationtype, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
 ### By Center
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
+```{r Registrationcenter, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
 ## Indicator review
 ### Impact
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+```{r Registrationimp, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+```{r Registrationperf, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Registration"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -227,16 +229,16 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 ## Indicator selection for this year and potential sourcing
 ### Impact
 
-```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+```{r RSD, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -245,21 +247,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -267,7 +269,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -276,14 +278,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "RSD"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -296,14 +298,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -311,21 +313,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -333,7 +335,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -342,14 +344,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Resettlement"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -361,14 +363,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -377,21 +379,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=16}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -399,7 +401,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -408,14 +410,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "ChildProtection"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -427,14 +429,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -443,21 +445,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=16}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -465,7 +467,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -474,14 +476,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "SGBV"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -493,14 +495,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -509,21 +511,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -531,7 +533,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -540,14 +542,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Education"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -559,14 +561,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -575,21 +577,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -597,7 +599,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -606,14 +608,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Legal"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -625,14 +627,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -641,21 +643,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -663,7 +665,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -672,14 +674,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Mixed migration"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -691,13 +693,13 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -706,21 +708,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -728,7 +730,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -737,14 +739,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Statelessness"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -756,14 +758,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -771,21 +773,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -793,7 +795,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -801,14 +803,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 ### Impact
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Community Services"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -820,14 +822,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -835,21 +837,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -857,7 +859,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -866,14 +868,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Community Based Protection"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -885,14 +887,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Cash"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Cash"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -900,21 +902,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Cash"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Cash"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Cash"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -922,7 +924,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Cash"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -931,14 +933,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Cash"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Cash"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -950,14 +952,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -966,21 +968,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -988,7 +990,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -998,14 +1000,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Communication"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1018,14 +1020,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -1033,21 +1035,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1055,7 +1057,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1064,14 +1066,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "ProtCoordination"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1083,14 +1085,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -1099,21 +1101,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1121,7 +1123,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1130,14 +1132,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Information Management"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1149,14 +1151,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -1165,21 +1167,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1187,7 +1189,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1196,14 +1198,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Health"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1215,14 +1217,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -1231,21 +1233,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1253,7 +1255,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1262,14 +1264,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Food"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1281,14 +1283,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -1296,21 +1298,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1318,7 +1320,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1327,14 +1329,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "NFI"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1346,14 +1348,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -1361,21 +1363,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1383,7 +1385,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1392,14 +1394,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Shelter"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1412,14 +1414,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -1427,21 +1429,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1449,7 +1451,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1458,14 +1460,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "WASH"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1479,14 +1481,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -1494,21 +1496,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1516,7 +1518,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1525,14 +1527,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Supply"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1545,14 +1547,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -1560,21 +1562,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1582,7 +1584,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1591,14 +1593,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "CCCM"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1611,7 +1613,7 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 
@@ -1619,7 +1621,7 @@ source("D:/R-project/focus-analysis/code/revindic.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -1627,21 +1629,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1649,7 +1651,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1658,7 +1660,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 
@@ -1666,7 +1668,7 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Energy"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1679,14 +1681,14 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -1695,21 +1697,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1717,7 +1719,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1726,7 +1728,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 
@@ -1734,7 +1736,7 @@ source("D:/R-project/focus-analysis/code/plotindic.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Environment"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1747,13 +1749,13 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -1761,21 +1763,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1783,7 +1785,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1792,13 +1794,13 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Management"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1811,13 +1813,13 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 
@@ -1826,21 +1828,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1848,7 +1850,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1857,13 +1859,13 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 ### Performance
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "ExtRel"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
@@ -1875,13 +1877,13 @@ source("D:/R-project/focus-analysis/code/plotindic2.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/revindic.R")
+source("revindic.R")
 ```
 
 ### Performance
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/revindic2.R")
+source("revindic2.R")
 ```
 
 ## Budget for linked output & objectives
@@ -1889,21 +1891,21 @@ source("D:/R-project/focus-analysis/code/revindic2.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/plotindicBudgetscenario.R")
+source("plotindicBudgetscenario.R")
 ```
 
 ### By Implementer
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/plotindicBudgetimplementerName.R")
+source("plotindicBudgetimplementerName.R")
 ```
 
 ### By Type
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/plotindicBudget.R")
+source("plotindicBudget.R")
 ```
 
 
@@ -1911,7 +1913,7 @@ source("D:/R-project/focus-analysis/code/plotindicBudget.R")
 
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=14}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
+source("plotindicBudgetCentername.R")
 ```
 
 
@@ -1920,14 +1922,14 @@ source("D:/R-project/focus-analysis/code/plotindicBudgetCentername.R")
  
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/plotindic.R")
+source("plotindic.R")
 ```
 
 
 ### Performance
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Coordination"
-source("D:/R-project/focus-analysis/code/plotindic2.R")
+source("plotindic2.R")
 ```
 
 
