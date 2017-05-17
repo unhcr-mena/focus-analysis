@@ -1,16 +1,16 @@
 ### This code allow to print the indicator review graph
 
 ### Remove indicator that are not selected -- i.e. no OP target for 2018
-framework.this <- as.data.frame(unique(framework[framework$subtype==this.subtype , c("RightsGroup","Objective",  "Output","outputrfid")]))
+framework.this <- as.data.frame(unique(framework[framework$subtype==this.subtype , c("RightsGroup","Objective",  "Output","outputmsrp")]))
 framework.this <- framework.this [ !(is.na(framework.this$Output)), ]
 
-framework.this2 <- as.character(framework.this [ , c("outputrfid") ])
+framework.this2 <- as.character(framework.this [ , c("outputmsrp") ])
 
-budget.this <- focus1.budget[ focus1.budget$outputrfid %in% framework.this2 ,  ]
+budget.this <- focus1.budget[ focus1.budget$outputmsrp %in% framework.this2 ,  ]
 
-budget.this1 <- as.data.frame(unique(budget.this[ , c("Output","outputrfid","Objective","planningPeriod")]))
+budget.this1 <- as.data.frame(unique(budget.this[ , c("Output","outputmsrp","Objective","planningPeriod")]))
 
-budget.this1 <- budget.this1[budget.this1$planningPeriod==2018,  c("Output","outputrfid","Objective")]
+budget.this1 <- budget.this1[budget.this1$planningPeriod==2018,  c("Output","outputmsrp","Objective")]
 
 budget.this1 <- budget.this1[ !(is.na(budget.this1$Output)), ]
 
@@ -26,9 +26,9 @@ if (n>0) {
     #i <- 1
     rm(indicplot,plotindic,dataplot)
     indicplot <- as.character(budget.this1[i, 1])
-    outputrfid1 <- as.character(budget.this1[i, 2])
+    outputmsrp1 <- as.character(budget.this1[i, 2])
     objectivelab <- as.character(budget.this1[i, 3])
-    dataplot <- budget.this[ budget.this$outputrfid==outputrfid1, ]
+    dataplot <- budget.this[ budget.this$outputmsrp==outputmsrp1, ]
     # str(dataplot)
     # dataplot
     dataplot$amount <- as.numeric(dataplot$amount)
@@ -59,7 +59,7 @@ if (n>0) {
                   #legend.title=element_blank(),
                   legend.box="horizontal")
         print(plotbudget1)
-       #ggsave(filename=paste("out/budget_",outputrfid1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
+       #ggsave(filename=paste("out/budget_",outputmsrp1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
     } 
 
 } else { cat(paste0("No related budget for output linked to this category\n"))}

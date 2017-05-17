@@ -9,8 +9,8 @@ output:
 ---
 ```{r datafilter, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
-#ctrname <- "Jordan"
-#yearreport <- "2018"
+ctrname <- "Jordan"
+yearreport <- "2018"
 
 ```
 
@@ -21,7 +21,7 @@ date: "`r Sys.Date()`"
 ---
 
 
-```{r libs include=FALSE, cache=FALSE}
+```{r libs, include=FALSE, cache=FALSE}
 
 library(ggplot2)
 library(ggthemes)
@@ -211,14 +211,14 @@ source("plotindicBudgetCentername.R")
 ## Indicator review
 ### Impact
 
-```{r Registrationimp, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+```{r Registrationimprev, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Registration"
 source("plotindic.R")
 ```
 
 ### Performance
 
-```{r Registrationperf, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+```{r Registrationperfrev, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
 this.subtype <- "Registration"
 source("plotindic2.R")
 ```

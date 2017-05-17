@@ -48,39 +48,25 @@ for(i in 1:nrow(listcountry))
   file.rename("code/Report-Annual-Review-Country.docx", paste0("out/COP-Review/",ctrname,Sys.Date(),"_FOCUS_Plan_Annual-Review_Analysis_Report.docx"))
 }
 
+
+## generate Report for Perfomance Review
 for(i in 1:nrow(listcountry))
 {
   ctrname <- as.character(listcountry[ i , 1])
   cat(paste(i, " - Render report for ",ctrname ))
   yearreport <- "2018"
-  render("code/Report-Annual-Review-Country.Rmd")
+  render("code/Report-performance-Country.Rmd")
   file.rename("code/Report-performance-Country.docx", paste0("out/Performance-Review/",ctrname,Sys.Date(),"_FOCUS_performance_Analysis_Report.docx"))
 }
 
+
+## Generate report for indepth programme review
 for(i in 1:nrow(listcountry))
 {
   ctrname <- as.character(listcountry[ i , 1])
   cat(paste(i, " - Render report for ",ctrname ))
   yearreport <- "2018"
-  render("code/Report-Annual-Review-Country.Rmd")
-  file.rename("code/Report-Programme-Country.docx", paste0("out/Programme-Review/",ctrname,Sys.Date(),"_FOCUS_Programme-Review_Analysis_Report.docx"))
+  render("code/Report-Programme-Review-Country.Rmd")
+  file.rename("code/Report-Programme-Review-Country.docx", paste0("out/Programme-Review/",ctrname,Sys.Date(),"_FOCUS_Programme-Review_Analysis_Report.docx"))
 }
 
-
-
-
-
-
-
-
-
-
-#render("code/Report-impact-Country.Rmd", pdf_document(latex_engine='xelatex'), output_options=self_contained)
-#"code/Report-Programme-Review-Country.Rmd", 
-#pdf_document(latex_engine='xelatex'), 
-# pdf_document(latex_engine='pdflatex'), 
-#output_options=list(pdf_document = list(fig_caption=yes,number_sections=yes,toc=yes,toc_depth=3))
-
-#file.rename("code/Report-Impact-Country.pdf", paste0("out/",ctrname,"_FOCUS_Plan_Impact_Indicator_Analysis_Report.pdf"))
-#file.rename("code/Report-Impact-Country.docx", paste0("out/",ctrname,"_FOCUS_Plan_Impact_Indicator_Analysis_Report.docx"))
-#file.rename("code/Report-Programme-Review-Country.docx", paste0("out/",ctrname,"_FOCUS_Plan_Programme-Review_Analysis_Report.docx"))
