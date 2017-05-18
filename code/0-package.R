@@ -201,6 +201,9 @@ library(knitr)
 library(pander)
 library(rmarkdown)
 
+
+library(readxl)
+
 #gpclibPermit()
 #library(lattice)
 #library(gmodels)

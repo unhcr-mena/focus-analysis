@@ -9,7 +9,7 @@ source("code/0-package.R")
 
 source("code/2-api_get_plan.R")
 
-#source("code/3-Performance_Indicator.R")
+source("code/3-Performance_Indicator.R")
 
 source("code/4-Impact-Indicator.R")
 
@@ -36,7 +36,8 @@ listcountry <- as.data.frame(c("Iraq", # Worked #
                                "Mauritania",
                                "Morocco",
                                "Tunisia",
-                               "Western Sahara"))
+                               "Western Sahara",
+                               "Turkey"))
 
 ## Generate reports for Annual Review
 for(i in 1:nrow(listcountry))
