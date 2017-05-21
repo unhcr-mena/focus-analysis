@@ -1,0 +1,362 @@
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+### This is the template for the indepth programme analysis --
+
+cat(paste0("# ", this.subtype.label, "\n"))
+
+
+
+```
+
+## Indicator selection for this year and potential data sourcing
+
+### Impact
+
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+
+temp <- unique(focus1.impact[ focus1.impact$subtype==this.subtype &  focus1.impact$planningPeriod == yearreport , c("Objective",  "Indicator","Source")])
+temp <- temp[ !(is.na(temp$Indicator)), ]
+temp <- temp[with(temp, order(Objective)), ]
+row.names(temp) <- NULL
+
+if (nrow(temp) > 0) {
+  #emphasize.strong.cells(1)
+  print(pandoc.table(temp, split.cells = c("35%", "50%","15%"), use.hyphening = TRUE, justify = 'left', caption = "List of related impact indicators selected in the next plan"))
+  #  print(pander(temp, split.cells = c("35%", "50%","15%"), use.hyphening = TRUE, justify = 'left',  caption = "List of related impact indicators selected in the next plan"))
+  
+  
+} else {
+  cat("No indicator in this area for next year")
+}
+
+```
+
+### Performance
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+
+temp <- unique(focus1.performance[ focus1.performance$subtype==this.subtype &  focus1.performance$planningPeriod == yearreport , c("Objective",  "Indicator","Source")])
+temp <- temp[ !(is.na(temp$Indicator)), ]
+temp <- temp[with(temp, order(Objective)), ]
+row.names(temp) <- NULL
+
+
+if (nrow(temp) > 0) {
+  #emphasize.strong.cells(1)
+  print(pandoc.table(temp, split.cells = c("35%", "50%","15%"), use.hyphening = TRUE, justify = 'left', caption = "List of related Performance indicators selected in the next plan"))
+  #  print(pander(temp, split.cells = c("35%", "50%","15%"), use.hyphening = TRUE, justify = 'left',  caption = "List of related Performance indicators selected in the next plan"))
+} else {
+  cat("No indicator in this area for next year \n")
+}
+```
+
+## Budget for linked output & objectives
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+### Remove indicator that are not selected -- i.e. no OP target for 2018
+framework.this <- as.data.frame(unique(framework[framework$subtype==this.subtype , c("RightsGroup","Objective",  "Output","outputmsrp")]))
+framework.this <- framework.this [ !(is.na(framework.this$Output)), ]
+
+framework.this2 <- as.character(framework.this [ , c("outputmsrp") ])
+
+budget.this <- focus1.budget[ focus1.budget$outputmsrp %in% framework.this2 ,  ]
+
+budget.this1 <- as.data.frame(unique(budget.this[ , c("Output","outputmsrp","Objective","planningPeriod")]))
+budget.this1 <- budget.this1[budget.this1$planningPeriod==2018,  c("Output","outputmsrp","Objective")]
+budget.this1 <- budget.this1[ !(is.na(budget.this1$Output)), ]
+budget.this1 <- budget.this1[with(budget.this1, order(Objective)), ]
+
+
+```
+
+### By Scenario
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+
+if (nrow(budget.this1)>0) {
+  for (i in 1:nrow(budget.this1) ) {
+    #i <- 1
+    rm(indicplot,plotindic,dataplot)
+    indicplot <- as.character(budget.this1[i, 1])
+    outputmsrp1 <- as.character(budget.this1[i, 2])
+    objectivelab <- as.character(budget.this1[i, 3])
+    
+    dataplot <- budget.this[ budget.this$outputmsrp==outputmsrp1, ]
+    dataplot$amount <- as.numeric(dataplot$amount)
+
+    
+    cat(paste0("Objective: ", objectivelab , "\n"))
+    
+    plotbudget1 <-  ggplot(dataplot, aes(x= planningPeriod, fill=scenario)) + 
+      geom_bar(aes(y = amount), stat="identity") +
+      ggtitle(paste0("Output: ", indicplot),  
+              subtitle = paste0("Objective: ", objectivelab))+
+      
+      xlab("") + ylab("") +
+      scale_y_continuous(labels=format_si())+
+      theme_economist_white()+
+      theme(legend.key=element_blank(),
+            plot.title=element_text(face="bold", size=12),
+            axis.text = element_text(size = 7, face="plain"),
+            #legend.title=element_blank(),
+            legend.box="horizontal")
+    print(plotbudget1)
+    #ggsave(filename=paste("out/budget_",outputmsrp1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
+  } 
+  
+} else { cat(paste0("No related budget for output linked to this category\n"))}
+```
+
+
+### By Implementer
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+
+if (nrow(budget.this1)>0) {
+  for (i in 1:nrow(budget.this1) ) {
+    #i <- 1
+    rm(indicplot,plotindic,dataplot)
+    indicplot <- as.character(budget.this1[i, 1])
+    outputmsrp1 <- as.character(budget.this1[i, 2])
+    objectivelab <- as.character(budget.this1[i, 3])
+    
+    dataplot <- budget.this[ budget.this$outputmsrp==outputmsrp1, ]
+    dataplot$amount <- as.numeric(dataplot$amount)
+    dataplot$planningPeriod <- as.numeric(dataplot$planningPeriod)
+    dataplot$planningPeriod <- as.factor(dataplot$planningPeriod)
+    dataplot$implementerName <- as.character(dataplot$implementerName)
+    dataplot$implementerName <- as.factor(dataplot$implementerName)
+
+    cat(paste0("Objective: ", objectivelab , "\n"))
+    
+    plotbudget1 <-  ggplot(dataplot, aes(x=implementerName, fill=scenario )) + 
+      geom_bar(aes(y = amount ), stat="identity") +
+      facet_wrap(~ planningPeriod , ncol=1) +
+      # ggtitle(paste0("Output: ", indicplot)) +
+      ggtitle(paste0("Output: ", indicplot, " (in USD for Operating level only)."), 
+              subtitle = paste0("Objective: ", objectivelab))+
+      
+      coord_flip()+
+      xlab("") + ylab("") +
+      scale_y_continuous(labels=format_si())+
+      theme_economist_white()+
+      theme(legend.key=element_blank(),
+            plot.title=element_text(face="bold", size=12),
+            axis.text = element_text(size = 7, face="plain"),
+            #legend.title=element_blank(),
+            legend.box="horizontal")
+    print(plotbudget1)
+    # ggsave(filename=paste("out/budget_",outputmsrp1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
+  } 
+  
+} else { cat(paste0("No related budget for output linked to this category\n"))}
+
+
+```
+
+### By Type
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+
+if (nrow(budget.this1) >0) {
+  for (i in 1:nrow(budget.this1) ) {
+    #i <- 1
+    rm(indicplot,plotindic,dataplot)
+    indicplot <- as.character(budget.this1[i, 1])
+    outputmsrp1 <- as.character(budget.this1[i, 2])
+    objectivelab <- as.character(budget.this1[i, 3])
+    
+    dataplot <- budget.this[ budget.this$outputmsrp==outputmsrp1, ]
+    dataplot$amount <- as.numeric(dataplot$amount)
+    dataplot$planningPeriod <- as.numeric(dataplot$planningPeriod)
+    dataplot$planningPeriod <- as.factor(dataplot$planningPeriod)
+    dataplot$Type <- as.character(dataplot$Type)
+    dataplot$Type <-factor(dataplot$Type, levels=dataplot[order(dataplot$amount), "Type"])
+    
+    cat(paste0("Objective: ", objectivelab , "\n"))
+    
+    plotbudget1 <-  ggplot(dataplot, aes(x=Type, fill=scenario )) + 
+      geom_bar(aes(y = amount), stat="identity") +
+      facet_wrap(~ planningPeriod , ncol=1) +
+      # ggtitle(paste0("Output: ", indicplot)) +
+      ggtitle(paste0("Output: ", indicplot, " (in USD for Operating level only)."),  
+              subtitle = paste0("Objective: ", objectivelab))+
+      
+      xlab("") + ylab("") +
+      scale_y_continuous(labels=format_si())+
+      theme_economist_white()+
+      theme(legend.key=element_blank(),
+            plot.title=element_text(face="bold", size=12),
+            axis.text = element_text(size = 7, face="plain"),
+            #legend.title=element_blank(),
+            legend.box="horizontal")
+    print(plotbudget1)
+    #ggsave(filename=paste("out/budget_",outputmsrp1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
+  } 
+  
+} else { cat(paste0("No related budget for output linked to this category\n"))}
+
+```
+
+
+### By Center
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+if (nrow(budget.this1)>0) {
+  
+  for (i in 1:nrow(budget.this1) ) {
+    #i <- 1
+    rm(indicplot,plotindic,dataplot)
+    indicplot <- as.character(budget.this1[i, 1])
+    outputmsrp1 <- as.character(budget.this1[i, 2])
+    objectivelab <- as.character(budget.this1[i, 3])
+    
+    dataplot <- budget.this[ budget.this$outputmsrp==outputmsrp1, ]
+    dataplot$amount <- as.numeric(dataplot$amount)
+    dataplot$planningPeriod <- as.numeric(dataplot$planningPeriod)
+    dataplot$planningPeriod <- as.factor(dataplot$planningPeriod)
+    dataplot$CenterName <- as.character(dataplot$CenterName)
+    dataplot$CenterName <-factor(dataplot$CenterName, levels=dataplot[order(dataplot$amount), "CenterName"])
+
+    
+    cat(paste0("Objective: ", objectivelab , "\n"))
+    
+    plotbudget1 <-  ggplot(dataplot, aes(x=CenterName, fill=scenario)) + 
+      geom_bar(aes(y = amount ), stat="identity") +
+      facet_wrap(~ planningPeriod , ncol=1) +
+      # ggtitle(paste0("Output: ", indicplot)) +
+      ggtitle(paste0("Output: ", indicplot, " (in USD for Operating level only)."), 
+              subtitle = paste0("Objective: ", objectivelab))+
+      
+      xlab("") + ylab("") +
+      scale_y_continuous(labels=format_si())+
+      theme_economist_white()+
+      theme(legend.key=element_blank(),
+            plot.title=element_text(face="bold", size=12),
+            axis.text = element_text(size = 7, face="plain"),
+            #legend.title=element_blank(),
+            legend.box="horizontal")
+    print(plotbudget1)
+    # ggsave(filename=paste("out/budget_",outputmsrp1,".png",sep=""), plot=plotbudget1, width=10, height=10,units="in", dpi=300)
+  } 
+  
+} else { cat(paste0("No related budget for output linked to this category\n"))}
+
+```
+
+## Indicator review
+
+
+### Impact
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+
+### Remove indicator that are not selected -- i.e. no OP target for 2018
+indic.country.this <- as.data.frame(unique(focus.impact.indic[focus.impact.indic$operationName==ctrname & focus.impact.indic$subtype==this.subtype , 
+                                                              c("Indicator", "indicatorrfid","subtype","Objective","planningPeriod")]))
+indic.country.this <- indic.country.this[indic.country.this$planningPeriod==2018,  c("Indicator", "indicatorrfid","subtype","Objective")]
+indic.country.this <- indic.country.this[ !(is.na(indic.country.this$Indicator)), ]
+indic.country.this <- indic.country.this[with(indic.country.this, order(Objective)), ]
+
+if (nrow(indic.country.this)>0) {
+  for (i in 1:nrow(indic.country.this) ) {
+    #i <- 1
+    rm(indicplot,plotindic,dataplot)
+    indicplot <- as.character(indic.country.this[i, 1])
+    dataplot <- indic.country.date2[ indic.country.date2$Indicator==indicplot, ]
+    objectivelab <- as.character(indic.country.this[i, 4])
+    
+    dataplot$record <- as.numeric(dataplot$record)
+    dataplot$thresholdRed <- as.numeric(dataplot$thresholdRed)
+    dataplot$thresholdGreen <- as.numeric(dataplot$thresholdGreen)
+    dataplot$OP.Target <- as.numeric(dataplot$OP.Target)
+    dataplot$OL.Target <- as.numeric(dataplot$OL.Target)
+    
+    if (is.na(dataplot$record)) {
+      sprintf("No Record")
+    } else {
+      
+      cat(paste0("Objective: ", objectivelab , "\n"))
+      
+      plotindic <-  ggplot(dataplot, aes(label)) + 
+        geom_bar(aes(y = record), stat="identity", fill= "slateblue4") +
+        facet_wrap(~ ppg.country , ncol=1) +
+        geom_line(aes(y = thresholdRed, group = 1, color = "thresholdRed"), size=1.4) +
+        geom_line(aes(y = thresholdGreen, group = 1, color = "thresholdGreen"), size=1.4) +
+        geom_line(aes(y = OP.Target, group = 1, color = "OP.Target"), size=1.4) +
+        geom_line(aes(y = OL.Target, group = 1, color = "OL.Target"), linetype = 2, size=1.4) +
+        scale_colour_manual(" ", values=c("record" = "blue", "thresholdRed" = "red", "thresholdGreen" = "green", "OP.Target" = "black", "OL.Target" = "blue"))+
+        geom_label_repel(aes(y = record, label = record), fill = 'black', color = 'white') +
+        xlab("") + ylab("") +
+        theme_economist_white()+
+        theme(legend.key=element_blank(),
+              plot.title=element_text(face="bold", size=12),
+              axis.text = element_text(size = 7, face="plain"),
+              legend.position="top", 
+              legend.direction="horizontal")
+      print(plotindic)
+    }
+  } 
+  
+} else {cat(paste0("No indicators for this category\n"))}
+
+```
+
+### Performance
+
+```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width = 10, fig.height = 7}
+### Remove indicator that are not selected -- i.e. no OP target for 2018
+indic.country.this.perf <- as.data.frame(unique(focus.performance.indic[focus.performance.indic$operationName==ctrname & focus.performance.indic$subtype==this.subtype , 
+                                                                      c("Indicator", "indicatorrfid","subtype","Objective","planningPeriod")]))
+indic.country.this.perf <- indic.country.this.perf[indic.country.this.perf$planningPeriod==2018,  c("Indicator", "indicatorrfid","subtype","Objective")]
+indic.country.this.perf <- indic.country.this.perf[ !(is.na(indic.country.this.perf$Indicator)), ]
+indic.country.this.perf <- indic.country.this.perf[with(indic.country.this.perf, order(Objective)), ]
+
+
+if (nrow(indic.country.this.perf)>0) {
+  for (i in 1:nrow(indic.country.this.perf) ) {
+    #i <- 3
+    rm(indicplot,plotindic,dataplot)
+    indicplot <- as.character(indic.country.this.perf[i, 1])
+    indicid <- as.character(indic.country.this.perf[i, 2])
+    objectivelab <- as.character(indic.country.this.perf[i, 4])
+    
+    dataplot <- indic.country.date3[ indic.country.date3$Indicator==indicplot, ]
+    dataplot$record <- as.numeric(dataplot$record)
+    dataplot$Standard <- as.numeric(dataplot$Standard) 
+    dataplot$OP.Target <- as.numeric(dataplot$OP.Target)
+    dataplot$OL.Target <- as.numeric(dataplot$OL.Target)
+
+    cat(paste0("Objective: ", objectivelab , "\n"))
+    
+    plotindic2 <-  ggplot(dataplot, aes(label)) + 
+      geom_bar(aes(y = record), stat="identity", fill= "slateblue4") +
+      facet_wrap(~ ppg.country , ncol=1) +
+      geom_line(aes(y = Standard, group = 1, color = "Standard"), size=1.4) +
+      #  geom_line(aes(y = thresholdGreen, group = 1, color = "thresholdGreen")) +
+      geom_line(aes(y = OP.Target, group = 1, color = "OP.Target"), size=1.4) +
+      geom_line(aes(y = OL.Target, group = 1, color = "OL.Target"), linetype = 2, size=1.4) +
+      scale_colour_manual(" ", values=c("record" = "blue", "Standard" = "red",  "OP.Target" = "black", "OL.Target" = "blue"))+
+      geom_label_repel(aes(y = record, label = record), fill = 'black', color = 'white') +
+      ggtitle(indicplot) +
+      xlab("") + ylab("") +
+      theme_economist_white()+
+      theme(legend.key=element_blank(),
+            plot.title=element_text(face="bold", size=12),
+            axis.text = element_text(size = 7, face="plain"),
+            legend.position="top", 
+            legend.direction="horizontal")
+    print(plotindic2)
+    # ggsave(filename=paste("out/",indicid,".png",sep=""), plot=plotindic2, width=10, height=10,units="in", dpi=300)
+    
+    # }
+  } 
+  
+} else { cat(paste0("No indicators for this category\n"))}
+
+#rm()
+
+```
+
+
+
