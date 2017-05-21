@@ -11,7 +11,8 @@
 # urlendsp2 <- readline("provide the URL extnesion for user tracking:")
 
 ## External file for easier reference 
-source("code/1-parse_reference.R")
+source("code/0-package.R")
+#source("code/1-parse_reference.R")
 source("perso/api_get_perso.R")
 
 urlendsp1 <- ".zip?user="
