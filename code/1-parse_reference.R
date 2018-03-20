@@ -108,7 +108,7 @@ write.csv(opreference,"data/opreference.csv")
 #opreference.mena <- opreference.mena[ ! (opreference.mena$operationName %in% c('Regional Activities in Middle East & North Africa (MENA)','Syria Regional Refugee Coordination Office in Amman')) ,  ]
 
 opreference.mena <- opreference[ opreference$operationName %in% c('Algeria' , 'Egypt' , 'Iraq' , 'Israel' , 'Jordan' , 'Lebanon' , 'Libya', 'Mauritania' , 'Morocco' , 'Saudi Arabia' , 'Syrian Arab Republic' , 'Tunisia' , 'United Arab Emirates' , 'Western Sahara', 'Yemen', 'Turkey') & 
-                                   (opreference$planningPeriod %in% c('2016','2017','2018')) & 
+                                   (opreference$planningPeriod %in% c('2016','2017','2018','2019')) & 
                                    (opreference$planname=='Operations Plan') ,  ]
 
 
