@@ -1,10 +1,11 @@
 ################################################################################################
-### STEP 1: Subset data 
+### STEP 1: Subset data
 #names(focus.impact)
-focus.impact.indic <- focus.impact[focus.impact$operationName==ctrname , c("operationName","indicatorid","Objective","objectivemsrp", "Indicator","planningPeriod","subtype","Population.Group","indicatorrfid",
+focus.impact.indic <- focus.impact[focus.impact$operationName==ctrname , c("operationName","indicatorid","Objective" ,"objectivemsrp", "Indicator","planningPeriod","subtype","Population.Group","indicatorrfid",
                                                                            "Baseline","Mid.Year", "Year.End","Standard",
-                                                                           "thresholdRed", "thresholdGreen" , "OP.Target",  "OL.Target"  ) ]
-
+                                                                           "thresholdRed", "thresholdGreen" , "OP.Target",
+                                                                           "OL.Target") ]
+names(focus.impact)
 #focusimpact.indic.t <- dcast(formloc,  thresholdRed + thresholdGreen + OP.Target +OL.Target ~ indicatorid + indicatorrfid +Indicator + planningPeriod , value.var = "IDPs_In_Baladiya_HH", fun=sum )
 
 
@@ -92,46 +93,46 @@ for (i in 1:n ) {
   Indicator1 <-  as.character(indic.country.date2[i, 7 ])
   ppgcountry1 <-  as.character(indic.country.date2[i, 10])
   country1 <-  as.character(indic.country.date2[i, 11])
-  
-  record <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                  
-                     operationName==country1 &                                          
-                     planningPeriod==date1 &                                  
-                     variable==phase1 &                                  
+
+  record <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &
+                     operationName==country1 &
+                     planningPeriod==date1 &
+                     variable==phase1 &
                      Indicator==Indicator1  )["value"]
-  
-  Standard <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                  
-                           operationName==country1 &                                         
-                           planningPeriod==date1 &                                
-                           variable=="Standard" &                                  
-                           Indicator==Indicator1 )["value"] 
-  
-  thresholdRed <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                  
-                           operationName==country1 &                                         
-                           planningPeriod==date1 &                                
-                           variable=="thresholdRed" &                                  
-                           Indicator==Indicator1 )["value"] 
-  
-  thresholdGreen <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                  
-                             operationName==country1 &                                         
-                             planningPeriod==date1 &                                
-                             variable=="thresholdGreen" &                                  
+
+  Standard <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &
+                           operationName==country1 &
+                           planningPeriod==date1 &
+                           variable=="Standard" &
+                           Indicator==Indicator1 )["value"]
+
+  thresholdRed <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &
+                           operationName==country1 &
+                           planningPeriod==date1 &
+                           variable=="thresholdRed" &
+                           Indicator==Indicator1 )["value"]
+
+  thresholdGreen <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &
+                             operationName==country1 &
+                             planningPeriod==date1 &
+                             variable=="thresholdGreen" &
                              Indicator==Indicator1  )["value"]
-  
-  OP.Target <- subset(focus.impact.indic.t ,Population.Group==ppgcountry1 &                                  
-                        operationName==country1 &                                         
-                        planningPeriod==date1 &                                
-                        variable=="OP.Target" &  
-                        Indicator==Indicator1)["value"] 
-  
-  OL.Target <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                    
-                        operationName==country1 &                                       
-                        planningPeriod==date1 &                                
-                        variable=="OL.Target" & 
+
+  OP.Target <- subset(focus.impact.indic.t ,Population.Group==ppgcountry1 &
+                        operationName==country1 &
+                        planningPeriod==date1 &
+                        variable=="OP.Target" &
+                        Indicator==Indicator1)["value"]
+
+  OL.Target <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &
+                        operationName==country1 &
+                        planningPeriod==date1 &
+                        variable=="OL.Target" &
                         Indicator==Indicator1 )["value"]
-  
+
   ### Now inset the values into the timeline
   # cat(paste("looking at ",i,"\n ", sep="  "))
-  
+
   #if(is.na(record,numeric(0))){
   #if(identical(record,0-length)){
   if(nrow(record)==0){
@@ -140,35 +141,35 @@ for (i in 1:n ) {
     #  cat(paste("Record for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), record,"\n ", sep="\n "))
     indic.country.date2[i, 12 ] <- record
   }
-  
+
   if(nrow(Standard)==0){
     #  cat('No matched values\n')
   }else{
     # cat(paste("Standard for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), Standard,"\n ", sep="\n"))
     indic.country.date2[i, 13 ] <- Standard
   }
-  
+
   if(nrow(thresholdRed)==0){
     #  cat('No matched values\n')
   }else{
     # cat(paste("thresholdRed for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), thresholdRed,"\n ", sep="\n"))
     indic.country.date2[i, 14 ] <- thresholdRed
   }
-  
+
   if(nrow(thresholdGreen)==0){
     #  cat('No matched values\n')
   }else{
     # cat(paste("thresholdGreen for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), thresholdGreen,"\n ", sep="\n"))
     indic.country.date2[i, 15 ] <- thresholdGreen
   }
-  
+
   if(nrow(OP.Target)==0){
     # cat('No matched values\n')
   }else{
     # cat(paste("OP.Target for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), OP.Target,"\n ", sep="\n"))
     indic.country.date2[i, 16 ] <- OP.Target
   }
-  
+
   if(nrow(OL.Target)==0){
     # cat('No matched values\n')
   }else{

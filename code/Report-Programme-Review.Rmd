@@ -23,7 +23,7 @@ date: "`r Sys.Date()`"
 
 
 ```{r loaddata, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
-setwd("D:/R-project/focus-analysis") 
+setwd("/home/edouard/R-project/focus-analysis") 
 
 ## load all R packages for the analysis
 source("code/0-package.R")
@@ -155,41 +155,10 @@ A final objective is to review the consistency of baseline value between previou
 
 
 *** 
-```{r chapters, echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
-## get list of chapter and build each parts
-
-this.subtype <- c("Registration","RSD","Resettlement","ChildProtection",
-                  "SGBV", "Education","Legal", "Education",
-                  "Mixed Migration","Statelessness","Community Services",
-                  "Community Based Protection","Cash","Communication","ProtCoordination",
-                  "Information Management","Health","Food","NFI","Shelter","WASH",
-                  "Supply","CCCM","Energy","Environment","Management","ExtRel",
-                  "Coordination" )
-                  
-this.subtype.label <- c("Refugee Registration","Refugee Status Determination (RSD)","Resettlement","Child Protection",
-                        "Sexual and other forms of gender-based violence (SGBV)","Education", "Legal issues", "Education",
-                        "Mixed Migration","Statelessness","Community Services",
-                        "Community Based Protection","Cash Based Intervention","Communication","Protection Coordination",
-                        "Information Management","Health","Food Security & Nutrition","Non Food Item (NFI)","Shelter","Water & sanitation - WASH",
-                        "Supply","Camp Coordination and Camp Management (CCCM)","Energy","Environment","Management", "External Relations",
-                        "Response Coordination")
-
-report.chapter <- cbind(this.subtype,this.subtype.label )
-rm(this.subtype,this.subtype.label )
-
-#for (i in 1:nrow(report.chapter)){
-for (i in 1:2){
-  # i <- 1
-
- this.subtype.label <- as.character(report.chapter[ i, 2])
- this.subtype <- as.character(report.chapter[i ,1 ])
- source("details-area.Rmd") 
-}
-
-
-
+```{r child = 'details-area.Rmd"'}
 ```
+
 
 
 
