@@ -19,6 +19,7 @@ opreferencemena$plandel <-
 
 opreferencemena.imp <- opreferencemena
 
+
 opreference <-
   opreferencemena.imp[opreferencemena.imp$planningPeriod %in% c("2016", "2017", "2018") , c(
     "operationID",
@@ -33,6 +34,7 @@ opreference <-
     "idoperation"
   )]
 
+
 write.csv(opreferencemena.imp, "data/opereferencemenaimp.csv")
 
 #############################################################
@@ -40,7 +42,7 @@ write.csv(opreferencemena.imp, "data/opereferencemenaimp.csv")
 impindicatorall <- NULL
 #names(opreference)
 
-xp <- function (doc, tag) {
+xp <- function(doc, tag) {
   n <- xpathSApply(doc, tag, xmlValue)
   if (length(n) > 0)
     # paste multiple values?  BILCOD and probably others..
@@ -79,7 +81,7 @@ for (i in 1:nrow(opreference))
   Refresheddate <- as.character(lastRefreshed$lastRefreshed)
 
   print(
-    paste (
+    paste(
       i ,
       "Now loading Operation Plan for ",
       operationName ,
@@ -180,7 +182,7 @@ for (i in 1:nrow(opreference))
 
 
   print(
-    paste (
+    paste(
       "There is ",
       length(ppgnum) ,
       "population groups",
@@ -243,7 +245,7 @@ for (i in 1:nrow(opreference))
 
   nimp <- nimp + nrow(impindicatorobj)
   print(
-    paste (
+    paste(
       "Loaded ",
       nrow(impindicatorobj) ,
       "impact indicator linked to ppg, total of",
@@ -256,7 +258,7 @@ for (i in 1:nrow(opreference))
 
   nimp2 <- nimp2 + nrow(impindicatortemp)
   print(
-    paste (
+    paste(
       "Loaded ",
       nrow(impindicatortemp) ,
       "impact indicator Lines, total of",
@@ -269,7 +271,7 @@ for (i in 1:nrow(opreference))
 
   nimp1 <- nimp1 + nrow(impindicatortemp1)
   print(
-    paste (
+    paste(
       "Merged ",
       nrow(impindicatortemp1) ,
       "impact indicator Lines, total of",

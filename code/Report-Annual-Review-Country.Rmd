@@ -11,7 +11,7 @@ output:
 ```{r ctryfilter , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
 #ctrname <- "Tunisia"
-yearreport <- "2018"
+yearreport <- "2019"
 
 
 ```
@@ -59,22 +59,33 @@ focus1.narrative$ppggoal <- paste(focus1.narrative$Population.Group, focus1.narr
 
 ## Number of ppggoal
 focus1.impact$ppggoalsit <- paste(focus1.impact$Population.Group, focus1.impact$Goal, focus1.impact$SituationName, sep=" - ")
-ppg.ctr <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("Population.Group")]))
+ppg.ctr <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("Population.Group")]))
 
-ppggoalsit1 <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("ppggoalsit")]))
-ppggoalsit <- length(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("ppggoalsit")]))
+ppggoalsit1 <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("ppggoalsit")]))
+ppggoalsit <- length(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("ppggoalsit")]))
 
 ## Extracting last refresh date
 
 #names(focus1.impact)
 
-lastRefreshedate <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("lastRefreshed")]))
+lastRefreshedate <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("lastRefreshed")]))
 
+Objectives.2019 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("Objective")]))
 Objectives.2018 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("Objective")]))
 Objectives.2017 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2017, c("Objective")]))
 
+impindic.2019 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("rid")]))
 impindic.2018 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("rid")]))
 impindic.2017 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2017, c("rid")]))
+
+
+ol.budget.2019 <- format(sum(focus1.budget[focus1.budget$scenario=="Operating Level" & focus1.impact$planningPeriod==2019, c("amount")]),
+                        digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
+
+aol.budget.2019 <- format( sum(focus1.budget[focus1.budget$scenario=="Above Operating Level" & focus1.impact$planningPeriod==2019, c("amount")]),
+                         digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
+
+
 
 ol.budget.2018 <- format(sum(focus1.budget[focus1.budget$scenario=="Operating Level" & focus1.impact$planningPeriod==2018, c("amount")]),
                         digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
@@ -114,9 +125,9 @@ The plan includes:
 
  *  __`r ppggoalsit`__ Population Planning Group(s) associated with Goal & situation,
 
- *  __`r Objectives.2018`__ Objectives (`r Objectives.2017`% change compared with 2017), 
+ *  __`r Objectives.2019`__ Objectives (`r Objectives.2018`% change compared with 2018), 
 
- *  __`r impindic.2018`__ Impact indicators (`r impindic.2017` % change compared 2017)
+ *  __`r impindic.2019`__ Impact indicators (`r impindic.2018` % change compared 2018)
 
 The report is extracting information from Focus in order to review selected objectives within each sector/functional areas:
 
@@ -127,13 +138,13 @@ The report is extracting information from Focus in order to review selected obje
    *  2018 "Problem Assessment and Comprehensive Response" 
 
  
- 2.	Budget evolution from 2016 to 2018 at objective level – stacked by scenario.
+ 2.	Budget evolution from 2016 to 2019 at objective level – stacked by scenario.
  
- 3.	Impact indicators from 2016 year end till 2018 baseline – Notify if GSP or not in the title of the chart.
+ 3.	Impact indicators from 2016 year end till 2019 baseline – Notify if GSP or not in the title of the chart.
  
  4. Based, on the elements above, feedback if any from the experts within the office of the director
 
-This plan present an "operating level" budget of  __`r ol.budget.2018`USD__  (difference of `r ol.budget.2017` USD with 2017) and an "above operating level" budget of __`r aol.budget.2018` USD__ (difference of `r aol.budget.2017` USD with 2017)
+This plan present an "operating level" budget of  __`r ol.budget.2019`USD__  (difference of `r ol.budget.2018` USD with 2018) and an "above operating level" budget of __`r aol.budget.2019` USD__ (difference of `r aol.budget.2018` USD with 2018)
 
 
 Globally the budget evolution per area of expertise is:
@@ -142,7 +153,7 @@ Globally the budget evolution per area of expertise is:
  
 
 
-ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018"), ], aes(x=  planningPeriod , fill=scenario )) + 
+ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2019"), ], aes(x=  planningPeriod , fill=scenario )) + 
             geom_bar(aes(y = amount), stat="identity") +
             facet_wrap(~ subtype.obj, ncol=1) +
            # ggtitle(paste0("Output: ", indicplot)) +

@@ -31,11 +31,11 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
   ## names(focus1.narrative)
   
   temp.narr <- unique(focus1.narrative[ focus1.narrative$objectivemsrp %in% temp.obj &
-                                          focus1.narrative$planningPeriod %in% c("2016","2017","2018")&
+                                          focus1.narrative$planningPeriod %in% c("2016","2017","2018","2019")&
                                           focus1.narrative$reportName %in% c("Year-End Report","Operations Plan Document"), ])
   temp.narr$objectivemsrp <- as.character(temp.narr$objectivemsrp)
   ## List ppg goal
-  ppggoallist <- as.data.frame(unique(focus1.narrative[focus1.narrative$planningPeriod==2018, c("ppggoal")]))
+  ppggoallist <- as.data.frame(unique(focus1.narrative[focus1.narrative$planningPeriod==2019, c("ppggoal")]))
   names(ppggoallist)[1] <- "ppggoal"
 
   cat("## Comparison of narrative.\n")
@@ -83,13 +83,22 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
                                                temp.narr$ppggoal == ppggoalthis , 
                                              c("text") ])
       
+      summary2019 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2019" &  
+                                               temp.narr$sectionName == "Problem Assessment, Comprehensive and Prioritised Response - Problem Assessment, Comprehensive and Prioritised Response" & 
+                                               temp.narr$objectivemsrp == objectivemsrpthis &
+                                               temp.narr$ppggoal == ppggoalthis , 
+                                             c("text") ])
+      
       tempsummary[1,1] <- "__Results and Impact for 2016__"
       if(nrow(summary2016)==0 ){ tempsummary[2,1] <- "No narrative for2016 " } else {  tempsummary[2,1] <- as.character(summary2016[1,1])  }
       tempsummary[3,1] <- "__Prioritized Response for 2017__"
       if(nrow(summary2017)==0 ){ tempsummary[4,1] <- "No narrative for 2017 " } else {  tempsummary[4,1] <-  as.character(summary2017[1,1])  }
       tempsummary[5,1] <- "__Problem Assessment and Comprehensive Response for 2018__"
       if(nrow(summary2018)==0 ){ tempsummary[6,1] <- "No narrative for 2018 " } else {  tempsummary[6,1] <-  as.character(summary2018[1,1])  }
-
+      tempsummary[7,1] <- "__Problem Assessment and Comprehensive Response for 2019__"
+      if(nrow(summary2019)==0 ){ tempsummary[8,1] <- "No narrative for 2019 " } else {  tempsummary[9,1] <-  as.character(summary2019[1,1])  }
+      
+      
       #print(kable(tempsummary3, rownames = NA,  longtable = TRUE, padding = 2))
       if(nrow(summary2018)==0 ){ 
         cat("") } else {   
@@ -109,7 +118,7 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
   #row.names(temp.obj) <- NULL
   #temp.obj1 <- as.character(temp.obj)
   
-  focus1.budget.obj <- focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018") & focus1.budget$objectivemsrp %in% temp.obj, ]
+  focus1.budget.obj <- focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2019") & focus1.budget$objectivemsrp %in% temp.obj, ]
   
   cat("## Budget per Objective.\n")
   cat(" The following chart presents budget evolution over years between Operating and Above Operating levels. \n")
@@ -143,7 +152,7 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
   #	Impact indicators From 2016 year end till 2018 baseline – Notify if GSP or not in the title of the chart.
   # str(focus1.impact)
   temp.ind <- unique(focus1.impact[ focus1.impact$objectivemsrp %in% temp.obj &
-                                      focus1.impact$planningPeriod %in% c("2016","2017","2018")  ,
+                                      focus1.impact$planningPeriod %in% c("2016","2017","2018","2019")  ,
                                     c("Objective",  "Indicator","indicatorrfid","GSP")])
   #temp.ind  <- temp.ind [ !(is.na(temp.ind $Indicator)), ]
   #temp.ind  <- temp.ind [with(temp.ind , order(Objective)), ]
@@ -168,7 +177,7 @@ if ( nrow(temp.obj) == 0) { cat("There's no objective related to this functional
       gsp <- as.character(temp.ind[i, 4])
       gsp[gsp =="false"] <- ""
       gsp[gsp =="true"] <-  "This indicator corresponds to a Global Strategic Priority (GSP)"
-      dataplot <- indic.country.date2[ indic.country.date2$Indicator==indicplot & indic.country.date2$year %in% c("2016","2017","2018"), ]
+      dataplot <- indic.country.date2[ indic.country.date2$Indicator==indicplot & indic.country.date2$year %in% c("2016","2017","2018","2019"), ]
       objectivelab <- as.character(temp.ind[i, 1])
       # str(dataplot)
       # dataplot

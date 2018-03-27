@@ -16,8 +16,9 @@ opreferencemena$plandel <-
 
 opreferencemena.perf <- opreferencemena
 
+
 opreference <-
-  opreferencemena.perf[opreferencemena.perf$planningPeriod %in% c("2016", "2017", "2018") , c(
+  opreferencemena.perf[opreferencemena.perf$planningPeriod %in% c("2016", "2017", "2018","2019") , c(
     "operationID",
     "attr" ,
     "planid" ,
@@ -31,6 +32,7 @@ opreference <-
   )]
 
 ## Loop through urls and download all plan
+
 perfindicatorall <- NULL
 #names(opreference)
 
@@ -73,7 +75,7 @@ for (i in 1:nrow(opreference))
   Refresheddate <- as.character(lastRefreshed$lastRefreshed)
 
   print(
-    paste (
+    paste(
       i ,
       "Now loading Operation Plan for ",
       operationName ,
@@ -169,7 +171,7 @@ for (i in 1:nrow(opreference))
     )
 
   print(
-    paste (
+    paste(
       "There is ",
       length(ppgnum) ,
       "population groups",
@@ -264,8 +266,9 @@ for (i in 1:nrow(opreference))
 
 
   nperf <- nperf + nrow(perfindicatorobj)
+
   print(
-    paste (
+    paste(
       "Loaded ",
       nrow(perfindicatorobj) ,
       "performance indicator Lines, total of",
@@ -278,7 +281,7 @@ for (i in 1:nrow(opreference))
 
   nperf2 <- nperf2 + nrow(perfindicatortemp)
   print(
-    paste (
+    paste(
       "Loaded ",
       nrow(perfindicatortemp) ,
       "prformance indicator Lines, total of",
@@ -291,7 +294,7 @@ for (i in 1:nrow(opreference))
 
   nperf1 <- nperf1 + nrow(perfindicatortemp1)
   print(
-    paste (
+    paste(
       "Merged ",
       nrow(perfindicatortemp1) ,
       "prformance indicator Lines, total of",
@@ -319,6 +322,8 @@ for (i in 1:nrow(opreference))
       perfindicatortemp1,
       lastRefreshed
     )
+
+
   perfindicatorall <- rbind(perfindicatorall, perfindicatortemp2)
 
 
@@ -410,11 +415,6 @@ rm(
   perfindicatorobj2,
   opreferencemena, opreferencemena.perf
 )
-
-
-
-
-
 
 
 ##########################################################################
@@ -601,7 +601,16 @@ data2 <-
        by = "situationCode",
        type = "left")
 
-data.performance <- data2
+
+## Seeems we need to remove outputrfid
+#data <- data[ , -c("outputrfid")]
+data$outputrfid <- NULL
+
+data.performance <- as.data.frame(data)
+str(data.performance)
+
+write.csv(data.performance, "data/performance.csv", row.names = FALSE)
+
 
 #str(data.performance)
 write.csv(data.performance, "data/performance.csv", row.names = FALSE)
