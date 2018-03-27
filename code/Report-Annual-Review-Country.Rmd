@@ -10,7 +10,7 @@ output:
 
 ```{r ctryfilter , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
-#ctrname <- "Tunisia"
+#ctrname <- "Algeria"
 yearreport <- "2019"
 
 
@@ -32,74 +32,74 @@ library(readxl)
 
 
 ```{r load-data , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE}
-setwd("D:/R-project/focus-analysis") 
+mainDir <- getwd()
+mainDirroot <- substring(mainDir, 0 , nchar(mainDir) - 5)
+## Load all required packages
+source(paste0(mainDirroot,"/code/0-package.R"))
 
-
-## load all R packages for the analysis
-source("code/0-package.R")
 
 ##  Loading the 3 dataset - Impact, performance, budget
-focus.impact <- read.csv("data/impact.csv")
+focus.impact <- read.csv(paste0(mainDirroot,"/data/impact.csv"))
 ## Subset for the country
-focus1.impact <-focus.impact[focus.impact$operationName == ctrname, ]
-source("code/timeindic.R")
+focus1.impact <- focus.impact[focus.impact$operationName == ctrname, ]
+source(paste0(mainDirroot,"/code/timeindic.R"))
 
-focus.budget <- read.csv("data/budget.csv")
-focus1.budget <-focus.budget[focus.budget$operationName == ctrname, ]
+focus.budget <- read.csv(paste0(mainDirroot,"/data/budget.csv"))
+focus1.budget <- focus.budget[focus.budget$operationName == ctrname, ]
 
-framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
+framework <- read_excel(paste0(mainDirroot,"/config/UNHCR-Result-Based-Management.xlsx"), sheet = 1) 
 #names(framework)
-framework<- framework[ !(is.na(framework$Indicator)) ,  ]
-framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]
+framework <- framework[ !(is.na(framework$Indicator)) ,  ]
+framework <- framework[ !(framework$dup2 %in% c('dup')) ,  ]
  # names(framework)
 
-focus.narrative <- read.csv("data/narrative.csv")
-focus1.narrative <-focus.narrative[focus.narrative$operationName == ctrname, ]
+focus.narrative <- read.csv(paste0(mainDirroot,"/data/narrative.csv"))
+focus1.narrative <- focus.narrative[focus.narrative$operationName == ctrname, ]
 focus1.narrative$ppggoal <- paste(focus1.narrative$Population.Group, focus1.narrative$goal, sep=" - ")
 
 ## Number of ppggoal
 focus1.impact$ppggoalsit <- paste(focus1.impact$Population.Group, focus1.impact$Goal, focus1.impact$SituationName, sep=" - ")
-ppg.ctr <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("Population.Group")]))
+ppg.ctr <- as.character(unique(focus1.impact[focus1.impact$planningPeriod == 2019, c("Population.Group")]))
 
-ppggoalsit1 <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("ppggoalsit")]))
-ppggoalsit <- length(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("ppggoalsit")]))
+ppggoalsit1 <- as.character(unique(focus1.impact[focus1.impact$planningPeriod == 2019, c("ppggoalsit")]))
+ppggoalsit <- length(unique(focus1.impact[focus1.impact$planningPeriod == 2019, c("ppggoalsit")]))
 
 ## Extracting last refresh date
 
 #names(focus1.impact)
 
-lastRefreshedate <- as.character(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("lastRefreshed")]))
+lastRefreshedate <- as.character(unique(focus1.impact[focus1.impact$planningPeriod == 2019, c("lastRefreshed")]))
 
-Objectives.2019 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("Objective")]))
-Objectives.2018 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("Objective")]))
-Objectives.2017 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2017, c("Objective")]))
+Objectives.2019 <- length(unique(focus1.impact[focus1.impact$planningPeriod == 2019, c("Objective")]))
+Objectives.2018 <- length(unique(focus1.impact[focus1.impact$planningPeriod == 2018, c("Objective")]))
+Objectives.2017 <- length(unique(focus1.impact[focus1.impact$planningPeriod == 2017, c("Objective")]))
 
-impindic.2019 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2019, c("rid")]))
-impindic.2018 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2018, c("rid")]))
-impindic.2017 <- length(unique(focus1.impact[focus1.impact$planningPeriod==2017, c("rid")]))
-
-
-ol.budget.2019 <- format(sum(focus1.budget[focus1.budget$scenario=="Operating Level" & focus1.impact$planningPeriod==2019, c("amount")]),
-                        digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
-
-aol.budget.2019 <- format( sum(focus1.budget[focus1.budget$scenario=="Above Operating Level" & focus1.impact$planningPeriod==2019, c("amount")]),
-                         digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
+impindic.2019 <- length(unique(focus1.impact[focus1.impact$planningPeriod == 2019, c("rid")]))
+impindic.2018 <- length(unique(focus1.impact[focus1.impact$planningPeriod == 2018, c("rid")]))
+impindic.2017 <- length(unique(focus1.impact[focus1.impact$planningPeriod == 2017, c("rid")]))
 
 
+ol.budget.2019 <- format(sum(focus1.budget[focus1.budget$scenario == "Operating Level" & focus1.impact$planningPeriod == 2019, c("amount")]),
+                        digits = 2, decimal.mark = ".",  big.mark = ",", scientific = FALSE)
 
-ol.budget.2018 <- format(sum(focus1.budget[focus1.budget$scenario=="Operating Level" & focus1.impact$planningPeriod==2018, c("amount")]),
-                        digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
+aol.budget.2019 <- format( sum(focus1.budget[focus1.budget$scenario == "Above Operating Level" & focus1.impact$planningPeriod == 2019, c("amount")]),
+                         digits = 2, decimal.mark = ".",  big.mark = ",", scientific = FALSE)
 
-aol.budget.2018 <- format( sum(focus1.budget[focus1.budget$scenario=="Above Operating Level" & focus1.impact$planningPeriod==2018, c("amount")]),
-                         digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
 
-ol.budget.2017 <- format( sum(focus1.budget[focus1.budget$scenario=="Operating Level" & focus1.impact$planningPeriod==2018,c("amount")])
-                         - sum(focus1.budget[focus1.budget$scenario=="Operating Level" & focus1.impact$planningPeriod==2017, c("amount")]),
-                          digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
 
-aol.budget.2017 <- format(sum(focus1.budget[focus1.budget$scenario=="Above Operating Level" & focus1.impact$planningPeriod==2018,c("amount")])
-                         - sum(focus1.budget[focus1.budget$scenario=="Above Operating Level" & focus1.impact$planningPeriod==2017, c("amount")]),
-                          digits=2, decimal.mark=".",  big.mark=",", scientific=FALSE)
+ol.budget.2018 <- format(sum(focus1.budget[focus1.budget$scenario == "Operating Level" & focus1.impact$planningPeriod == 2018, c("amount")]),
+                        digits = 2, decimal.mark = ".",  big.mark = ",", scientific = FALSE)
+
+aol.budget.2018 <- format( sum(focus1.budget[focus1.budget$scenario == "Above Operating Level" & focus1.impact$planningPeriod == 2018, c("amount")]),
+                         digits = 2, decimal.mark = ".",  big.mark = ",", scientific = FALSE)
+
+ol.budget.2017 <- format( sum(focus1.budget[focus1.budget$scenario == "Operating Level" & focus1.impact$planningPeriod == 2018,c("amount")])
+                         - sum(focus1.budget[focus1.budget$scenario == "Operating Level" & focus1.impact$planningPeriod == 2017, c("amount")]),
+                          digits = 2, decimal.mark = ".",  big.mark = ",", scientific = FALSE)
+
+aol.budget.2017 <- format(sum(focus1.budget[focus1.budget$scenario == "Above Operating Level" & focus1.impact$planningPeriod == 2018,c("amount")])
+                         - sum(focus1.budget[focus1.budget$scenario == "Above Operating Level" & focus1.impact$planningPeriod == 2017, c("amount")]),
+                          digits = 2, decimal.mark = ".",  big.mark = ",", scientific = FALSE)
 
 ```
 
@@ -151,331 +151,225 @@ Globally the budget evolution per area of expertise is:
 
 ```{r budgettopic , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE, fig.width=8, fig.height=10}
  
-
-
-ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2019"), ], aes(x=  planningPeriod , fill=scenario )) + 
-            geom_bar(aes(y = amount), stat="identity") +
-            facet_wrap(~ subtype.obj, ncol=1) +
+ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2019"), ], aes(x =  planningPeriod , fill = scenario )) + 
+            geom_bar(aes(y = amount), stat = "identity") +
+            facet_wrap(~ subtype.obj, ncol = 1) +
            # ggtitle(paste0("Output: ", indicplot)) +
             ggtitle("Budget per scenario & year (in USD for Operating level only",  
-                  subtitle = "Breakdown per functional area ")+
-            coord_flip()+
+                  subtitle = "Breakdown per functional area") +
+            coord_flip() +
             xlab("") + ylab("") +
-            scale_y_continuous(labels=format_si())+
-            theme_economist_white()+
-            theme(legend.key=element_blank(),
-                  plot.title=element_text(face="bold", size=12),
-                  axis.text = element_text(size = 7, face="plain"),
+            scale_y_continuous(labels = format_si()) +
+            theme_economist_white() +
+            theme(legend.key = element_blank(),
+                  plot.title = element_text(face = "bold", size = 12),
+                  axis.text = element_text(size = 7, face = "plain"),
                   #legend.title=element_blank(),
-                  legend.box="horizontal")
+                  legend.box = "horizontal")
 
 ```
 
-
-
 *** 
- 
 # Refugee Registration
-
-
 
 ```{r Registration, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Registration"
 #list.files()
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
 
-
-
-
 *** 
- 
 # Refugee Status Determination (RSD)
-
-
 
 ```{r RSD, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "RSD"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Resettlement
 
-
-
 ```{r Resettlement, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Resettlement"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Child Protection
 
-
-
 ```{r ChildProtection, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ChildProtection"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Sexual and other forms of gender-based violence (SGBV)
 
-
-
 ```{r SGBV, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "SGBV"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Education
 
-
-
 ```{r Education, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Education"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Legal issues
 
-
-
 ```{r Legal, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Legal"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Mixed Migration
 
-
-
 ```{r Mixedmigration, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Mixed migration"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Statelessness
 
-
-
 ```{r Statelessness, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Statelessness"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Community Services
 
-
-
 ```{r CommunityServices, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Community Services"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Community Based Protection
 
-
-
 ```{r CBP, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Community Based Protection"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Communication
 
-
-
 ```{r Communication, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Communication"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Protection Coordination
 
-
-
 ```{r ProtCoordination, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ProtCoordination"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Non Food Item (NFI) & Cash Based Intervention
 
-
-
 ```{r NFI-cash, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "NFI-cash"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Health
 
-
-
 ```{r Health, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Health"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Food Security & Nutrition
 
-
-
 ```{r , echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Food"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Shelter
 
-
-
 ```{r Shelter, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Shelter"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # WASH
 
-
-
 ```{r WASH, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "WASH"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Supply
 
 
-
 ```{r Supply, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Supply"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Camp Coordination and Camp Management (CCCM)
 
-
-
 ```{r CCCM, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "CCCM"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Energy
 
-
-
 ```{r Energy, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Energy"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Environment
 
-
-
 ```{r Environment, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Environment"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Management
 
-
-
 ```{r Management, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Management"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # External Relations
 
-
-
 ```{r ExtRel, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "ExtRel"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 *** 
 # Response Coordination
 
-
-
 ```{r Coordination, echo=FALSE, warning=FALSE, message=FALSE, results='asis', fig.width=10, fig.height=6}
 this.subtype <- "Coordination"
-source("obj_review.R")
+source(paste0(mainDirroot,"/code/obj_review.R"))
 ```
-
-
 
 ***
 END OF REPORT

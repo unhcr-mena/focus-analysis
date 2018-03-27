@@ -284,9 +284,9 @@ for (i in 1:nrow(opreference))
     paste(
       "Loaded ",
       nrow(perfindicatortemp) ,
-      "prformance indicator Lines, total of",
+      "performance indicator Lines, total of",
       nperf2 ,
-      "prformance indicator Lines.",
+      "performance indicator Lines.",
       sep = " ",
       collapse = NULL
     )
@@ -297,9 +297,9 @@ for (i in 1:nrow(opreference))
     paste(
       "Merged ",
       nrow(perfindicatortemp1) ,
-      "prformance indicator Lines, total of",
+      "performance indicator Lines, total of",
       nperf1 ,
-      "prformance indicator Lines.",
+      "performance indicator Lines.",
       sep = " ",
       collapse = NULL
     )

@@ -1,7 +1,7 @@
 ####################################################################################################
 ### This scripts generate country report one by one based on the report template: 8-Report.Rmd
 #####################################################################################################
-setwd("D:/R-project/focus-analysis") 
+#setwd("D:/R-project/focus-analysis")
 ## load all packages
 source("code/0-package.R")
 
@@ -23,7 +23,7 @@ source("code/7-narrative.R")
 #listcountry <- as.data.frame(unique(opreferencemena$operationName))
 
 listcountry <- as.data.frame(c("Iraq", # Worked #
-                               "Jordan",    # Worked # 
+                               "Jordan",    # Worked #
                                "Lebanon", # Worked #
                                "Israel", # Worked #
                                "Saudi Arabia",

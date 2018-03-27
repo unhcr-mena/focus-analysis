@@ -3,7 +3,7 @@ source("code/0-package.R")
 ### Producing data frame from FOCUS XML structure
 ### Find ways within the API
 
-## External file for easier reference 
+## External file for easier reference
 source("perso/api_get_perso.R")
 
 upw = paste(user, passw, sep = ":")
@@ -40,7 +40,7 @@ rm(plan.attr, plan.planid, plan.planname,  plan.planningPeriod , plan.plantype)
 
 #write.csv(plan,"out/plan.csv")
 
-L <- xpathSApply(OperationList, "//OperationHeader", function(x) 
+L <- xpathSApply(OperationList, "//OperationHeader", function(x)
   cbind(operationID = xmlValue(x[["operationID"]]),
         #operationName = xmlValue(x[["name"]]),
        # plan = xpathSApply(x, "plans/PlanHeader/name", xmlValue),
@@ -48,7 +48,7 @@ L <- xpathSApply(OperationList, "//OperationHeader", function(x)
        # planid = xpathSApply(x, "plans/PlanHeader/planID", xmlValue),
        # planningPeriod = xpathSApply(x, "plans/PlanHeader/planningPeriod", xmlValue),
        # plantype = xpathSApply(x, "plans/PlanHeader/type", xmlValue)
-        
+
   )
 )
 
@@ -75,7 +75,7 @@ region <- data.frame(
 )
 
 
-L2 <- xpathSApply(OperationList, "//subgroups/OperationGroup/subgroups/OperationGroup", function(x) 
+L2 <- xpathSApply(OperationList, "//subgroups/OperationGroup/subgroups/OperationGroup", function(x)
   cbind(regionanme = xmlValue(x[["name"]]),
         operationName = xpathSApply(x, "operations/OperationHeader/name", xmlValue)
   )
@@ -100,7 +100,7 @@ write.csv(opreference,"data/opreference.csv")
 
 ## Define the reference to be used
 
-#opreference.mena <- opreference[ (opreference$regionanme %in% c('Middle East', 'North Africa')) & 
+#opreference.mena <- opreference[ (opreference$regionanme %in% c('Middle East', 'North Africa')) &
 #                                (opreference$planningPeriod %in% c('2016','2017','2018')) & # '2013', '2014', '2015',
 #                                 (opreference$planname=='Operations Plan') ,  ]
 
@@ -111,15 +111,14 @@ opreference.mena <- opreference[ opreference$operationName %in% c('Algeria' , 'E
                                                                   'Jordan' , 'Lebanon' , 'Libya', 'Mauritania' ,
                                                                   'Morocco' , 'Saudi Arabia' , 'Syrian Arab Republic' ,
                                                                   'Tunisia' , 'United Arab Emirates' ,
-                                                                  'Western Sahara', 'Yemen', 'Turkey') & 
-                                   (opreference$planningPeriod %in% c('2016','2017','2018','2019')) & 
+                                                                  'Western Sahara', 'Yemen', 'Turkey') &
+                                   (opreference$planningPeriod %in% c('2016','2017','2018','2019')) &
                                    (opreference$planname=='Operations Plan') ,  ]
 
-opreference.mena <- opreference.mena[ !((opreference.mena$operationName ==  'Western Sahara') & 
-                                   (opreference.mena$planningPeriod %in% c('2018','2019'))) ,  ]
+#opreference.mena <- opreference.mena[ !((opreference.mena$operationName ==  'Western Sahara') & (opreference.mena$planningPeriod %in% c('2018','2019'))) ,  ]
 
 
- 
+
 
 write.csv(opreference.mena,"data/opreferencemena.csv", row.names=FALSE)
 
@@ -131,7 +130,7 @@ opreference.ope <- opreference[ (opreference$regionanme %in% c('Central Africa a
                                                                'North America and the Caribbean', 'Northern, Western, Central and Southern Europe',
                                                                'South-Eastern Europe', 'South-West Asia',
                                                                'South Asia', 'South East Asia',
-                                                               'Southern Africa', 'West Africa' )) & 
+                                                               'Southern Africa', 'West Africa' )) &
                                    (opreference$planningPeriod %in% c('2013', '2014', '2015')) &
                                    (opreference$planname=='Operations Plan') ,  ]
 
