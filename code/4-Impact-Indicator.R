@@ -15,7 +15,7 @@ opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$
 
 opreferencemena.imp <- opreferencemena
 
-opreference <- opreferencemena.imp[ opreferencemena.imp$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemena.imp[ opreferencemena.imp$planningPeriod %in% c("2016","2017","2018","2019") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                          "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 
 write.csv(opreferencemena.imp, "data/opereferencemenaimp.csv")

@@ -16,7 +16,7 @@ opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$
 
 opreferencemena.budg <- opreferencemena
 
-opreference <- opreferencemena.budg[ opreferencemena.budg$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemena.budg[ opreferencemena.budg$planningPeriod %in% c("2016","2017","2018","2019") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                          "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 ## Loop through urls and download all plan 
 

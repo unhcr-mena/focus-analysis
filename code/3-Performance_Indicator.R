@@ -14,7 +14,7 @@ opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$
 
 opreferencemena.perf <- opreferencemena
 
-opreference <- opreferencemena.perf[ opreferencemena.perf$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemena.perf[ opreferencemena.perf$planningPeriod %in% c("2016","2017","2018","2019") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                            "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 
 ## Loop through urls and download all plan 
@@ -152,14 +152,13 @@ for(i in 1:nrow(opreference))
 
   
   nperf <- nperf + nrow(perfindicatorobj)
-  print(paste ("Loaded ", nrow(perfindicatorobj) , "prformance indicator Lines, total of", nperf , "prformance indicator Lines.", sep = " ", collapse = NULL) )
+  print(paste ("Loaded ", nrow(perfindicatorobj) , "performance indicator Lines, total of", nperf , "performance indicator Lines.", sep = " ", collapse = NULL) )
   
   nperf2 <- nperf2 + nrow(perfindicatortemp)
-  print(paste ("Loaded ", nrow(perfindicatortemp) , "prformance indicator Lines, total of", nperf2 , "prformance indicator Lines.", sep = " ", collapse = NULL) )
+  print(paste ("Loaded ", nrow(perfindicatortemp) , "performance indicator Lines, total of", nperf2 , "performance indicator Lines.", sep = " ", collapse = NULL) )
   
   nperf1 <- nperf1 + nrow(perfindicatortemp1)
-  print(paste ("Merged ", nrow(perfindicatortemp1) , "prformance indicator Lines, total of", nperf1 , "prformance indicator Lines.", sep = " ", collapse = NULL) )
-  
+  print(paste ("Merged ", nrow(perfindicatortemp1) , "performance indicator Lines, total of", nperf1 , "performance indicator Lines.", sep = " ", collapse = NULL) )
   
   
   perfindicatortemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, perfindicatortemp1,lastRefreshed)
@@ -244,7 +243,13 @@ data <- join(x=data, y= framework, by="indicatorrfid", type="left" )
 SituationCode <- read.csv("config/SituationCode.csv")
 data <- join(x=data, y= SituationCode, by="situationCode", type="left")
 
-data.performance <- data
+## Seeems we need to remove outputrfid
+#data <- data[ , -c("outputrfid")]
+data$outputrfid <- NULL
+
+data.performance <- as.data.frame(data)
+str(data.performance)
+
 write.csv(data.performance, "data/performance.csv", row.names = FALSE)
 
 rm(api,apihead,bin,con,passw,upw,urlend,urlendsp2,urlendsp1,user,url)

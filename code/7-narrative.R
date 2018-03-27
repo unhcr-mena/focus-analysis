@@ -12,7 +12,7 @@ opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$
 #### 
 ## Pb with parsing some plans -- Need to be fixed
 opreferencemena.narrative <- opreferencemena
-opreference <- opreferencemena.narrative[opreferencemena.narrative$planningPeriod %in% c("2016","2017","2018") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+opreference <- opreferencemena.narrative[opreferencemena.narrative$planningPeriod %in% c("2016","2017","2018","2019") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
                                                "plantype",  "operationName","regionanme", "idregion","idoperation")] 
 ## Loop through urls and download all plan 
 
