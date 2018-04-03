@@ -59,6 +59,12 @@ focus1.narrative$ppggoal <- paste(focus1.narrative$Population.Group, focus1.narr
 
 ## Number of ppggoal
 focus1.impact$ppggoalsit <- paste(focus1.impact$Population.Group, focus1.impact$Goal, focus1.impact$SituationName, sep=" - ")
+
+## Add order in focus 
+focus1.budget$subtype.obj <- factor( focus1.budget$subtype.obj, levels =  c("Registration" ,"RSD" , "Resettlement" ,  "ChildProtection" ,"Education", "Legal", "Mixed migration", "Statelessness", "Community Services", "Community Based Protection",
+"Communication", "ProtCoordination", "NFI-cash", "Health", "Food", "Shelter", "WASH", "Supply", "CCCM", "Energy", "Environment",
+"Management", "ExtRel", "Coordination")) 
+
 ppg.ctr <- as.character(unique(focus1.impact[focus1.impact$planningPeriod == 2019, c("Population.Group")]))
 
 ppggoalsit1 <- as.character(unique(focus1.impact[focus1.impact$planningPeriod == 2019, c("ppggoalsit")]))
@@ -131,19 +137,16 @@ The plan includes:
 
 The report is extracting information from Focus in order to review selected objectives within each sector/functional areas:
 
- 1.	Comparison of Narrative: 
+##	Comparison of Narrative: 
  
    *  2016 "Results and Impact - Results and Impact"" 
    *  2017 "Problem/Objective - Prioritized Response" 
    *  2018 "Problem Assessment and Comprehensive Response" 
+   *  2019 "Problem Assessment and Comprehensive Response" 
 
  
- 2.	Budget evolution from 2016 to 2019 at objective level – stacked by scenario.
+##	Budget evolution from 2016 to 2019 at objective level – stacked by scenario.
  
- 3.	Impact indicators from 2016 year end till 2019 baseline – Notify if GSP or not in the title of the chart.
- 
- 4. Based, on the elements above, feedback if any from the experts within the office of the director
-
 This plan present an "operating level" budget of  __`r ol.budget.2019`USD__  (difference of `r ol.budget.2018` USD with 2018) and an "above operating level" budget of __`r aol.budget.2019` USD__ (difference of `r aol.budget.2018` USD with 2018)
 
 
@@ -151,7 +154,8 @@ Globally the budget evolution per area of expertise is:
 
 ```{r budgettopic , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE, fig.width=8, fig.height=10}
  
-ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2019"), ], aes(x =  planningPeriod , fill = scenario )) + 
+ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2019") &
+                       focus1.budget$subtype.obj %in% c("Registration" ,"RSD" , "Resettlement" ,  "ChildProtection" ,"Education", "Legal", "Mixed migration", "Statelessness", "Community Services", "Community Based Protection") , ], aes(x =  planningPeriod , fill = scenario )) + 
             geom_bar(aes(y = amount), stat = "identity") +
             facet_wrap(~ subtype.obj, ncol = 1) +
            # ggtitle(paste0("Output: ", indicplot)) +
@@ -168,6 +172,38 @@ ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2
                   legend.box = "horizontal")
 
 ```
+
+```{r budgettopic2 , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE, fig.width=8, fig.height=10}
+ 
+ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2019") &
+                       focus1.budget$subtype.obj %in% c("Communication", "ProtCoordination", "NFI-cash", "Health", "Food", "Shelter", "WASH", "Supply", "CCCM", "Energy", "Environment",
+"Management", "ExtRel", "Coordination" ) , ], aes(x =  planningPeriod , fill = scenario )) + 
+            geom_bar(aes(y = amount), stat = "identity") +
+            facet_wrap(~ subtype.obj, ncol = 1) +
+           # ggtitle(paste0("Output: ", indicplot)) +
+            ggtitle("Budget per scenario & year (in USD for Operating level only",  
+                  subtitle = "Breakdown per functional area") +
+            coord_flip() +
+            xlab("") + ylab("") +
+            scale_y_continuous(labels = format_si()) +
+            theme_economist_white() +
+            theme(legend.key = element_blank(),
+                  plot.title = element_text(face = "bold", size = 12),
+                  axis.text = element_text(size = 7, face = "plain"),
+                  #legend.title=element_blank(),
+                  legend.box = "horizontal")
+
+```
+
+##	Impact indicators 
+
+Impact indicators from 2016 year end till 2019 baseline are presented. A notification is inserted in the title of the chart if GSP or not.
+
+Indicators chart can be interpreted as follows:
+
+![__Diagram:__ Gap, progress & achievement](gap.png)
+
+It's expected that year-end from year __'n'__ equals the baseline form year __'n+1'__. Any drastic change in the values of the indicator should be explained in the narrative for the objective.
 
 *** 
 # Refugee Registration

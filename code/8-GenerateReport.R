@@ -44,7 +44,7 @@ for(i in 1:nrow(listcountry))
 {
   ctrname <- as.character(listcountry[ i , 1])
   cat(paste(i, " - Render report for ",ctrname ))
-  yearreport <- "2018"
+  yearreport <- "2019"
   render("code/Report-Annual-Review-Country.Rmd")
   file.rename("code/Report-Annual-Review-Country.docx", paste0("out/COP-Review/",ctrname,Sys.Date(),"_FOCUS_Plan_Annual-Review_Analysis_Report.docx"))
   #file.rename("code/Report-Annual-Review-Country.docx", paste0("D:/OneDrive for Business/MENA_PROTECTION_SERVICE/Focus-Analysis/",ctrname,Sys.Date(),"_FOCUS_Plan_Annual-Review_Analysis_Report.docx"))
