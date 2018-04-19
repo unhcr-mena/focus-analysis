@@ -136,7 +136,7 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
     for (g in 1:nrow(ppggoallist) ) {
 
       # f <- 1
-      # g <- 2
+      # g <- 1
       ## Get objective name corresponding to MSRP code
       objectivethis <- as.character(temp.obj2[f, 2])
       objectivemsrpthis <- as.character(temp.obj2[f, 1])

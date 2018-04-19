@@ -61,7 +61,7 @@ focus1.narrative$ppggoal <- paste(focus1.narrative$Population.Group, focus1.narr
 focus1.impact$ppggoalsit <- paste(focus1.impact$Population.Group, focus1.impact$Goal, focus1.impact$SituationName, sep = " - ")
 
 ## Add order in focus 
-focus1.budget$subtype.obj <- factor( focus1.budget$subtype.obj, levels =  c("Registration" ,"RSD" , "Resettlement" ,  "ChildProtection" ,"Education", "Legal", "Mixed migration", "Statelessness", "Community Services", "Community Based Protection",
+focus1.budget$subtype.obj <- factor( focus1.budget$subtype.obj, levels =  c("Registration" ,"RSD" , "Resettlement" ,  "ChildProtection" , "SGBV", "Education", "Legal", "Mixed migration", "Statelessness", "Community Services", "Community Based Protection",
 "Communication", "ProtCoordination", "NFI-cash", "Health", "Food", "Shelter", "WASH", "Supply", "CCCM", "Energy", "Environment",
 "Management", "ExtRel", "Coordination")) 
 
@@ -144,7 +144,7 @@ Globally the budget evolution per area of expertise is:
 ```{r budgettopic , echo=FALSE, warning=FALSE, message=FALSE, cache=FALSE, fig.width=8, fig.height=9}
  
 ggplot(focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2019") &
-                       focus1.budget$subtype.obj %in% c("Registration" ,"RSD" , "Resettlement" ,  "ChildProtection" ,"Education", "Legal", "Mixed migration", "Statelessness", "Community Services", "Community Based Protection") , ], aes(x =  planningPeriod , fill = scenario )) + 
+                       focus1.budget$subtype.obj %in% c("Registration" ,"RSD" , "Resettlement" ,  "ChildProtection" ,"Education", "SGBV", "Legal", "Mixed migration", "Statelessness", "Community Services", "Community Based Protection") , ], aes(x =  planningPeriod , fill = scenario )) + 
             geom_bar(aes(y = amount), stat = "identity") +
             facet_wrap(~ subtype.obj, ncol = 1) +
            # ggtitle(paste0("Output: ", indicplot)) +
