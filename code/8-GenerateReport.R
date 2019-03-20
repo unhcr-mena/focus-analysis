@@ -44,7 +44,7 @@ for (i in 1:nrow(listcountry))
 {
   ctrname <- as.character(listcountry[ i , 1])
   cat(paste(i, " - Render report for ",ctrname ))
-  yearreport <- "2019"
+  yearreport <- "2020"
   #rmarkdown::render("code/Report-Annual-Review-Country.Rmd", clean = TRUE, envir = new.env() )
   rmarkdown::render("code/Report-Annual-Review-Country.Rmd" )
 

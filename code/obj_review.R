@@ -1,6 +1,6 @@
 
 ### Compile analysis per Objective####################################################
-#	Budget evolution 2016 to 2019 at objective level – stacked by scenario. #######
+#	Budget evolution 2017 to 2020 at objective level – stacked by scenario. #######
 ### List objective ###############################################
 
 # Get list of related objective ###############################################
@@ -25,7 +25,8 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
   cat("## Budget per Objective.\n")
   cat(" The following chart presents budget evolution over years between Operating and Above Operating levels. \n")
 
-  focus1.budget.obj <- focus1.budget[focus1.budget$planningPeriod %in% c("2016","2017","2018","2019") & focus1.budget$objectivemsrp %in% temp.obj, ]
+  focus1.budget.obj <- focus1.budget[focus1.budget$planningPeriod %in% c("2017","2018","2019","2020") &
+                                       focus1.budget$objectivemsrp %in% temp.obj, ]
 
   plotbudjobj <- ggplot(focus1.budget.obj, aes(x =  planningPeriod , fill = scenario )) +
     geom_bar(aes(y = amount), stat = "identity") +
@@ -49,12 +50,12 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
   cat("## Review of impact indicators.\n")
   cat(" The following chart presents evolution of impact indicators over years.
       Actual reported Indicators values are represented as bars and can be compared between baseline, mid-year and end-year.
-      Different types of target are represented as lines in the same chart: as defined by budget: OL, as defined by needs: OP and as defined by global standards: Green and Red Threeshold. \n")
+      Different types of target are represented as lines in the same chart: as defined by budget: OL, as defined by needs: OP and as defined by global standards: Green and Red Threshold. \n")
   cat("  A specific note included for the indicators falling under Global Strategic Priorities - GSP. Note that operations are not forced to report mid-year values for all their impact indicators.\n")
-  cat(" The chart allows to visualise progress, gaps, missing values & inconsistencies (for instance when the baseline for the next year differs from the end-year value from the previous years).\n\n")
+  cat(" The chart allows to visualize progress, gaps, missing values & inconsistencies (for instance when the baseline for the next year differs from the end-year value from the previous years).\n\n")
 
   temp.ind <- unique(focus1.impact[ focus1.impact$objectivemsrp %in% temp.obj &
-                                      focus1.impact$planningPeriod %in% c("2016","2017","2018","2019")  ,
+                                      focus1.impact$planningPeriod %in% c("2017","2018","2019","2020")  ,
                                     c("Objective",  "Indicator","indicatorrfid","GSP")])
 
   row.names(temp.ind ) <- NULL
@@ -66,7 +67,8 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
       gsp <- as.character(temp.ind[i, 4])
       gsp[gsp == "false"] <- ""
       gsp[gsp == "true"] <-  "This indicator corresponds to a Global Strategic Priority (GSP)"
-      dataplot <- indic.country.date2[ indic.country.date2$Indicator == indicplot & indic.country.date2$year %in% c("2016","2017","2018","2019"), ]
+      dataplot <- indic.country.date2[ indic.country.date2$Indicator == indicplot &
+                                         indic.country.date2$year %in% c("2017","2018","2019","2020"), ]
       objectivelab <- as.character(temp.ind[i, 1])
       # str(dataplot)
       # dataplot
@@ -121,14 +123,14 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
   cat(" \n")
   ##	Comparison of Narrative######################################################################################
   cat("## Comparison of narrative.\n")
-  cat(" The following tables present narratives from the current & previous Country Operation Plan: Results and Impact for 2016 and  Prioritized Response for both 2017 & 2018 & 2019. \n")
+  cat(" The following tables present narratives from the current & previous Country Operation Plan: Results and Impact for 2018,  Prioritized Response for both 2019 & Problem Assessment for 2020. \n")
 
   temp.narr <- unique(focus1.narrative[ focus1.narrative$objectivemsrp %in% temp.obj &
-                                          focus1.narrative$planningPeriod %in% c("2016","2017","2018","2019") &
+                                          focus1.narrative$planningPeriod %in% c("2017","2018","2019","2020") &
                                           focus1.narrative$reportName %in% c("Year-End Report","Operations Plan Document"), ])
   temp.narr$objectivemsrp <- as.character(temp.narr$objectivemsrp)
   ## List ppg goal
-  ppggoallist <- as.data.frame(unique(as.character(focus1.narrative[focus1.narrative$planningPeriod == 2018, c("ppggoal")])))
+  ppggoallist <- as.data.frame(unique(as.character(focus1.narrative[focus1.narrative$planningPeriod == 2020, c("ppggoal")])))
   names(ppggoallist)[1] <- "ppggoal"
 
 
@@ -151,44 +153,37 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
                                     temp.narr$ppggoal == ppggoalthis  ,
                                   c("reportID","planningPeriod","sectionName", "Objective","objectivemsrp", "ppggoal", "reportName", "text") ]
 
-      summary2016 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2016" &
-                                               temp.narr$sectionName == "Results and Impact - Results and Impact" &
-                                               temp.narr$objectivemsrp == objectivemsrpthis &
-                                               temp.narr$ppggoal == ppggoalthis ,
-                                             c("text") ])
 
-      summary2017 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2017" &
+
+      summary2018 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2018" &
                                                temp.narr$sectionName == "Results and Impact - Results and Impact" &
                                                temp.narr$objectivemsrp == objectivemsrpthis &
                                                temp.narr$ppggoal == ppggoalthis ,
                                              c("text")])
 
-      summary2018 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2018" &
+      summary2019 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2019" &
                                                temp.narr$sectionName == "Prioritized Response - Prioritized Response" &
                                                temp.narr$objectivemsrp == objectivemsrpthis &
                                                temp.narr$ppggoal == ppggoalthis ,
                                              c("text") ])
 
-      summary2019 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2019" &
+      summary2020 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2020" &
                                                temp.narr$sectionName == "Problem Assessment, Comprehensive and Prioritised Response - Problem Assessment, Comprehensive and Prioritised Response" &
                                                temp.narr$objectivemsrp == objectivemsrpthis &
                                                temp.narr$ppggoal == ppggoalthis ,
                                              c("text") ])
 
-      tempsummary[1,1] <- "__Results and Impact for 2016__"
-      if (nrow(summary2016) == 0) { tempsummary[2,1] <- "No narrative for2016 " } else {tempsummary[2,1] <- as.character(summary2016[1,1])  }
+      tempsummary[3,1] <- "__Results and Impact for 2018__"
+      if (nrow(summary2018) == 0) { tempsummary[4,1] <- "No narrative for 2018 " } else {tempsummary[4,1] <-  as.character(summary2017[1,1])  }
 
-      tempsummary[3,1] <- "__Results and Impact for 2017__"
-      if (nrow(summary2017) == 0) { tempsummary[4,1] <- "No narrative for 2017 " } else {tempsummary[4,1] <-  as.character(summary2017[1,1])  }
+      tempsummary[5,1] <- "__Prioritized Response for 2019__"
+      if (nrow(summary2019) == 0) { tempsummary[6,1] <- "No narrative for 2019 " } else {tempsummary[6,1] <-  as.character(summary2018[1,1])  }
 
-      tempsummary[5,1] <- "__Prioritized Response for 2018__"
-      if (nrow(summary2018) == 0) { tempsummary[6,1] <- "No narrative for 2018 " } else {tempsummary[6,1] <-  as.character(summary2018[1,1])  }
-
-      tempsummary[7,1] <- "__Problem Assessment and Comprehensive Response for 2019__"
-      if (nrow(summary2019) == 0) { tempsummary[8,1] <- "No narrative for 2019 " } else {tempsummary[9,1] <-  as.character(summary2019[1,1])  }
+      tempsummary[7,1] <- "__Problem Assessment and Comprehensive Response for 2020__"
+      if (nrow(summary2020) == 0) { tempsummary[8,1] <- "No narrative for 2020 " } else {tempsummary[9,1] <-  as.character(summary2019[1,1])  }
 
       #print(kable(tempsummary3, rownames = NA,  longtable = TRUE, padding = 2))
-      if (nrow(summary2019) == 0) { cat("") } else {
+      if (nrow(summary2020) == 0) { cat("") } else {
         print(pandoc.table(tempsummary, rownames = NULL, split.table = 300, split.cells = c( "100%"), justify = 'left'))
         # use.hyphening = TRUE,
         cat(" \n") }

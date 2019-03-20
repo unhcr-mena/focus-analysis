@@ -11,24 +11,25 @@ opreferencemena <- read.csv("data/opreferencemena.csv")
 opreferencemena$plandel <- paste(opreferencemena$operationName, opreferencemena$planningPeriod, sep = " ")
 
 #opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Saudi Arabia 2016', 'United Arab Emirates 2018', 'Tunisia 2018', 'Western Sahara 2018')), ]
-#### 
+####
 ## Pb with parsing some plans -- Need to be fixed
 
 opreferencemena.budg <- opreferencemena
 
-opreference <- opreferencemena.budg[ opreferencemena.budg$planningPeriod %in% c("2016","2017","2018","2019") , c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
-                                         "plantype",  "operationName","regionanme", "idregion","idoperation")] 
-## Loop through urls and download all plan 
+opreference <- opreferencemena.budg[ opreferencemena.budg$planningPeriod %in% c("2016","2017","2018","2019","2020") ,
+                                     c( "operationID",    "attr" ,"planid" ,"planname", "planningPeriod",
+                                         "plantype",  "operationName","regionanme", "idregion","idoperation")]
+## Loop through urls and download all plan
 
 budgetall <- NULL
 #names(opreference)
 
-  
-xp <- function (doc, tag){
+
+xp <- function(doc, tag){
     n <- xpathSApply(doc, tag, xmlValue)
-    if (length(n) > 0) 
+    if (length(n) > 0)
       # paste multiple values?  BILCOD and probably others..
-      paste0(n, collapse="; ") 
+      paste0(n, collapse = "; ")
     else NA
 }
 
@@ -39,7 +40,7 @@ nbudg1 <- 0
 nbudg2 <- 0
 nbudg3 <- 0
 
-for(i in 1:nrow(opreference))
+for (i in 1:nrow(opreference))
 {
   # i <- 6
   idplan <- as.character(opreference[ i , 2])
@@ -53,23 +54,26 @@ for(i in 1:nrow(opreference))
   idregion <- as.character(opreference[ i , 9])
   idoperation <- as.character(opreference[ i , 10])
   plancountryid <- paste( "data/plan/Plan_", idplan ,".xml", sep = "")
-  
+
   plancountryparse <- xmlTreeParse(plancountryid, useInternal = TRUE)
-  
+
   lastRefreshed   <-  as.data.frame(xpathSApply(plancountryparse, "//Plan/lastRefreshed", xmlValue))
-  names(lastRefreshed)[1] <- "lastRefreshed"  
+  names(lastRefreshed)[1] <- "lastRefreshed"
   Refresheddate <- as.character(lastRefreshed$lastRefreshed)
-  
-  print(paste (i , "Now loading Operation Plan for ", operationName ," for year ", planningPeriod ," from ", plancountryid, " last edited on ", Refresheddate,
+
+  print(paste(i , "Now loading Operation Plan for ", operationName ,
+              " for year ", planningPeriod ,
+              " from ", plancountryid,
+              " last edited on ", Refresheddate,
                sep = " - ", collapse = NULL) )
-  
+
 
   z <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine")
-  n1 <-length(z)
-  notices <-vector("list",n1)
-  
+  n1 <- length(z)
+  notices <- vector("list",n1)
+
   ## Now parsing all budget lines
-  for(i in 1:n1)
+  for (i in 1:n1)
     {
       z2<-xmlDoc(z[[i]])
       notices[[i]] <- data.frame(
@@ -87,18 +91,18 @@ for(i in 1:nrow(opreference))
         localCost        = as.numeric(xp(z2, "//localCost")),
         amount           = as.numeric(xp(z2, "//amount")),
         stringsAsFactors=FALSE)
-      free(z2)  
+      free(z2)
     }
   budgettemp <- as.data.frame(do.call("rbind", notices))
-  
+
   ## If we have only one population group, it will be difficult to join: need to test
   ppgnum <- getNodeSet(plancountryparse, "//ppgs/PPG/name")
   goalnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/name")
   budgetnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine")
   outputnum <- getNodeSet(plancountryparse, "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/name")
-  
+
   print(paste ("This plan includes ",length(ppgnum) , "population groups, ",length(goalnum), "goals, ",length(outputnum), "outputs and ",length(budgetnum), "budget lines", sep = " ", collapse = NULL) )
-  
+
 
     getPPGContent =
       function(x)
@@ -118,11 +122,11 @@ for(i in 1:nrow(opreference))
             BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
           )
         } else { cat("nothing to parse \n")}
-      }  
+      }
      temp <-  xpathApply(plancountryparse, "//ppgs/PPG", getPPGContent)
     budgetobj <- as.data.frame(do.call("rbind", temp))
-    
-    
+
+
     ## Restore hierachy with RBM
     getoutContent =
       function(x)
@@ -138,61 +142,61 @@ for(i in 1:nrow(opreference))
             BudgetLineid      = if(length(BudgetLineid)) BudgetLineid else NA
           )
         } else { cat("nothing to parse \n")}
-      }  
-    
-    
+      }
+
+
  # BudgetLineidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/budgetLines/BudgetLine", xmlGetAttr, 'ID'))
  # outputrfidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output", xmlGetAttr, 'RFID'))
     temp2 <-  xpathApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs", getoutContent)
    # str(temp2)
-    
+
     budgetobj2 <- as.data.frame(do.call("rbind", temp2))
 
-    ### Get MSRP Code 
-    
+    ### Get MSRP Code
+
 
     # objective <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/name", xmlValue))
     # outputrfidtest <- as.data.frame(xpathSApply(plancountryparse, "//ppgs/PPG//goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/msrpcode", xmlValue))
 
-    
+
     budgetobj2 <- as.data.frame(do.call("rbind", temp2))
-    
-    
-    
-    
-        
+
+
+
+
+
     print(length(unique(budgetobj2$BudgetLineid)))
-    
-    
+
+
     budgetobj2 <- budgetobj2[!(is.na(budgetobj2$BudgetLineid )), ]
     budgetobj <- join(x=budgetobj, y=budgetobj2,  by="BudgetLineid", type="left")
-    
+
     budgettemp1 <- merge(x=budgettemp, y=budgetobj,  by="BudgetLineid", all.x=TRUE)
-    
-    
-    
+
+
+
     nbudg2 <- nbudg2 + nrow(budgettemp)
     print(paste ("Loaded ", nrow(budgettemp) , "Budget Lines documented, total of", nbudg2 , "Budget Lines.", sep = " ", collapse = NULL) )
-    
+
     nbudg <- nbudg + nrow(budgetobj)
     print(paste ("Loaded ", nrow(budgetobj) , "Budget Lines mapped to ppg, total of", nbudg , "Budget Lines.", sep = " ", collapse = NULL) )
-    
+
     nbudg3 <- nbudg3 + nrow(budgetobj2)
     print(paste ("Loaded ", nrow(budgetobj2) , "Budget Lines mapped to output, total of", nbudg3 , "Budget Lines.", sep = " ", collapse = NULL) )
-    
+
     nbudg1 <- nbudg1 + nrow(budgettemp1)
     print(paste ("Merged ", nrow(budgettemp1) , "Budget Lines together, total of", nbudg1 , "Budget Lines.", sep = " ", collapse = NULL) )
- 
+
   budgettemp2 <-cbind(idplan, operationID, planid, planname,  planningPeriod , plantype , operationName , regionanme, idregion, idoperation, budgettemp1,lastRefreshed)
-  
+
   ## Now merging with the rest of the loop
   budgetall <- rbind(budgetall, budgettemp2)
-  
+
   rm(budgettemp2, budgettemp1,budgettemp, budgetobj, budgetobj1,lastRefreshed, goalnum,i,idoperation,
      idplan,idregion,n1,
      notices,operationID,operationName,plancountryid,planid,plancountryparse,planningPeriod,plantype,ppgnum,planname,
      Refresheddate,regionanme,sectnum,temp,temp2,z,z2)
-}  
+}
 
 ## that's it
 
@@ -211,7 +215,7 @@ names(data.budget)
 ## Load Result Based Management framework -- in order to get # of indic
 ## Join is done on RFID
 
-framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1) 
+framework <- read_excel("config/UNHCR-Result-Based-Management.xlsx", sheet = 1)
 #names(framework)
 framework<- framework[ !(is.na(framework$Indicator)) ,  ]
 framework<- framework[ !(framework$dup2 %in% c('dup')) ,  ]

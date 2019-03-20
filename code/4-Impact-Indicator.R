@@ -21,7 +21,7 @@ opreferencemena.imp <- opreferencemena
 
 
 opreference <-
-  opreferencemena.imp[opreferencemena.imp$planningPeriod %in% c("2016", "2017", "2018") , c(
+  opreferencemena.imp[opreferencemena.imp$planningPeriod %in% c("2016", "2017", "2018", "2019", "2020") , c(
     "operationID",
     "attr" ,
     "planid" ,

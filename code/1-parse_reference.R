@@ -112,7 +112,7 @@ opreference.mena <- opreference[ opreference$operationName %in% c('Algeria' , 'E
                                                                   'Morocco' , 'Saudi Arabia' , 'Syrian Arab Republic' ,
                                                                   'Tunisia' , 'United Arab Emirates' ,
                                                                   'Western Sahara', 'Yemen', 'Turkey') &
-                                   (opreference$planningPeriod %in% c('2016','2017','2018','2019')) &
+                                   (opreference$planningPeriod %in% c('2016','2017','2018','2019','2020')) &
                                    (opreference$planname=='Operations Plan') ,  ]
 
 #opreference.mena <- opreference.mena[ !((opreference.mena$operationName ==  'Western Sahara') & (opreference.mena$planningPeriod %in% c('2018','2019'))) ,  ]
@@ -131,8 +131,8 @@ opreference.ope <- opreference[ (opreference$regionanme %in% c('Central Africa a
                                                                'South-Eastern Europe', 'South-West Asia',
                                                                'South Asia', 'South East Asia',
                                                                'Southern Africa', 'West Africa' )) &
-                                   (opreference$planningPeriod %in% c('2013', '2014', '2015')) &
-                                   (opreference$planname=='Operations Plan') ,  ]
+                                   (opreference$planningPeriod %in% c('2013', '2014', '2015','2016','2017','2018','2019','2020')) &
+                                   (opreference$planname == 'Operations Plan') ,  ]
 
 
 ### We need to exclude certains operations for analysis purpose
@@ -159,11 +159,11 @@ opreference.ope <- opreference.ope[ !(opreference.ope$operationName %in% c('Syri
 
 
 
-write.csv(opreference.ope,"data/opreferenceope.csv", row.names=FALSE)
+write.csv(opreference.ope,"data/opreferenceope.csv", row.names = FALSE)
 
 rm(regionop,regionop1,regionop2,planoperation,planoperation1,operation,plan,region, L, L2, Operation, OperationList)
 
-write.csv(unique(opreference$operationName),"data/listop.csv", row.names=FALSE)
+write.csv(unique(opreference$operationName),"data/listop.csv", row.names = FALSE)
 
 rm(api,apihead,bin,con,passw,upw,urlend,urlendsp2,user)
 #rm(opreference.ope1)

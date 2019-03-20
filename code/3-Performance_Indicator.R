@@ -14,11 +14,14 @@ opreferencemena$plandel <-
 
 #opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Saudi Arabia 2016', 'United Arab Emirates 2018', 'Tunisia 2018', 'Lebanon 2018')), ]
 
+#opreferencemena <- opreferencemena[ !(opreferencemena$plandel %in% c('Western Sahara 2018','Western Sahara 2019')), ]
+
 opreferencemena.perf <- opreferencemena
 
 
 opreference <-
-  opreferencemena.perf[opreferencemena.perf$planningPeriod %in% c("2016", "2017", "2018","2019") , c(
+  #opreferencemena.perf[opreferencemena.perf$planningPeriod %in% c("2016", "2017", "2018","2019","2020") , c(
+    opreferencemena.perf[opreferencemena.perf$planningPeriod %in% c("2016", "2017", "2018","2019") , c(
     "operationID",
     "attr" ,
     "planid" ,
@@ -37,7 +40,7 @@ perfindicatorall <- NULL
 #names(opreference)
 
 ## Parsing functions for XML
-xp <- function (doc, tag) {
+xp <- function(doc, tag) {
   n <- xpathSApply(doc, tag, xmlValue)
   if (length(n) > 0)
     # paste multiple values?  BILCOD and probably others..
@@ -64,8 +67,7 @@ for (i in 1:nrow(opreference))
   regionanme <- as.character(opreference[i , 8])
   idregion <- as.character(opreference[i , 9])
   idoperation <- as.character(opreference[i , 10])
-  plancountryid <-
-    paste("data/plan/Plan_", idplan , ".xml", sep = "")
+  plancountryid <- paste("data/plan/Plan_", idplan , ".xml", sep = "")
 
   plancountryparse <-
     xmlTreeParse(plancountryid, useInternal = TRUE)
@@ -90,8 +92,7 @@ for (i in 1:nrow(opreference))
     )
   )
 
-  z <-
-    getNodeSet(
+  z <- getNodeSet(
       plancountryparse,
       "//ppgs/PPG/goals/Goal/rightsGroups/RightsGroup/problemObjectives/ProblemObjective/outputs/Output/indicators/Indicator"
     )
@@ -259,7 +260,7 @@ for (i in 1:nrow(opreference))
          type = "left")
 
   perfindicatortemp1 <-
-    merge (x = perfindicatortemp,
+    merge(x = perfindicatortemp,
            y = perfindicatorobj,
            by = "indicatorid",
            all.x = TRUE)
@@ -565,8 +566,7 @@ data.performance <- data
 ## Load Result Based Management framework -- in order to get # of indic
 ## Join is done on RFID
 
-framework <-
-  read_excel("config/UNHCR-Result-Based-Management2.xlsx", sheet = 1)
+framework <- read_excel("config/UNHCR-Result-Based-Management2.xlsx", sheet = 1)
 #names(framework)
 framework <- framework[!(is.na(framework$Indicator)) ,]
 framework <- framework[!(framework$dup2 %in% c('dup')) ,]
