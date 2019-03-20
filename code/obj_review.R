@@ -130,7 +130,8 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
                                           focus1.narrative$reportName %in% c("Year-End Report","Operations Plan Document"), ])
   temp.narr$objectivemsrp <- as.character(temp.narr$objectivemsrp)
   ## List ppg goal
-  ppggoallist <- as.data.frame(unique(as.character(focus1.narrative[focus1.narrative$planningPeriod == 2020, c("ppggoal")])))
+  ppggoallist <- as.data.frame(unique(as.character(focus1.narrative[focus1.narrative$planningPeriod == 2019, c("ppggoal")])))
+ # ppggoallist <- as.data.frame(unique(as.character(focus1.narrative[focus1.narrative$planningPeriod == 2020, c("ppggoal")])))
   names(ppggoallist)[1] <- "ppggoal"
 
 
