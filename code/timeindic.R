@@ -37,14 +37,17 @@ indic.country.date = data.frame(
            "2016-01-02", "2016-07-01", "2016-12-15",
            "2017-01-02", "2017-07-01", "2017-12-15",
            "2018-01-02", "2018-07-01", "2018-12-15",
-           "2019-01-02"),
+           "2019-01-02", "2019-07-01", "2019-12-15",
+           "2020-01-02"),
   label = c("2014\n baseline", "2014\n midyear", "2014\n endyear",
             "2015\n baseline", "2015\n midyear", "2015\n endyear",
             "2016\n baseline", "2016\n midyear", "2016\n endyear",
             "2017\n baseline", "2017\n midyear", "2017\n endyear",
             "2018\n baseline", "2018\n midyear", "2018\n endyear",
-            "2019\n baseline"),
+            "2019\n baseline", "2019\n midyear", "2019\n endyear",
+            "2020\n baseline"),
   phase = c("Baseline", "Mid.Year", "Year.End",
+            "Baseline", "Mid.Year", "Year.End",
             "Baseline", "Mid.Year", "Year.End",
             "Baseline", "Mid.Year", "Year.End",
             "Baseline", "Mid.Year", "Year.End",
@@ -55,7 +58,8 @@ indic.country.date = data.frame(
            "2016", "2016", "2016",
            "2017", "2017", "2017",
            "2018", "2018", "2018",
-           "2019"))
+           "2019", "2019", "2019",
+           "2020"))
 
 indic.country.date2 <- merge(indic.country.date, indic.country)
 indic.country.date2 <- merge(indic.country.date2, ppg.country)
@@ -66,7 +70,8 @@ indic.country.date2$label <- factor(indic.country.date2$label, c("2014\n baselin
                                                                  "2016\n baseline", "2016\n midyear", "2016\n endyear",
                                                                  "2017\n baseline", "2017\n midyear", "2017\n endyear",
                                                                  "2018\n baseline", "2018\n midyear", "2018\n endyear",
-                                                                 "2019\n baseline"))
+                                                                 "2019\n baseline", "2019\n midyear", "2019\n endyear",
+                                                                 "2020\n baseline"))
 
 ##Create fields for values
 indic.country.date2$year <- as.character(indic.country.date2$year)
@@ -140,43 +145,43 @@ for (i in 1:n ) {
 
   #if(is.na(record,numeric(0))){
   #if(identical(record,0-length)){
-  if(nrow(record) == 0){
+  if (nrow(record) == 0) {
     #  cat('No matched values\n')
-  }else{
+  } else {
     #  cat(paste("Record for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), record,"\n ", sep="\n "))
     indic.country.date2[i, 12 ] <- record
   }
 
-  if(nrow(Standard) == 0){
+  if (nrow(Standard) == 0) {
     #  cat('No matched values\n')
   }else{
     # cat(paste("Standard for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), Standard,"\n ", sep="\n"))
     indic.country.date2[i, 13 ] <- Standard
   }
 
-  if(nrow(thresholdRed) == 0){
+  if (nrow(thresholdRed) == 0) {
     #  cat('No matched values\n')
   }else{
     # cat(paste("thresholdRed for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), thresholdRed,"\n ", sep="\n"))
     indic.country.date2[i, 14 ] <- thresholdRed
   }
 
-  if(nrow(thresholdGreen) == 0){
+  if (nrow(thresholdGreen) == 0) {
     #  cat('No matched values\n')
   }else{
     # cat(paste("thresholdGreen for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), thresholdGreen,"\n ", sep="\n"))
     indic.country.date2[i, 15 ] <- thresholdGreen
   }
 
-  if(nrow(OP.Target) == 0){
+  if (nrow(OP.Target) == 0) {
     # cat('No matched values\n')
   }else{
     # cat(paste("OP.Target for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), OP.Target,"\n ", sep="\n"))
     indic.country.date2[i, 16 ] <- OP.Target
   }
 
-  if(nrow(OL.Target) == 0){
-    # cat('No matched values\n')
+  if (nrow(OL.Target) == 0) {
+     # cat('No matched values\n')
   }else{
     #  cat(paste("OL.Target for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), OL.Target,"\n ", sep="\n"))
     indic.country.date2[i, 17 ] <- OL.Target

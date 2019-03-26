@@ -123,7 +123,7 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
   cat(" \n")
   ##	Comparison of Narrative######################################################################################
   cat("## Comparison of narrative.\n")
-  cat(" The following tables present narratives from the current & previous Country Operation Plan: Results and Impact for 2018,  Prioritized Response for both 2019 & Problem Assessment for 2020. \n")
+  cat(" The following tables present narratives from the current & previous Country Operation Plan: Results and Impact for 2018,  Problem Assessment for 2019 & 2020. \n")
 
   temp.narr <- unique(focus1.narrative[ focus1.narrative$objectivemsrp %in% temp.obj &
                                           focus1.narrative$planningPeriod %in% c("2017","2018","2019","2020") &
@@ -163,7 +163,7 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
                                              c("text")])
 
       summary2019 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2019" &
-                                               temp.narr$sectionName == "Prioritized Response" &
+                                               temp.narr$sectionName == "Problem Assessment, Comprehensive and Prioritised Response" &
                                                temp.narr$objectivemsrp == objectivemsrpthis &
                                                temp.narr$ppggoal == ppggoalthis ,
                                              c("text") ])
@@ -175,13 +175,16 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
                                              c("text") ])
 
       tempsummary[3,1] <- "__Results and Impact for 2018__"
-      if (nrow(summary2018) == 0) { tempsummary[4,1] <- "No narrative for 2018 " } else {tempsummary[4,1] <-  as.character(summary2018[1,1])  }
+      if (nrow(summary2018) == 0) {
+        tempsummary[4,1] <- "No narrative for 2018 " } else {tempsummary[4,1] <-  as.character(summary2018[1,1])  }
 
-      tempsummary[5,1] <- "__Prioritized Response for 2019__"
-      if (nrow(summary2019) == 0) { tempsummary[6,1] <- "No narrative for 2019 " } else {tempsummary[6,1] <-  as.character(summary2018[1,1])  }
+      tempsummary[5,1] <- "__Problem Assessment, Comprehensive and Prioritised Response for 2019__"
+      if (nrow(summary2019) == 0) {
+        tempsummary[6,1] <- "No narrative for 2019 " } else {tempsummary[6,1] <-  as.character(summary2019[1,1])  }
 
       tempsummary[7,1] <- "__Problem Assessment and Comprehensive Response for 2020__"
-      if (nrow(summary2020) == 0) { tempsummary[8,1] <- "No narrative for 2020 " } else {tempsummary[9,1] <-  as.character(summary2019[1,1])  }
+      if (nrow(summary2020) == 0) {
+        tempsummary[8,1] <- "No narrative for 2020 " } else {tempsummary[8,1] <-  as.character(summary2020[1,1])  }
 
       #print(kable(tempsummary3, rownames = NA,  longtable = TRUE, padding = 2))
       if (nrow(summary2020) == 0) { cat("") } else {

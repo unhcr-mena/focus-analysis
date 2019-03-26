@@ -11,7 +11,7 @@ source("code/0-package.R")
 ################################################################################################
 
 ################################################################################################
-### STEP 1: Subset data 
+### STEP 1: Subset data
 #names(focus.impact)
 focus.impact.indic <- focus.impact[focus.impact$operationName==ctrname , c("operationName","indicatorid", "Indicator","planningPeriod","subtype","Population.Group","indicatorrfid",
                                           "Baseline","Mid.Year", "Year.End",
@@ -46,19 +46,23 @@ indic.country.date = data.frame(
   date = c("2014-01-02", "2014-07-01", "2014-12-15",
            "2015-01-02", "2015-07-01", "2015-12-15",
            "2016-01-02", "2016-07-01", "2016-12-15",
-           "2017-01-02", "2017-07-01", "2017-12-15"),
+           "2017-01-02", "2017-07-01", "2017-12-15",
+           "2018-01-02", "2018-07-01", "2018-12-15"),
   label = c("2014-baseline", "2014-midyear", "2014-endyear",
            "2015-baseline", "2015-midyear", "2015-endyear",
            "2016-baseline", "2016-midyear", "2016-endyear",
-           "2017-baseline", "2017-midyear", "2017-endyear"),
+           "2017-baseline", "2017-midyear", "2017-endyear",
+           "2018-baseline", "2018-midyear", "2018-endyear"),
   phase = c("Baseline", "Mid.Year", "Year.End",
+            "Baseline", "Mid.Year", "Year.End",
             "Baseline", "Mid.Year", "Year.End",
             "Baseline", "Mid.Year", "Year.End",
             "Baseline", "Mid.Year", "Year.End"),
   year = c("2014", "2014", "2014",
            "2015", "2015", "2015",
            "2016", "2016", "2016",
-           "2017", "2017", "2017"))
+           "2017", "2017", "2017",
+           "2018", "2018", "2018"))
 
 indic.country.date2 <- merge(indic.country.date, indic.country)
 indic.country.date2 <- merge(indic.country.date2, ppg.country)
@@ -67,7 +71,8 @@ indic.country.date2 <- merge(indic.country.date2, ppg.country)
 indic.country.date2$label <- factor(indic.country.date2$label, c("2014-baseline", "2014-midyear", "2014-endyear",
                                                      "2015-baseline", "2015-midyear", "2015-endyear",
                                                      "2016-baseline", "2016-midyear", "2016-endyear",
-                                                     "2017-baseline", "2017-midyear", "2017-endyear"))
+                                                     "2017-baseline", "2017-midyear", "2017-endyear",
+                                                     "2018-baseline", "2018-midyear", "2018-endyear"))
 
 ##Create fields for values
 indic.country.date2$year <- as.character(indic.country.date2$year)
@@ -97,37 +102,37 @@ for (i in 1:n ) {
   Indicator1 <-  as.character(indic.country.date2[i, 5 ])
   ppgcountry1 <-  as.character(indic.country.date2[i, 8])
   country1 <-  as.character(indic.country.date2[i, 9])
-  
-  record <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                  
-                                          operationName==country1 &                                          
-                                          planningPeriod==date1 &                                  
-                                          variable==phase1 &                                  
-                                          Indicator==Indicator1  )["value"]
-  
-  thresholdRed <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                  
-                                                operationName==country1 &                                         
-                                                planningPeriod==date1 &                                
-                                                variable=="thresholdRed" &                                  
-                                                Indicator==Indicator1 )["value"] 
-  
-  thresholdGreen <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                  
-                                                  operationName==country1 &                                         
-                                                  planningPeriod==date1 &                                
-                                                  variable=="thresholdGreen" &                                  
+
+  record <- subset(focus.impact.indic.t , Population.Group == ppgcountry1 &
+                                          operationName == country1 &
+                                          planningPeriod == date1 &
+                                          variable == phase1 &
+                                          Indicator == Indicator1  )["value"]
+
+  thresholdRed <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &
+                                                operationName==country1 &
+                                                planningPeriod==date1 &
+                                                variable=="thresholdRed" &
+                                                Indicator==Indicator1 )["value"]
+
+  thresholdGreen <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &
+                                                  operationName==country1 &
+                                                  planningPeriod==date1 &
+                                                  variable=="thresholdGreen" &
                                                   Indicator==Indicator1  )["value"]
-  
-  OP.Target <- subset(focus.impact.indic.t ,Population.Group==ppgcountry1 &                                  
-                                            operationName==country1 &                                         
-                                            planningPeriod==date1 &                                
-                                            variable=="OP.Target" &  
-                                            Indicator==Indicator1)["value"] 
-  
-  OL.Target <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &                                    
-                                             operationName==country1 &                                       
-                                             planningPeriod==date1 &                                
-                                             variable=="OL.Target" & 
+
+  OP.Target <- subset(focus.impact.indic.t ,Population.Group==ppgcountry1 &
+                                            operationName==country1 &
+                                            planningPeriod==date1 &
+                                            variable=="OP.Target" &
+                                            Indicator==Indicator1)["value"]
+
+  OL.Target <- subset(focus.impact.indic.t , Population.Group==ppgcountry1 &
+                                             operationName==country1 &
+                                             planningPeriod==date1 &
+                                             variable=="OL.Target" &
                                              Indicator==Indicator1 )["value"]
-  
+
   ### Now inset the values into the timeline
  # cat(paste("looking at ",i,"\n ", sep="  "))
 
@@ -153,7 +158,7 @@ for (i in 1:n ) {
    # cat(paste("thresholdGreen for ", paste(i, Indicator1,ppgcountry1,date1, sep="-"), thresholdGreen,"\n ", sep="\n"))
     indic.country.date2[i, 12 ] <- thresholdGreen
   }
-  
+
   if(nrow(OP.Target)==0){
    # cat('No matched values\n')
   }else{
@@ -171,15 +176,15 @@ for (i in 1:n ) {
 
 ################################################################################################
 ### STEP 5: Generate regional average for local comparison "regional","subregional"
- 
+
 
 
 ################################################################################################
-### STEP 6: Plot each indicator in a loop 
+### STEP 6: Plot each indicator in a loop
 #names(indic.country.date2)
 
-indic.country.this <- as.data.frame(unique(focus.impact.indic[focus.impact.indic$operationName==ctrname , c("Indicator", "indicatorrfid","subtype")]))
-indic.country.this2 <- as.data.frame(unique(indic.country.date2[focus.impact.indic$operationName==ctrname , c("Indicator", "indicatorrfid","subtype")]))
+indic.country.this <- as.data.frame(unique(focus.impact.indic[focus.impact.indic$operationName == ctrname , c("Indicator", "indicatorrfid","subtype")]))
+indic.country.this2 <- as.data.frame(unique(indic.country.date2[focus.impact.indic$operationName == ctrname , c("Indicator", "indicatorrfid","subtype")]))
 
 #indic.country.this <- as.data.frame(unique(focus.impact.indic[focus.impact.indic$operationName %in% c("regional","subregional") , c("Indicator", "indicatorrfid","subtype")]))
 
@@ -194,12 +199,12 @@ for (i in 1:n ) {
   dataplot <- indic.country.date2[ indic.country.date2$Indicator==indicplot, ]
  # str(dataplot)
  # dataplot
-  
+
   if (is.na(dataplot$record)) {
     sprintf("No Record")
   } else {
-  
-  plotindic <-  ggplot(dataplot, aes(label)) + 
+
+  plotindic <-  ggplot(dataplot, aes(label)) +
     geom_bar(aes(y = record), stat="identity", fill= "slateblue4") +
     facet_wrap(~ ppg.country , ncol=1) +
     geom_line(aes(y = thresholdRed, group = 1, color = "thresholdRed")) +
