@@ -130,7 +130,7 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
                                           focus1.narrative$reportName %in% c("Year-End Report","Operations Plan Document"), ])
   temp.narr$objectivemsrp <- as.character(temp.narr$objectivemsrp)
   ## List ppg goal
-  ppggoallist <- as.data.frame(unique(as.character(focus1.narrative[focus1.narrative$planningPeriod == 2019, c("ppggoal")])))
+  ppggoallist <- as.data.frame(unique(as.character(focus1.narrative[focus1.narrative$planningPeriod == yearreport, c("ppggoal")])))
  # ppggoallist <- as.data.frame(unique(as.character(focus1.narrative[focus1.narrative$planningPeriod == 2020, c("ppggoal")])))
   names(ppggoallist)[1] <- "ppggoal"
 
@@ -157,25 +157,25 @@ if ( nrow(temp.obj2) == 0) { cat("There's no objective related to this functiona
 
 
       summary2018 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2018" &
-                                               temp.narr$sectionName == "Results and Impact - Results and Impact" &
+                                               temp.narr$sectionName == "Results and Impact" &
                                                temp.narr$objectivemsrp == objectivemsrpthis &
                                                temp.narr$ppggoal == ppggoalthis ,
                                              c("text")])
 
       summary2019 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2019" &
-                                               temp.narr$sectionName == "Prioritized Response - Prioritized Response" &
+                                               temp.narr$sectionName == "Prioritized Response" &
                                                temp.narr$objectivemsrp == objectivemsrpthis &
                                                temp.narr$ppggoal == ppggoalthis ,
                                              c("text") ])
 
       summary2020 <- as.data.frame(temp.narr[temp.narr$planningPeriod == "2020" &
-                                               temp.narr$sectionName == "Problem Assessment, Comprehensive and Prioritised Response - Problem Assessment, Comprehensive and Prioritised Response" &
+                                               temp.narr$sectionName == "Problem Assessment, Comprehensive and Prioritised Response" &
                                                temp.narr$objectivemsrp == objectivemsrpthis &
                                                temp.narr$ppggoal == ppggoalthis ,
                                              c("text") ])
 
       tempsummary[3,1] <- "__Results and Impact for 2018__"
-      if (nrow(summary2018) == 0) { tempsummary[4,1] <- "No narrative for 2018 " } else {tempsummary[4,1] <-  as.character(summary2017[1,1])  }
+      if (nrow(summary2018) == 0) { tempsummary[4,1] <- "No narrative for 2018 " } else {tempsummary[4,1] <-  as.character(summary2018[1,1])  }
 
       tempsummary[5,1] <- "__Prioritized Response for 2019__"
       if (nrow(summary2019) == 0) { tempsummary[6,1] <- "No narrative for 2019 " } else {tempsummary[6,1] <-  as.character(summary2018[1,1])  }

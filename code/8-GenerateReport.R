@@ -42,6 +42,7 @@ listcountry <- as.data.frame(c("Iraq", # Worked #
 ## Generate reports for Annual Review
 for (i in 1:nrow(listcountry))
 {
+  # i <- 2
   ctrname <- as.character(listcountry[ i , 1])
   cat(paste(i, " - Render report for ",ctrname ))
   yearreport <- "2020"
@@ -56,6 +57,7 @@ for (i in 1:nrow(listcountry))
 ## generate Report for Performance Review
 for (i in 1:nrow(listcountry))
 {
+  # i <- 1
   ctrname <- as.character(listcountry[ i , 1])
   cat(paste(i, " - Render report for ",ctrname ))
   yearreport <- "2018"
